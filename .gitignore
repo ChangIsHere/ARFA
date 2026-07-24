@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+.env
+
+# External datasets and generated experiment artifacts.
+data/phase1/external_intercode/
+data/phase1/final/*.jsonl
+data/phase1/annotation/*.json
+results/phase1_residual/pilot_50/
+results/phase1_residual/final/
+results/phase1_residual/*.jsonl
+results/phase1_residual/*.csv
+results/phase1_residual/*.json
+results/phase1_residual/*.png

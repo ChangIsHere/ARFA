@@ -1,0 +1,49 @@
+dataset:
+  min_records: 50
+  output_path: results/phase1_residual/pilot_50/residual_dataset.jsonl
+
+final_dataset:
+  source_root: .
+  output_path: data/phase1/final/intercode_bash_phase1.jsonl
+  max_records: 700
+  seed: 1729
+
+residual:
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  embedding_fallback: tfidf
+  require_embedding_model: false
+  embedding_threshold: auto
+  rule_threshold: auto
+  hybrid_threshold: auto
+  hybrid_embedding_weight: 0.60
+  hybrid_structured_weight: 0.40
+
+analysis:
+  scores_path: results/phase1_residual/pilot_50/residual_scores.csv
+  metrics_path: results/phase1_residual/pilot_50/metrics.json
+  false_fast_path: results/phase1_residual/pilot_50/false_fast_cases.jsonl
+  distribution_plot_path: results/phase1_residual/pilot_50/residual_distribution.png
+  confusion_matrix_path: results/phase1_residual/pilot_50/confusion_matrix.png
+  report_path: results/phase1_residual/pilot_50/phase1_report.md
+
+final_analysis:
+  scores_path: results/phase1_residual/final/residual_scores.csv
+  dataset_summary_path: results/phase1_residual/final/dataset_summary.json
+  splits_path: results/phase1_residual/final/splits.json
+  thresholds_path: results/phase1_residual/final/thresholds.json
+  test_metrics_path: results/phase1_residual/final/test_metrics.csv
+  bootstrap_ci_path: results/phase1_residual/final/bootstrap_confidence_intervals.csv
+  task_category_path: results/phase1_residual/final/results_by_task_category.csv
+  step_type_path: results/phase1_residual/final/results_by_step_type.csv
+  ablation_path: results/phase1_residual/final/ablation_results.csv
+  false_fast_path: results/phase1_residual/final/false_fast_cases.jsonl
+  false_slow_path: results/phase1_residual/final/false_slow_cases_sample.jsonl
+  failure_analysis_path: results/phase1_residual/final/failure_case_analysis.md
+  leakage_audit_path: results/phase1_residual/final/leakage_audit.md
+  residual_distribution_plot_path: results/phase1_residual/final/residual_distribution.png
+  roc_curve_path: results/phase1_residual/final/roc_curve.png
+  precision_recall_curve_path: results/phase1_residual/final/precision_recall_curve.png
+  threshold_tradeoff_path: results/phase1_residual/final/threshold_tradeoff.png
+  fast_path_safety_curve_path: results/phase1_residual/final/fast_path_safety_curve.png
+  confusion_matrix_path: results/phase1_residual/final/confusion_matrix_test.png
+  report_path: results/phase1_residual/final/phase1_final_report.md

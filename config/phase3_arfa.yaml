@@ -1,0 +1,7 @@
+locked: true
+reason: Phase 3 starts only after Phase 1 and Phase 2 acceptance criteria are reviewed.
+
+router:
+  threshold_source: phase1_results
+  max_consecutive_fast_steps: 3
+  residual_method: hybrid
