@@ -96,6 +96,17 @@ Phase 3 builds the dual-track ARFA agent.
 
 The repository intentionally keeps Phase 2 and Phase 3 locked until Phase 1 is reviewed.
 
+## Project Memory
+
+Stable research framing is recorded in:
+
+```text
+docs/08_research_memory.md
+docs/09_next_steps_workshop.md
+```
+
+ARFA currently expands to **Action Residual Fused Agent**.
+
 ## Phase 1 Acceptance Gate
 
 Phase 2 remains locked unless held-out Phase 1 results satisfy the provisional evidence gate:
