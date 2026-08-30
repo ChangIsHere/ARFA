@@ -84,6 +84,8 @@ def tfidf_residuals(records: list[dict[str, Any]]) -> list[float]:
 def embedding_residuals(records: list[dict[str, Any]], model_name: str, require_model: bool = False) -> tuple[list[float], str]:
     expectations = [_expectation(record) for record in records]
     observations = [_observation(record) or "<empty output>" for record in records]
+    if model_name.lower() in {"tfidf", "tfidf_fallback"}:
+        return _tfidf_residual(expectations, observations), "tfidf_fallback"
     try:
         return _try_sentence_transformer(expectations, observations, model_name)
     except Exception as exc:

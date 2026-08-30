@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import io
 import json
 import sys
 from pathlib import Path
@@ -36,12 +37,12 @@ def write_csv(path: str | Path, rows: list[dict[str, Any]]) -> None:
             if key not in fieldnames:
                 fieldnames.append(key)
     with target.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore", quoting=csv.QUOTE_ALL, escapechar="\\")
         writer.writeheader()
         writer.writerows(rows)
 
 
 def read_csv(path: str | Path) -> list[dict[str, str]]:
     csv.field_size_limit(sys.maxsize)
-    with Path(path).open("r", encoding="utf-8", newline="") as handle:
-        return list(csv.DictReader(handle))
+    text = Path(path).read_text(encoding="utf-8", errors="replace").replace("\x00", "")
+    return list(csv.DictReader(io.StringIO(text)))

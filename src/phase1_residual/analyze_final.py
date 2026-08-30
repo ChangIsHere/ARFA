@@ -377,7 +377,13 @@ def _plot_curves(validation_rows: list[dict[str, str]], test_rows: list[dict[str
     plt.close()
 
 
-def _write_report(path: Path, dataset_summary: dict[str, Any], test_metric_rows: list[dict[str, Any]], thresholds: dict[str, Any], gate: dict[str, Any]) -> None:
+def _display_rate(row: dict[str, Any], key: str) -> str:
+    if key == "safe_fast_precision" and float(row["fast_path_rate"]) == 0:
+        return "n/a"
+    return f"{float(row[key]):.3f}"
+
+
+def _write_report(path: Path, dataset_summary: dict[str, Any], test_metric_rows: list[dict[str, Any]], thresholds: dict[str, Any], gate: dict[str, Any], embedding_backend: str) -> None:
     hybrid = next(row for row in test_metric_rows if row["method"] == "hybrid")
     lines = [
         "# Phase 1 Final Report",
@@ -396,6 +402,7 @@ def _write_report(path: Path, dataset_summary: dict[str, Any], test_metric_rows:
         f"- Distinct tasks: {dataset_summary['distinct_task_count']}",
         f"- Distinct trajectories: {dataset_summary['distinct_trajectory_count']}",
         f"- Class distribution: `{dataset_summary['class_distribution']}`",
+        f"- Embedding backend: `{embedding_backend}`",
         "",
         "## Threshold Policy",
         "",
@@ -413,7 +420,7 @@ def _write_report(path: Path, dataset_summary: dict[str, Any], test_metric_rows:
         lines.append(
             f"| {row['method']} | {float(row['accuracy']):.3f} | {float(row['balanced_accuracy']):.3f} | "
             f"{float(row['f1']):.3f} | {float(pr_auc):.3f} | {float(row['false_fast_rate']):.3f} | "
-            f"{float(row['fast_path_rate']):.3f} | {float(row['safe_fast_precision']):.3f} |"
+            f"{float(row['fast_path_rate']):.3f} | {_display_rate(row, 'safe_fast_precision')} |"
         )
     lines.extend(
         [
@@ -433,7 +440,8 @@ def _write_report(path: Path, dataset_summary: dict[str, Any], test_metric_rows:
             "",
             "- Expectations are generated from action text before reading each observation, because InterCode logs do not contain agent-written expectations.",
             "- Labels are an ARFA annotation layer over external trajectories and need human review before manuscript claims.",
-            "- `sentence-transformers` is not installed in the current environment, so the current semantic backend may be incomplete unless the embedding model is installed and rerun.",
+            "- Labels are still an ARFA annotation layer and need human review before manuscript claims.",
+            "- InterCode Bash is useful for terminal interaction, but it is not a full replacement for later coding-agent benchmarks such as SWE-bench Lite.",
             "",
             "Phase 2 remains locked until this report, the leakage audit, and the acceptance gate are reviewed.",
         ]
@@ -502,7 +510,8 @@ def analyze_final(config_path: str) -> dict[str, Any]:
         },
     )
     gate = _gate(test_metric_rows)
-    _write_report(Path(paths["report_path"]), dataset_summary, test_metric_rows, thresholds, gate)
+    embedding_backends = sorted({row.get("embedding_backend", "unknown") for row in rows})
+    _write_report(Path(paths["report_path"]), dataset_summary, test_metric_rows, thresholds, gate, ", ".join(embedding_backends))
     return {"dev_binary_records": len(dev_rows), "validation_binary_records": len(validation_rows), "test_binary_records": len(test_rows), "gate": gate}
 
 

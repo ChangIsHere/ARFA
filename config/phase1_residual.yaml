@@ -11,7 +11,7 @@ final_dataset:
 residual:
   embedding_model: sentence-transformers/all-MiniLM-L6-v2
   embedding_fallback: tfidf
-  require_embedding_model: false
+  require_embedding_model: true
   embedding_threshold: auto
   rule_threshold: auto
   hybrid_threshold: auto

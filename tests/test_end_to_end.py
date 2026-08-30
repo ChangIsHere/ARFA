@@ -23,7 +23,7 @@ dataset:
   min_records: 50
   output_path: {dataset}
 residual:
-  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  embedding_model: tfidf_fallback
   embedding_fallback: tfidf
   embedding_threshold: 0.45
   rule_threshold: 0.50

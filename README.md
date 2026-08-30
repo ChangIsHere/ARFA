@@ -60,6 +60,13 @@ Limitations:
 
 ## Final Phase 1
 
+Set up the local environment and cache the embedding model:
+
+```bash
+bash scripts/setup_phase1_env.sh
+bash scripts/phase1_verify_embedding.sh
+```
+
 Build the external-data dataset and residual scores:
 
 ```bash

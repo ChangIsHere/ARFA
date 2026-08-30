@@ -291,13 +291,18 @@ def _write_tables(summary: dict[str, Any], metrics: list[dict[str, str]], ablati
 
 
 def _write_index(summary: dict[str, Any], backend: str) -> None:
+    caveat = (
+        "The final data source is external InterCode Bash trajectories, and this run uses the intended MiniLM embedding backend. Remaining caveats are annotation quality and benchmark scope."
+        if "sentence-transformers/all-MiniLM-L6-v2" in backend
+        else f"The final data source is external InterCode Bash trajectories, but the current semantic backend is `{backend}`. Do not describe this run as a final MiniLM embedding result until `sentence-transformers/all-MiniLM-L6-v2` is installed and the experiment is rerun."
+    )
     text = f"""# Phase 1 Paper Artifacts
 
 Generated from `results/phase1_residual/final/`.
 
 ## Important Caveat
 
-The final data source is external InterCode Bash trajectories, but the current semantic backend is `{backend}`. Do not describe this run as a final MiniLM embedding result until `sentence-transformers/all-MiniLM-L6-v2` is installed and the experiment is rerun.
+{caveat}
 
 ## Dataset Snapshot
 
