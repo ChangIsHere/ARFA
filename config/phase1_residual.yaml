@@ -5,7 +5,7 @@ dataset:
 final_dataset:
   source_root: .
   output_path: data/phase1/final/intercode_bash_phase1.jsonl
-  max_records: 700
+  max_records: 0
   seed: 1729
 
 residual:

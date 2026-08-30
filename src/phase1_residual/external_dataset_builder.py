@@ -13,7 +13,7 @@ from src.common.schemas import Phase1FinalRecord
 from src.common.utils import ensure_parent, write_jsonl
 
 
-SOURCE_GLOB = "data/phase1/external_intercode/data/results/bash/*/ic_bash_multiturn*_10_turns_fs_*.json"
+SOURCE_GLOB = "data/phase1/external_intercode/data/results/bash/**/*.json"
 DEFAULT_OUTPUT = "data/phase1/final/intercode_bash_phase1.jsonl"
 DEFAULT_ANNOTATION = "data/phase1/annotation/second_pass_self_agreement.json"
 DEFAULT_SUMMARY = "results/phase1_residual/final/dataset_summary.json"
@@ -167,7 +167,7 @@ def _iter_trajectories(source_root: Path) -> list[tuple[Path, str, dict[str, Any
     return trajectories
 
 
-def build_external_records(source_root: Path, max_records: int, seed: int) -> list[dict[str, Any]]:
+def build_external_records(source_root: Path, max_records: int | None, seed: int) -> list[dict[str, Any]]:
     rng = random.Random(seed)
     trajectories = _iter_trajectories(source_root)
     rng.shuffle(trajectories)
@@ -192,7 +192,7 @@ def build_external_records(source_root: Path, max_records: int, seed: int) -> li
         prev_reward = 0.0
 
         for idx, action in enumerate(actions):
-            if len(records) >= max_records:
+            if max_records is not None and len(records) >= max_records:
                 return records
             observation = observations[idx] if idx < len(observations) else ""
             reward = float(rewards[idx]) if idx < len(rewards) else None
@@ -254,6 +254,7 @@ def _write_summary(records: list[dict[str, Any]], splits: dict[str, Any], summar
         "ambiguous_count": sum(record["reasoning_needed"] == "ambiguous" for record in records),
         "distinct_task_count": len({record["task_id"] for record in records}),
         "distinct_trajectory_count": len({record["trajectory_id"] for record in records}),
+        "source_file_count": len({record["source_file"] for record in records}),
         "class_distribution": dict(Counter(record["reasoning_needed"] for record in records)),
         "task_category_distribution": dict(Counter(record["task_category"] for record in records)),
         "step_type_distribution": dict(Counter(record["step_type"] for record in records)),
@@ -309,11 +310,12 @@ def main() -> None:
     parser.add_argument("--summary", default=DEFAULT_SUMMARY)
     parser.add_argument("--splits", default=DEFAULT_SPLITS)
     parser.add_argument("--second-pass", default=DEFAULT_ANNOTATION)
-    parser.add_argument("--max-records", type=int, default=700)
+    parser.add_argument("--max-records", type=int, default=0, help="Maximum records to write. Use 0 for all available records.")
     parser.add_argument("--seed", type=int, default=1729)
     args = parser.parse_args()
 
-    records = build_external_records(Path(args.source_root), args.max_records, args.seed)
+    max_records = None if args.max_records == 0 else args.max_records
+    records = build_external_records(Path(args.source_root), max_records, args.seed)
     splits = _make_splits(records, args.seed)
     write_jsonl(args.output, records)
     ensure_parent(args.splits).write_text(json.dumps(splits, indent=2), encoding="utf-8")

@@ -67,7 +67,7 @@ bash scripts/setup_phase1_env.sh
 bash scripts/phase1_verify_embedding.sh
 ```
 
-Build the external-data dataset and residual scores:
+Build the full external-data dataset and residual scores:
 
 ```bash
 bash scripts/phase1_build_final_dataset.sh

@@ -13,7 +13,7 @@ export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
   --summary results/phase1_residual/final/dataset_summary.json \
   --splits results/phase1_residual/final/splits.json \
   --second-pass data/phase1/annotation/second_pass_self_agreement.json \
-  --max-records 700 \
+  --max-records 0 \
   --seed 1729
 
 "$PYTHON_BIN" -m src.phase1_residual.residual_calculator \

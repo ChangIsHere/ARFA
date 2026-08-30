@@ -440,7 +440,6 @@ def _write_report(path: Path, dataset_summary: dict[str, Any], test_metric_rows:
             "",
             "- Expectations are generated from action text before reading each observation, because InterCode logs do not contain agent-written expectations.",
             "- Labels are an ARFA annotation layer over external trajectories and need human review before manuscript claims.",
-            "- Labels are still an ARFA annotation layer and need human review before manuscript claims.",
             "- InterCode Bash is useful for terminal interaction, but it is not a full replacement for later coding-agent benchmarks such as SWE-bench Lite.",
             "",
             "Phase 2 remains locked until this report, the leakage audit, and the acceptance gate are reviewed.",
