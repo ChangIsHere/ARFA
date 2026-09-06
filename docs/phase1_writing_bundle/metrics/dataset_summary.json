@@ -1,0 +1,38 @@
+{
+  "record_count": 10500,
+  "binary_record_count": 6087,
+  "ambiguous_count": 4413,
+  "distinct_task_count": 200,
+  "distinct_trajectory_count": 1648,
+  "source_file_count": 33,
+  "class_distribution": {
+    "false": 1477,
+    "ambiguous": 4413,
+    "true": 4610
+  },
+  "task_category_distribution": {
+    "repository_navigation": 6489,
+    "test_repair": 886,
+    "localized_code_modification": 2354,
+    "small_feature_implementation": 459,
+    "build_failure_diagnosis": 129,
+    "bug_fixing": 183
+  },
+  "step_type_distribution": {
+    "navigation_or_inspection": 4575,
+    "validation_or_termination": 2286,
+    "file_modification": 1584,
+    "symbol_or_text_search": 1467,
+    "file_reading": 512,
+    "build_execution": 39,
+    "dependency_inspection": 29,
+    "error_diagnosis": 8
+  },
+  "data_source": "InterCode Bash external trajectories, Princeton NLP intercode repository",
+  "external_source_root": "data/phase1/external_intercode",
+  "split_record_counts": {
+    "development": 6479,
+    "validation": 1903,
+    "test": 2118
+  }
+}
