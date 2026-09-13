@@ -6,6 +6,22 @@ Current status: **Phase 1 only**.
 
 Do not begin Phase 2 until Phase 1 has produced a complete dataset, residual metrics, failure-case analysis, and a written report.
 
+## For Paper Writing
+
+The compact Phase 1 writing bundle is tracked in git:
+
+```text
+docs/phase1_writing_bundle/
+```
+
+Start with:
+
+```text
+docs/phase1_writing_bundle/README_FOR_WRITING.md
+```
+
+It contains the Phase 1 report, paper-ready tables, selected figures, metrics, subgroup results, ablations, failure-case analysis, and leakage audit. This is the best entry point for another ChatGPT conversation that needs to write the workshop draft.
+
 ## Repository Branches
 
 - `main`: code, experiment scripts, configs, documentation, and tests.
@@ -36,6 +52,52 @@ data/phase1/external_intercode/
 That directory is intentionally ignored by git. Re-download or restore it locally before rebuilding final Phase 1 artifacts.
 
 The previous 50-record local dataset is preserved only as a pilot sanity check. It is not evidence that residual generalizes.
+
+## Current Phase 1 Result
+
+The latest full Phase 1 run uses all locally available InterCode Bash result files with `sentence-transformers/all-MiniLM-L6-v2` as the semantic residual backend.
+
+Dataset summary:
+
+```text
+execution steps: 10,500
+binary-labeled steps: 6,087
+ambiguous steps retained: 4,413
+distinct tasks: 200
+distinct trajectories: 1,648
+source result files: 33
+```
+
+Held-out test result for the hybrid residual:
+
+```text
+F1: 0.849
+PR-AUC: 0.919
+false-fast rate: 0.032
+fast-path rate: 0.070
+safe-fast precision: 0.671
+evidence gate: not passed
+```
+
+Interpretation:
+
+```text
+Residual contains useful signal, but the current routing criterion is not yet strong enough to unlock Phase 2/3 claims about live-agent efficiency.
+```
+
+Supported writing claim:
+
+```text
+Phase 1 provides preliminary external-trajectory evidence that residual is useful for reasoning-necessity prediction, while showing that safer and higher-coverage routing still requires better expectation quality, annotation review, and policy refinement.
+```
+
+Unsupported claims:
+
+```text
+Do not claim ARFA has reduced token usage, latency, or large-model calls yet.
+Do not claim ARFA-Min has been evaluated as a live agent yet.
+Do not claim labels are human gold labels yet.
+```
 
 ## Pilot Phase 1
 
@@ -127,7 +189,17 @@ Phase 2 remains locked unless held-out Phase 1 results satisfy the provisional e
 
 ## Current Caveat
 
-The current external-data run uses InterCode Bash trajectories, but the semantic backend may still be `tfidf_fallback` unless `sentence-transformers/all-MiniLM-L6-v2` is installed and cached locally. Do not describe fallback results as final embedding-model evidence.
+The current external-data run uses InterCode Bash trajectories and the intended MiniLM semantic backend. The remaining caveats are annotation quality, expectation-generation quality, and benchmark scope.
+
+## Next Phase
+
+The next research step is Phase 2 preparation:
+
+```text
+Build a standard terminal-based ReAct baseline that always reasons after each observation.
+```
+
+Phase 2 should be implemented carefully as a baseline, not as ARFA-Min. ARFA-Min belongs to Phase 3.
 
 ## Tests
 
