@@ -1,8 +1,33 @@
-locked: true
-reason: Phase 2 starts only after Phase 1 acceptance criteria are reviewed.
+locked: false
+reason: Phase 2 builds the standard ReAct baseline after Phase 1 review.
 
 baseline:
   model_interface: openai_compatible
-  model_name: Llama-3.1-8B-Instruct
+  base_url: http://localhost:11434/v1
+  api_key_env: ARFA_LOCAL_MODEL_API_KEY
+  model_name: qwen2.5-coder:7b
+  temperature: 0.0
+  max_tokens: 700
+  request_timeout_seconds: 120
+  request_attempts: 3
   max_steps: 12
   always_reason_after_observation: true
+
+data:
+  task_path: data/phase2/intercode_bash_local_tasks.jsonl
+  task_limit: 0
+  dataset_role: preliminary_local_fixture
+  paper_usable: false
+
+environment:
+  backend: local_fixture
+  command_timeout_seconds: 20
+  max_observation_chars: 4000
+  max_workspace_bytes: 10000000
+  workspace_root: results/phase2_baseline/workspaces
+
+outputs:
+  result_dir: results/phase2_baseline/local_react
+  traces_path: results/phase2_baseline/local_react/traces.jsonl
+  summary_path: results/phase2_baseline/local_react/summary.json
+  metrics_path: results/phase2_baseline/local_react/metrics.csv

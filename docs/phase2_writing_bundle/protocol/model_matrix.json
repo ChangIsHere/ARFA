@@ -1,0 +1,38 @@
+{
+  "runtime": "Ollama",
+  "runtime_version": "0.34.0",
+  "execution_order": "serial",
+  "temperature": 0.0,
+  "models": [
+    {
+      "name": "arfa-qwen2.5-coder:7b-8k",
+      "base_model": "qwen2.5-coder:7b",
+      "ollama_id": "dae161e27b0e",
+      "parameters": "7.6B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 32768,
+      "experiment_context_length": 8192,
+      "role": "primary coding baseline"
+    },
+    {
+      "name": "arfa-llama3.1:8b-8k",
+      "base_model": "llama3.1:8b",
+      "ollama_id": "46e0c10c039e",
+      "parameters": "8.0B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 131072,
+      "experiment_context_length": 8192,
+      "role": "cross-family general baseline"
+    },
+    {
+      "name": "arfa-qwen2.5-coder:14b-8k",
+      "base_model": "qwen2.5-coder:14b",
+      "ollama_id": "9ec8897f747e",
+      "parameters": "14.8B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 32768,
+      "experiment_context_length": 8192,
+      "role": "within-family scale comparison"
+    }
+  ]
+}

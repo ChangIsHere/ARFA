@@ -36,3 +36,17 @@ Writing bundle:
 ```text
 docs/phase1_writing_bundle/README_FOR_WRITING.md
 ```
+
+## Phase 2 Full InterCode NL2Bash Baseline
+
+Current status: complete for the workshop paper's always-reason baseline section.
+
+The frozen evaluation contains 600 real local-model runs: three models over all 200 tasks in the released InterCode NL2Bash suite. Task success is 26.0% for Qwen2.5-Coder 7B, 25.5% for Llama 3.1 8B, and 40.0% for Qwen2.5-Coder 14B. The paired differences between 14B and both smaller baselines are statistically significant under exact McNemar tests; the 7B/8B difference is not.
+
+Writing bundle:
+
+```text
+docs/phase2_writing_bundle/README_FOR_WRITING.md
+```
+
+These results measure the standard ReAct comparison point only. They do not yet support claims that ARFA reduces model calls, tokens, or latency.

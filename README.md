@@ -2,9 +2,9 @@
 
 ARFA studies whether an execution residual, the gap between an expected terminal outcome and the actual terminal observation, can help decide when a terminal-based coding agent needs another reasoning call.
 
-Current status: **Phase 1 only**.
+Current status: **Phase 2 complete: 600 real local-model runs across the full released InterCode NL2Bash suite**.
 
-Do not begin Phase 2 until Phase 1 has produced a complete dataset, residual metrics, failure-case analysis, and a written report.
+Phase 1 produced the external-trajectory residual analysis. Phase 2 establishes the standard always-reason ReAct baseline without ARFA routing. Phase 3 has not started.
 
 ## For Paper Writing
 
@@ -21,6 +21,12 @@ docs/phase1_writing_bundle/README_FOR_WRITING.md
 ```
 
 It contains the Phase 1 report, paper-ready tables, selected figures, metrics, subgroup results, ablations, failure-case analysis, and leakage audit. This is the best entry point for another ChatGPT conversation that needs to write the workshop draft.
+
+The corresponding compact Phase 2 evidence package is:
+
+```text
+docs/phase2_writing_bundle/README_FOR_WRITING.md
+```
 
 ## Repository Branches
 
@@ -163,7 +169,7 @@ Phase 1 validates whether residual is a useful reasoning-trigger signal.
 Phase 2 builds the standard ReAct coding-agent baseline.
 Phase 3 builds the dual-track ARFA agent.
 
-The repository intentionally keeps Phase 2 and Phase 3 locked until Phase 1 is reviewed.
+Phase 2 is a baseline only: it always calls the reasoning model after each terminal observation. Phase 3 is where residual-guided fast/slow control belongs.
 
 ## Project Memory
 
@@ -176,9 +182,9 @@ docs/09_next_steps_workshop.md
 
 ARFA currently expands to **Action Residual Fused Agent**.
 
-## Phase 1 Acceptance Gate
+## Residual Deployment Gate
 
-Phase 2 remains locked unless held-out Phase 1 results satisfy the provisional evidence gate:
+Phase 1 produced the required dataset, metrics, failure-case analysis, and written report, so the independent always-reason Phase 2 baseline was allowed to proceed. The residual policy still does not pass the following provisional deployment gate and must be improved before Phase 3 routing claims:
 
 - hybrid residual beats always-reason, never-reason, keyword, and TF-IDF baselines on F1 or PR-AUC
 - held-out false-fast rate is at most 5%
@@ -191,15 +197,60 @@ Phase 2 remains locked unless held-out Phase 1 results satisfy the provisional e
 
 The current external-data run uses InterCode Bash trajectories and the intended MiniLM semantic backend. The remaining caveats are annotation quality, expectation-generation quality, and benchmark scope.
 
-## Next Phase
+## Phase 2 Baseline
 
-The next research step is Phase 2 preparation:
+Phase 2 is implemented and evaluated as a local terminal ReAct baseline:
 
 ```text
-Build a standard terminal-based ReAct baseline that always reasons after each observation.
+data/phase2/intercode_bash_local_tasks.jsonl
+src/phase2_baseline/
+config/phase2_baseline.yaml
+config/phase2_paper.yaml
 ```
 
-Phase 2 should be implemented carefully as a baseline, not as ARFA-Min. ARFA-Min belongs to Phase 3.
+Validate the harness without a real model:
+
+```bash
+bash scripts/phase2_run_baseline.sh --dry-run
+```
+
+Run the real baseline after starting a local OpenAI-compatible model server:
+
+```bash
+bash scripts/phase2_run_baseline.sh
+```
+
+Default local model target:
+
+```text
+base_url: http://localhost:11434/v1
+model_name: qwen2.5-coder:7b
+```
+
+Dry-run results are not paper evidence. Paper-usable Phase 2 results require a real model endpoint.
+
+The frozen paper run uses all 200 tasks in the released InterCode NL2Bash suite with three local models: `qwen2.5-coder:7b`, `llama3.1:8b`, and `qwen2.5-coder:14b`. This is the ARFA Phase 2 evaluation set, not an upstream official test split. Paper aliases fix all three to an 8192-token context. Create the aliases, build and validate the Docker environments, then launch the resumable matrix:
+
+```bash
+bash scripts/phase2_create_ollama_models.sh
+bash scripts/phase2_build_intercode_images.sh
+bash scripts/phase2_validate_official_environment.sh
+bash scripts/phase2_run_paper_matrix.sh
+```
+
+Phase 2 contains no residual-guided routing. Its outputs establish the always-reason comparison point for Phase 3.
+
+The complete Phase 2 matrix contains 600 runs. Qwen2.5-Coder 7B reaches 26.0%, Llama 3.1 8B reaches 25.5%, and Qwen2.5-Coder 14B reaches 40.0% task success. The tracked paper-writing evidence is in:
+
+```text
+docs/phase2_writing_bundle/README_FOR_WRITING.md
+```
+
+Local model setup notes:
+
+```text
+docs/phase2_local_model_setup.md
+```
 
 ## Tests
 

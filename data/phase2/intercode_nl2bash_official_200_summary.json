@@ -1,0 +1,24 @@
+{
+  "benchmark": "intercode_nl2bash",
+  "development_set": "data/phase2/intercode_bash_local_tasks.jsonl",
+  "source_commit": "c3e46d827cfc9d4c704ec078f7abf9f41e3191d8",
+  "source_repo": "princeton-nlp/intercode",
+  "split": "arfa_phase2_evaluation",
+  "task_count": 200,
+  "tasks_by_category": {
+    "compute": 13,
+    "copy_or_move": 4,
+    "count": 29,
+    "create_or_modify": 13,
+    "delete": 28,
+    "inspect": 42,
+    "other": 38,
+    "search": 33
+  },
+  "tasks_by_filesystem": {
+    "1": 60,
+    "2": 53,
+    "3": 60,
+    "4": 27
+  }
+}

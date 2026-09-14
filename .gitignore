@@ -18,3 +18,4 @@ results/phase1_residual/*.jsonl
 results/phase1_residual/*.csv
 results/phase1_residual/*.json
 results/phase1_residual/*.png
+results/phase2_baseline/

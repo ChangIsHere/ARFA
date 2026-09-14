@@ -1,0 +1,36 @@
+locked: false
+reason: Full Phase 2 standard ReAct baseline on the released InterCode NL2Bash suite.
+
+baseline:
+  model_interface: openai_compatible
+  base_url: http://localhost:11434/v1
+  api_key_env: ARFA_LOCAL_MODEL_API_KEY
+  model_name: arfa-qwen2.5-coder:7b-8k
+  temperature: 0.0
+  max_tokens: 700
+  context_length: 8192
+  request_timeout_seconds: 180
+  request_attempts: 3
+  max_steps: 12
+  always_reason_after_observation: true
+
+data:
+  task_path: data/phase2/intercode_nl2bash_official_200.jsonl
+  task_limit: 0
+  expected_task_count: 200
+  dataset_role: arfa_phase2_evaluation_full_suite
+  paper_usable: true
+
+environment:
+  backend: intercode_docker
+  image_prefix: arfa/intercode-nl2bash:fs
+  command_timeout_seconds: 20
+  max_observation_chars: 4000
+  container_memory: 1g
+  network_mode: bridge
+
+outputs:
+  result_dir: results/phase2_baseline/paper/qwen2.5-coder-7b
+  traces_path: results/phase2_baseline/paper/qwen2.5-coder-7b/traces.jsonl
+  summary_path: results/phase2_baseline/paper/qwen2.5-coder-7b/summary.json
+  metrics_path: results/phase2_baseline/paper/qwen2.5-coder-7b/metrics.csv

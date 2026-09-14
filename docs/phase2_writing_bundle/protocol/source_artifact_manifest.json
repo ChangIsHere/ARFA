@@ -1,0 +1,23 @@
+{
+  "complete": true,
+  "source_traces": [
+    {
+      "path": "results/phase2_baseline/paper/llama3.1-8b/traces.jsonl",
+      "bytes": 760913,
+      "records": 200,
+      "sha256": "0ccde167634563292ae1323e2bb52b6c54c85deb24c6f564bb0a66a37d172e39"
+    },
+    {
+      "path": "results/phase2_baseline/paper/qwen2.5-coder-14b/traces.jsonl",
+      "bytes": 781362,
+      "records": 200,
+      "sha256": "7b56901e911fd9182fa438ced2b2f2d01bb77d4badb308cd498473ec816d3836"
+    },
+    {
+      "path": "results/phase2_baseline/paper/qwen2.5-coder-7b/traces.jsonl",
+      "bytes": 994847,
+      "records": 200,
+      "sha256": "b0b6d156c58804309835b8ce0e14abdaeca36d7b659588f3018e1b1b0bd43ce7"
+    }
+  ]
+}

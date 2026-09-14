@@ -37,7 +37,14 @@ def write_csv(path: str | Path, rows: list[dict[str, Any]]) -> None:
             if key not in fieldnames:
                 fieldnames.append(key)
     with target.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore", quoting=csv.QUOTE_ALL, escapechar="\\")
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=fieldnames,
+            extrasaction="ignore",
+            quoting=csv.QUOTE_ALL,
+            escapechar="\\",
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
 

@@ -1,0 +1,9 @@
+{
+  "expected_models": 3,
+  "observed_models": 3,
+  "expected_tasks_per_model": 200,
+  "observed_runs": 600,
+  "environment_validation_tasks": 200,
+  "gold_healthy_tasks": 195,
+  "complete": true
+}
