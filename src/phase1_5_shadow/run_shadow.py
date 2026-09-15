@@ -3,8 +3,11 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+import importlib.metadata
 import json
 import platform
+import re
+import subprocess
 import time
 from pathlib import Path
 from typing import Any
@@ -12,6 +15,7 @@ from typing import Any
 from src.common.config import load_simple_yaml
 from src.common.utils import ensure_parent, read_jsonl, write_csv, write_jsonl
 from src.phase1_5_shadow.json_model_client import OllamaStructuredClient
+from src.phase1_5_shadow.freeze_protocol import verify_freeze_manifest
 from src.phase1_5_shadow.shadow_agent import ShadowReActAgent, ShadowRun
 from src.phase2_baseline.intercode_docker_environment import InterCodeDockerEnvironment
 
@@ -21,6 +25,93 @@ ALLOWED_SPLITS = {"shadow_development", "shadow_validation", "shadow_test"}
 
 def _sha256(path: str | Path) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _package_versions() -> dict[str, str | None]:
+    versions: dict[str, str | None] = {}
+    for package in ("numpy", "scikit-learn", "sentence-transformers", "PyYAML"):
+        try:
+            versions[package] = importlib.metadata.version(package)
+        except importlib.metadata.PackageNotFoundError:
+            versions[package] = None
+    return versions
+
+
+def _git_commit() -> str:
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+
+def _ollama_model_metadata(model_name: str) -> dict[str, str | None]:
+    modelfile = subprocess.run(
+        ["ollama", "show", model_name, "--modelfile"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+    version = subprocess.run(
+        ["ollama", "--version"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    match = re.search(r"^FROM .*sha256[-:]([0-9a-f]{64})$", modelfile, flags=re.MULTILINE)
+    return {
+        "model_name": model_name,
+        "base_blob_sha256": match.group(1) if match else None,
+        "modelfile_sha256": hashlib.sha256(modelfile.encode("utf-8")).hexdigest(),
+        "ollama_version": version,
+    }
+
+
+def _docker_image_digests(tasks: list[dict[str, Any]], image_prefix: str) -> dict[str, str]:
+    images = sorted({f"{image_prefix}{int(task['filesystem_version'])}" for task in tasks})
+    return {
+        image: subprocess.run(
+            ["docker", "image", "inspect", "--format={{.Id}}", image],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        for image in images
+    }
+
+
+def _freeze_provenance(
+    config: dict[str, Any], tasks: list[dict[str, Any]], freeze_manifest_path: Path
+) -> dict[str, Any]:
+    protocol = config.get("protocol", {})
+    result: dict[str, Any] = {
+        "protocol_version": protocol.get("version"),
+        "protocol_stage": protocol.get("stage"),
+        "protocol_locked": bool(protocol.get("locked", False)),
+        "freeze_manifest_sha256": None,
+        "freeze_source_commit": None,
+        "model_artifact": None,
+        "docker_image_digests": None,
+        "python_version": platform.python_version(),
+        "package_versions": _package_versions(),
+    }
+    if not result["protocol_locked"]:
+        return result
+    try:
+        manifest = json.loads(freeze_manifest_path.read_text(encoding="utf-8"))
+        verify_freeze_manifest(config, manifest)
+    except (FileNotFoundError, ValueError) as exc:
+        raise SystemExit(f"Formal collection provenance verification failed: {exc}") from exc
+    result.update(
+        {
+            "freeze_manifest_sha256": _sha256(freeze_manifest_path),
+            "freeze_source_commit": manifest["source_commit"],
+            "model_artifact": _ollama_model_metadata(str(config["shadow"]["model_name"])),
+            "docker_image_digests": _docker_image_digests(tasks, str(config["environment"]["image_prefix"])),
+        }
+    )
+    return result
 
 
 def _load_split_tasks(task_path: str, split_path: str, split: str, limit: int) -> list[dict[str, Any]]:
@@ -33,6 +124,14 @@ def _load_split_tasks(task_path: str, split_path: str, split: str, limit: int) -
     if len(tasks) != expected:
         raise ValueError(f"Split {split} expected {expected} tasks, found {len(tasks)}")
     return tasks[:limit] if limit > 0 else tasks
+
+
+def _validate_collection_scope(config: dict[str, Any], split: str, task_limit: int) -> None:
+    locked = bool(config.get("protocol", {}).get("locked", False))
+    if not locked and (split != "shadow_development" or task_limit <= 0 or task_limit > 10):
+        raise ValueError("Unlocked protocol permits only a shadow_development pilot of at most 10 tasks")
+    if locked and task_limit != 0:
+        raise ValueError("Formal collection forbids task limits; each frozen split must run in full")
 
 
 def _build_environment(task: dict[str, Any], config: dict[str, Any]) -> InterCodeDockerEnvironment:
@@ -73,6 +172,9 @@ def _summary(runs: list[ShadowRun], config: dict[str, Any], split: str, expected
         "total_tokens": sum(run.total_tokens or 0 for run in runs),
         "total_task_wall_seconds": sum(run.total_task_wall_seconds for run in runs),
         "protocol": {
+            "version": config["protocol"]["version"],
+            "stage": config["protocol"]["stage"],
+            "locked": config["protocol"]["locked"],
             "temperature": config["shadow"]["temperature"],
             "max_tokens": config["shadow"]["max_tokens"],
             "context_length": config["shadow"]["context_length"],
@@ -116,23 +218,31 @@ def main() -> None:
     parser.add_argument("--model-name")
     parser.add_argument("--output-dir")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--freeze-manifest", default="data/phase1_5/protocol_freeze_manifest.json")
     args = parser.parse_args()
 
     config = copy.deepcopy(load_simple_yaml(args.config))
     if args.model_name:
         config["shadow"]["model_name"] = args.model_name
+    try:
+        _validate_collection_scope(config, args.split, args.task_limit)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
     output_dir = Path(args.output_dir or config["outputs"]["result_dir"])
     tasks = _load_split_tasks(config["data"]["task_path"], config["data"]["split_path"], args.split, args.task_limit)
     expected_tasks = len(tasks)
+    freeze_provenance = _freeze_provenance(config, tasks, Path(args.freeze_manifest))
     provenance = {
         "python": platform.python_version(),
         "platform": platform.platform(),
+        "run_source_commit": _git_commit(),
         "config_sha256": _sha256(args.config),
         "task_manifest_sha256": _sha256(config["data"]["task_path"]),
         "split_manifest_sha256": _sha256(config["data"]["split_path"]),
         "prompt_sha256": _sha256("src/phase1_5_shadow/prompts.py"),
         "agent_sha256": _sha256("src/phase1_5_shadow/shadow_agent.py"),
         "json_client_sha256": _sha256("src/phase1_5_shadow/json_model_client.py"),
+        **freeze_provenance,
     }
 
     client = OllamaStructuredClient.from_config(config["shadow"])

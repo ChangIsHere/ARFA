@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from src.common.utils import read_jsonl, write_jsonl
+from src.phase1_5_shadow.freeze_protocol import FROZEN_FILES
 
 
 PUBLIC_PACKET_FIELDS = (
@@ -74,14 +75,6 @@ def build_evidence_bundle(
     write_jsonl(packet_output, public_packet)
     write_jsonl(source_output, source_index)
 
-    protocol_files = (
-        "config/phase1_5_shadow.yaml",
-        "data/phase1_5/task_splits.json",
-        "docs/phase1_5_annotation_guideline.md",
-        "docs/phase1_5_protocol.md",
-        "src/phase1_5_shadow/analyze_annotations.py",
-        "src/phase1_5_shadow/prompts.py",
-    )
     manifest = {
         "phase": "phase1_5_shadow",
         "scope": "10-task engineering pilot; no residual-effect labels or metrics",
@@ -94,7 +87,7 @@ def build_evidence_bundle(
             {**_file_metadata(blind_path), "path": "private://blind_annotation_packet"},
             {**_file_metadata(source_path), "path": "private://source_map"},
         ],
-        "protocol_artifacts": [_file_metadata(path) for path in protocol_files],
+        "protocol_artifacts": [_file_metadata(path) for path in FROZEN_FILES],
         "published_artifacts": [
             _file_metadata(path)
             for path in (audit_output, annotation_output, packet_output, source_output)

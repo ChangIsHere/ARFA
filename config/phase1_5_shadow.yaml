@@ -41,10 +41,10 @@ acceptance:
   held_out_safe_fast_precision: 0.95
   held_out_fast_path_rate: 0.15
   held_out_false_fast_rate: 0.05
-  require_full_residual_beats_no_expectation: true
-  require_no_major_subgroup_collapse: true
   minimum_test_binary_labels: 100
   minimum_auc_gain_over_no_expectation: 0.02
+  minimum_raw_residual_auc_gain_over_no_expectation: 0.02
+  minimum_full_auc_gain_over_expectation_gate_only: 0.02
   minimum_expectation_mismatch_auc: 0.80
   minimum_subgroup_items: 20
   minimum_subgroup_safe_fast_precision: 0.85

@@ -16,6 +16,10 @@ Phase 1.5 must never execute tasks assigned to `phase3_final`.
 
 Protocol version `phase1.5-v1.1` is in pilot review. `protocol.locked` remains false until the pilot labels and independent agreement check are complete. Formal shadow collection is forbidden before a tracked freeze manifest records the config, prompt, schema, splits, annotation guide, analyzer, runner, and residual implementation hashes.
 
+Every formal run summary records the protocol version, freeze-manifest SHA-256, freeze source commit, run source commit, Ollama base-blob and Modelfile hashes, Docker image IDs, Python version, and core package versions. The Python runner independently verifies the complete frozen file set, so direct invocation cannot bypass the shell-level freeze check.
+
+While unlocked, the Python runner permits only a `shadow_development` pilot of at most 10 tasks. Once locked, it requires complete splits and rejects `--task-limit`; this prevents selective formal collection.
+
 ## Frozen Splits
 
 - `shadow_development`: 40 tasks for representation development.
@@ -40,6 +44,8 @@ Phase 3 remains locked unless the held-out shadow test satisfies all of the foll
 - false-fast rate at most 5%
 - full expectation-conditioned residual beats the no-expectation baseline
 - full residual gains at least 0.02 ROC-AUC over no-expectation and its task-bootstrap 95% interval excludes zero
+- raw expectation-observation residual gains at least 0.02 ROC-AUC over no-expectation and its task-bootstrap 95% interval excludes zero
+- gated full residual gains at least 0.02 ROC-AUC over expectation-gate-only and its task-bootstrap 95% interval excludes zero
 - at least 100 binary-labeled held-out items
 - expectation-mismatch ROC-AUC at least 0.80
 - Cohen's kappa at least 0.70 on both labels over an independently annotated 25% sample
@@ -53,6 +59,8 @@ Blank labels are incomplete. `ambiguous` is a completed annotation that is exclu
 
 Task-clustered bootstrap 95% confidence intervals accompany safe-fast precision, fast-path rate, false-fast rate, ROC-AUC, AUC gain, and eligible subgroup results. Acceptance remains based on the preregistered point estimates, with denominators and intervals reported alongside them.
 
+The ablation report separates `expectation_gate_only_score`, which captures continuation availability and expectation-quality gates, from `raw_full_residual_score`, which contains only semantic and structured expectation-observation mismatch. The semantic/structured weight is selected on development-set raw-residual AUC, without gate contribution. `full_residual_score` then applies that frozen raw score inside the complete gated routing system. This distinguishes system-level routing utility from the incremental information in residual mismatch itself.
+
 ## Reproducible Commands
 
 ```bash
@@ -60,12 +68,16 @@ bash scripts/phase1_5_build_splits.sh
 bash scripts/phase1_5_run_pilot.sh
 bash scripts/phase1_5_audit_collection.sh
 bash scripts/phase1_5_build_annotation_packet.sh --results-root results/phase1_5_shadow/pilot --output-dir results/phase1_5_shadow/pilot_annotation
-# Complete both pilot annotation packets, then run the pilot analysis.
-bash scripts/phase1_5_analyze_annotations.sh \
-  --annotations results/phase1_5_shadow/pilot_annotation/blind_annotation_packet.jsonl \
-  --secondary-annotations results/phase1_5_shadow/pilot_annotation/blind_annotation_packet_secondary_25pct.jsonl \
-  --source-map results/phase1_5_shadow/pilot_annotation/private_source_map.jsonl \
-  --output-dir results/phase1_5_shadow/pilot_analysis
+# Run these independently with distinct annotator IDs and shuffle seeds.
+bash scripts/phase1_5_annotate_packet.sh \
+  --packet results/phase1_5_shadow/pilot_annotation/blind_annotation_packet.jsonl \
+  --output results/phase1_5_shadow/pilot_annotation/primary_labeled.jsonl \
+  --annotator primary_ID --shuffle-seed 1511
+bash scripts/phase1_5_annotate_packet.sh \
+  --packet results/phase1_5_shadow/pilot_annotation/blind_annotation_packet_secondary_25pct.jsonl \
+  --output results/phase1_5_shadow/pilot_annotation/secondary_labeled.jsonl \
+  --annotator secondary_ID --shuffle-seed 1523
+bash scripts/phase1_5_review_pilot_annotations.sh
 bash scripts/phase1_5_freeze_protocol.sh
 bash scripts/phase1_5_run_shadow_matrix.sh
 # Complete both formal annotation packets, then run held-out analysis once.

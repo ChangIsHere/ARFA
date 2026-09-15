@@ -12,16 +12,27 @@ from src.common.config import load_simple_yaml
 
 FROZEN_FILES = (
     "config/phase1_5_shadow.yaml",
+    "data/phase2/intercode_nl2bash_official_200.jsonl",
     "data/phase1_5/task_splits.json",
     "docs/phase1_5_annotation_guideline.md",
     "docs/phase1_5_protocol.md",
+    "requirements.txt",
+    "scripts/phase1_5_run_shadow_matrix.sh",
+    "src/common/config.py",
+    "src/common/utils.py",
     "src/phase1_5_shadow/analyze_annotations.py",
+    "src/phase1_5_shadow/annotate_packet.py",
     "src/phase1_5_shadow/build_annotation_packet.py",
+    "src/phase1_5_shadow/freeze_protocol.py",
     "src/phase1_5_shadow/json_model_client.py",
     "src/phase1_5_shadow/prompts.py",
     "src/phase1_5_shadow/residual.py",
+    "src/phase1_5_shadow/review_pilot_annotations.py",
     "src/phase1_5_shadow/run_shadow.py",
     "src/phase1_5_shadow/shadow_agent.py",
+    "src/phase1_residual/residual_calculator.py",
+    "src/phase2_baseline/intercode_docker_environment.py",
+    "src/phase2_baseline/model_client.py",
 )
 
 
@@ -72,7 +83,12 @@ def verify_freeze_manifest(config: dict[str, Any], manifest: dict[str, Any]) -> 
         raise ValueError("Protocol version does not match the freeze manifest")
     if protocol.get("stage") != "formal_shadow_collection":
         raise ValueError("Formal collection requires protocol.stage=formal_shadow_collection")
-    for path, metadata in manifest.get("files", {}).items():
+    files = manifest.get("files")
+    if not isinstance(files, dict) or set(files) != set(FROZEN_FILES):
+        missing = sorted(set(FROZEN_FILES) - set(files or {}))
+        unexpected = sorted(set(files or {}) - set(FROZEN_FILES))
+        raise ValueError(f"Freeze manifest file set mismatch; missing={missing}, unexpected={unexpected}")
+    for path, metadata in files.items():
         if not Path(path).is_file() or _sha256(path) != metadata.get("sha256"):
             raise ValueError(f"Frozen protocol artifact changed or is missing: {path}")
 
@@ -80,7 +96,7 @@ def verify_freeze_manifest(config: dict[str, Any], manifest: dict[str, Any]) -> 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Create the immutable Phase 1.5 formal-collection manifest.")
     parser.add_argument("--config", default="config/phase1_5_shadow.yaml")
-    parser.add_argument("--pilot-analysis", default="results/phase1_5_shadow/pilot_analysis/analysis.json")
+    parser.add_argument("--pilot-analysis", default="results/phase1_5_shadow/pilot_review/pilot_review.json")
     parser.add_argument("--output", default="data/phase1_5/protocol_freeze_manifest.json")
     parser.add_argument("--verify-existing", action="store_true")
     args = parser.parse_args()

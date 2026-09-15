@@ -64,9 +64,15 @@
   "protocol_artifacts": [
     {
       "path": "config/phase1_5_shadow.yaml",
-      "sha256": "4335698d2635f0c02c9ac8f77fa0a8d09339c94bdc6f27e8ad56727196293d75",
-      "bytes": 1748,
+      "sha256": "09ff4e151900a4ec78dd42fcfe0d3d4369c44998184c857d951b10fe490a80a0",
+      "bytes": 1769,
       "records": 55
+    },
+    {
+      "path": "data/phase2/intercode_nl2bash_official_200.jsonl",
+      "sha256": "c6936840f27441f3310efdf958ef45d2adf9ac47d87c1ffa8cb04c2207dc3557",
+      "bytes": 134532,
+      "records": 200
     },
     {
       "path": "data/phase1_5/task_splits.json",
@@ -76,27 +82,117 @@
     },
     {
       "path": "docs/phase1_5_annotation_guideline.md",
-      "sha256": "de87ad76dda9f5edc421da44f572422c63fa2d3994ed1998108292ad44d92b9c",
-      "bytes": 1494,
-      "records": 13
+      "sha256": "33edc5d843c7921a56eb4734d5f2353278aed8d0b8630818176dca1a45707b09",
+      "bytes": 1887,
+      "records": 14
     },
     {
       "path": "docs/phase1_5_protocol.md",
-      "sha256": "57d82550489354f8b7c54bb92f10c70f6946ff1a39f2a5e4f143cefceb88b1f5",
-      "bytes": 5251,
-      "records": 51
+      "sha256": "2a2877a8ab341e0ec5128e6502d6bfff1c3e6cdf027da2d72ca0838177fd0fa2",
+      "bytes": 6823,
+      "records": 60
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "2ba32c7108fc8c7cf8cbbb6978370e2040ae7200832f74f8e950ff8d36987fc6",
+      "bytes": 66,
+      "records": 6
+    },
+    {
+      "path": "scripts/phase1_5_run_shadow_matrix.sh",
+      "sha256": "027b8edeba657b2635c09cb060c672281426e211b855e5b26d993735e2135707",
+      "bytes": 791,
+      "records": 23
+    },
+    {
+      "path": "src/common/config.py",
+      "sha256": "18f53ddac7866b5423fd214415a851ab90e785a431c30cab32da02e96b3bb645",
+      "bytes": 1303,
+      "records": 37
+    },
+    {
+      "path": "src/common/utils.py",
+      "sha256": "f1bb604fe4e07ec796c17e793f2d12b7fd2b9f2ee35afca09937c48ebb082e86",
+      "bytes": 1656,
+      "records": 44
     },
     {
       "path": "src/phase1_5_shadow/analyze_annotations.py",
-      "sha256": "7c6d126458a3ccb9309dfe2b91fd05f1e7d2e2f0f6aeb20ac0d338f0a0428447",
-      "bytes": 26300,
-      "records": 552
+      "sha256": "7be22b425d8fdc84c125b694229a90b2344017dbff27e570a030a41ee8271dc5",
+      "bytes": 30616,
+      "records": 640
+    },
+    {
+      "path": "src/phase1_5_shadow/annotate_packet.py",
+      "sha256": "4836f8389931fbbbd4f005d7c56bd6b1bff244047240f6131f9786a21c9fa53c",
+      "bytes": 4002,
+      "records": 84
+    },
+    {
+      "path": "src/phase1_5_shadow/build_annotation_packet.py",
+      "sha256": "7e0d26e763aeb6894cbc343dfb2227579e726ceba2ae4af012b02d8d265e7fb5",
+      "bytes": 7107,
+      "records": 149
+    },
+    {
+      "path": "src/phase1_5_shadow/freeze_protocol.py",
+      "sha256": "957d85f2fbf57d1f3ef61f7e19d255bb1a4371b57f6323a084609fd1e574ec68",
+      "bytes": 5628,
+      "records": 112
+    },
+    {
+      "path": "src/phase1_5_shadow/json_model_client.py",
+      "sha256": "fd89cd1adeb30b43b8e8e1e9ac2ab584ebddff4e0808a71a0855360103d23590",
+      "bytes": 4382,
+      "records": 109
     },
     {
       "path": "src/phase1_5_shadow/prompts.py",
       "sha256": "062c47475cfdc2e069ffad2ab8b361e428133bb060fb1b3f02b85c4c05bb1bfe",
       "bytes": 3465,
       "records": 47
+    },
+    {
+      "path": "src/phase1_5_shadow/residual.py",
+      "sha256": "443f7fa67a062a191e29e0370a724fae7c6813cc45c987f975ee518ff9174532",
+      "bytes": 4596,
+      "records": 97
+    },
+    {
+      "path": "src/phase1_5_shadow/review_pilot_annotations.py",
+      "sha256": "9c45f3f81d2446fe9fb86eac3b0c4ddf2e902e4cebb571fb5df99a41d5b103c7",
+      "bytes": 4518,
+      "records": 109
+    },
+    {
+      "path": "src/phase1_5_shadow/run_shadow.py",
+      "sha256": "08331635dc055df6c0a0627ea3c7a29cc546b0e7349fc0d60d341121b0b9500f",
+      "bytes": 12342,
+      "records": 252
+    },
+    {
+      "path": "src/phase1_5_shadow/shadow_agent.py",
+      "sha256": "a45de8f716c711498d4b56dd0d644a0fb39d1d6605d4ce1e5c5c7b1aed72b516",
+      "bytes": 13354,
+      "records": 315
+    },
+    {
+      "path": "src/phase1_residual/residual_calculator.py",
+      "sha256": "a05e881ab1ef946594699e1aff8b2dc6ff2693331ebe111b1ca16add686903e5",
+      "bytes": 10371,
+      "records": 193
+    },
+    {
+      "path": "src/phase2_baseline/intercode_docker_environment.py",
+      "sha256": "9ede7cafad642d545ad93072a7eebd20bfb92bb629c6d6949eba761ac37fb926",
+      "bytes": 9604,
+      "records": 217
+    },
+    {
+      "path": "src/phase2_baseline/model_client.py",
+      "sha256": "8bd924f3061bebb943ce309f577ccd39bcc5490e83bf420f1151e6d65760146f",
+      "bytes": 5738,
+      "records": 134
     }
   ],
   "published_artifacts": [

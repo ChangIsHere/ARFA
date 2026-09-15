@@ -24,6 +24,8 @@ The collector, native Ollama JSON-schema interface, content deduplication, blind
 
 The tracked redacted evidence bundle is in `evidence/phase1_5_pilot/`. It contains the collection audit, unlabeled blind packet, redacted 25-step source index, record counts, and SHA-256 metadata. Raw traces and the private source map remain local.
 
+Before formal collection, the analyzer adds expectation-gate-only and ungated raw-residual controls. Formal run summaries also bind results to the frozen protocol, model blob, Docker images, source commit, and package versions.
+
 ## Required Before Full Collection
 
 Independently label the 23-item primary pilot packet and the frozen 6-item secondary packet using `docs/phase1_5_annotation_guideline.md`. Use the pilot only to resolve guideline ambiguity and verify annotator agreement. Do not tune the residual representation or acceptance thresholds on pilot labels.

@@ -21,6 +21,7 @@ LABELS = {
     "expectation_match": {"mismatch": 1, "match": 0},
 }
 AMBIGUOUS_LABEL = "ambiguous"
+VALID_CONFIDENCE = {"high", "medium", "low"}
 
 
 def _binary_label(row: dict[str, Any], target: str) -> int | None:
@@ -37,6 +38,22 @@ def _validate_label_values(rows: list[dict[str, Any]]) -> None:
             value = _raw_label(row, target)
             if value and value not in {*binary_values, AMBIGUOUS_LABEL}:
                 raise ValueError(f"Invalid {target} label '{value}' for {row.get('annotation_id', '<unknown>')}")
+
+
+def _annotation_metadata_issues(rows: list[dict[str, Any]]) -> list[dict[str, str]]:
+    issues: list[dict[str, str]] = []
+    for row in rows:
+        annotation_id = str(row.get("annotation_id", "<unknown>"))
+        confidence = str(row.get("annotation_confidence", "")).strip().lower()
+        if confidence not in VALID_CONFIDENCE:
+            issues.append({"annotation_id": annotation_id, "issue": "missing_or_invalid_confidence"})
+        if not str(row.get("annotator", "")).strip():
+            issues.append({"annotation_id": annotation_id, "issue": "missing_annotator_id"})
+        if any(_raw_label(row, target) == AMBIGUOUS_LABEL for target in LABELS) and not str(
+            row.get("annotation_notes", "")
+        ).strip():
+            issues.append({"annotation_id": annotation_id, "issue": "ambiguous_without_notes"})
+    return issues
 
 
 def _metrics(rows: list[dict[str, Any]], score_key: str, threshold: float, target: str) -> dict[str, Any]:
@@ -165,10 +182,12 @@ def _apply_scores(rows: list[dict[str, Any]], semantic_scores: list[float], weig
         structured = float(row["structured_expectation_score"])
         observation = float(row["observation_only_raw_score"])
         row["semantic_residual_score"] = semantic
+        row["expectation_gate_only_score"] = expectation_gate
+        row["raw_full_residual_score"] = weight * semantic + (1.0 - weight) * structured
         row["semantic_with_safety_score"] = max(expectation_gate, semantic)
         row["structured_with_safety_score"] = max(expectation_gate, structured)
         row["no_expectation_score"] = max(action_gate, observation)
-        row["full_residual_score"] = max(expectation_gate, weight * semantic + (1.0 - weight) * structured)
+        row["full_residual_score"] = max(expectation_gate, row["raw_full_residual_score"])
 
 
 def _choose_weight(rows: list[dict[str, Any]], semantic_scores: list[float], weights: list[float], min_quality: float) -> float:
@@ -181,7 +200,7 @@ def _choose_weight(rows: list[dict[str, Any]], semantic_scores: list[float], wei
         if len(set(y_true)) < 2:
             score = -1.0
         else:
-            score = roc_auc_score(y_true, [row["full_residual_score"] for row in usable])
+            score = roc_auc_score(y_true, [row["raw_full_residual_score"] for row in usable])
         candidate = (score, -abs(weight - 0.5))
         if best is None or candidate > best:
             best = candidate
@@ -190,7 +209,14 @@ def _choose_weight(rows: list[dict[str, Any]], semantic_scores: list[float], wei
     return selected
 
 
-def _bootstrap_auc_difference(rows: list[dict[str, Any]], target: str, samples: int, seed: int) -> dict[str, Any]:
+def _bootstrap_auc_difference(
+    rows: list[dict[str, Any]],
+    target: str,
+    samples: int,
+    seed: int,
+    score_key: str,
+    baseline_key: str,
+) -> dict[str, Any]:
     usable = [row for row in rows if _binary_label(row, target) is not None]
     by_task: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in usable:
@@ -204,16 +230,18 @@ def _bootstrap_auc_difference(rows: list[dict[str, Any]], target: str, samples: 
         labels = [_binary_label(row, target) for row in draw]
         if len(set(labels)) < 2:
             continue
-        full = roc_auc_score(labels, [row["full_residual_score"] for row in draw])
-        baseline = roc_auc_score(labels, [row["no_expectation_score"] for row in draw])
-        differences.append(full - baseline)
+        score_auc = roc_auc_score(labels, [row[score_key] for row in draw])
+        baseline_auc = roc_auc_score(labels, [row[baseline_key] for row in draw])
+        differences.append(score_auc - baseline_auc)
     observed_labels = [_binary_label(row, target) for row in usable]
     observed = None
     if len(set(observed_labels)) == 2:
-        observed = roc_auc_score(observed_labels, [row["full_residual_score"] for row in usable]) - roc_auc_score(
-            observed_labels, [row["no_expectation_score"] for row in usable]
+        observed = roc_auc_score(observed_labels, [row[score_key] for row in usable]) - roc_auc_score(
+            observed_labels, [row[baseline_key] for row in usable]
         )
     return {
+        "score_method": score_key,
+        "baseline_method": baseline_key,
         "observed_auc_gain": observed,
         "bootstrap_ci95_low": float(np.percentile(differences, 2.5)) if differences else None,
         "bootstrap_ci95_high": float(np.percentile(differences, 97.5)) if differences else None,
@@ -279,7 +307,20 @@ def _annotation_agreement(
         "overlap_items": len(overlap),
         "overlap_fraction": len(overlap) / len(primary) if primary else 0.0,
         "minimum_fraction": minimum_fraction,
+        "primary_annotator_ids": sorted(
+            {str(row.get("annotator", "")).strip() for row in primary if str(row.get("annotator", "")).strip()}
+        ),
+        "secondary_annotator_ids": sorted(
+            {str(row.get("annotator", "")).strip() for row in secondary if str(row.get("annotator", "")).strip()}
+        ),
     }
+    result["independent_annotator_ids"] = bool(result["primary_annotator_ids"])
+    result["independent_annotator_ids"] = result["independent_annotator_ids"] and bool(
+        result["secondary_annotator_ids"]
+    )
+    result["independent_annotator_ids"] = result["independent_annotator_ids"] and not (
+        set(result["primary_annotator_ids"]) & set(result["secondary_annotator_ids"])
+    )
     complete = True
     for target in LABELS:
         raw_pairs = [(_raw_label(a, target), _raw_label(b, target)) for a, b in overlap]
@@ -310,7 +351,11 @@ def _annotation_agreement(
             "binary_pair_coverage": len(binary_pairs) / len(complete_pairs) if complete_pairs else 0.0,
             "binary_cohen_kappa": binary_kappa,
         }
-    result["complete"] = complete and result["overlap_fraction"] >= minimum_fraction
+    result["complete"] = (
+        complete
+        and result["overlap_fraction"] >= minimum_fraction
+        and result["independent_annotator_ids"]
+    )
     return result
 
 
@@ -383,6 +428,8 @@ def analyze(
         target: [row["annotation_id"] for row in rows if _raw_label(row, target) == AMBIGUOUS_LABEL]
         for target in LABELS
     }
+    primary_metadata_issues = _annotation_metadata_issues(annotations)
+    secondary_metadata_issues = _annotation_metadata_issues(secondary_annotations or [])
     agreement = _annotation_agreement(
         annotations,
         secondary_annotations or [],
@@ -396,8 +443,13 @@ def analyze(
         "ambiguous_rates": {
             target: len(items) / len(rows) if rows else 0.0 for target, items in ambiguous_by_target.items()
         },
+        "primary_metadata_issue_count": len(primary_metadata_issues),
+        "secondary_metadata_issue_count": len(secondary_metadata_issues),
         "agreement": agreement,
-        "ready": not any(incomplete_by_target.values()) and agreement["complete"],
+        "ready": not any(incomplete_by_target.values())
+        and not primary_metadata_issues
+        and not secondary_metadata_issues
+        and agreement["complete"],
     }
     if not readiness["ready"]:
         return rows, {"readiness": readiness}
@@ -417,6 +469,8 @@ def analyze(
     )
     methods = [
         "no_expectation_score",
+        "expectation_gate_only_score",
+        "raw_full_residual_score",
         "semantic_with_safety_score",
         "structured_with_safety_score",
         "full_residual_score",
@@ -455,12 +509,32 @@ def analyze(
 
     full = next(row for row in test_metrics if row["method"] == "full_residual_score")
     no_expectation = next(row for row in test_metrics if row["method"] == "no_expectation_score")
-    bootstrap = _bootstrap_auc_difference(
-        test,
-        "slow_reasoning_needed",
-        bootstrap_samples,
-        bootstrap_seed,
-    )
+    incremental_value = {
+        "full_vs_no_expectation": _bootstrap_auc_difference(
+            test,
+            "slow_reasoning_needed",
+            bootstrap_samples,
+            bootstrap_seed,
+            "full_residual_score",
+            "no_expectation_score",
+        ),
+        "raw_residual_vs_no_expectation": _bootstrap_auc_difference(
+            test,
+            "slow_reasoning_needed",
+            bootstrap_samples,
+            bootstrap_seed + 1,
+            "raw_full_residual_score",
+            "no_expectation_score",
+        ),
+        "full_vs_expectation_gate_only": _bootstrap_auc_difference(
+            test,
+            "slow_reasoning_needed",
+            bootstrap_samples,
+            bootstrap_seed + 2,
+            "full_residual_score",
+            "expectation_gate_only_score",
+        ),
+    }
     expectation_metrics = {
         method: {
             **_metrics(test, method, 0.5, "expectation_match"),
@@ -475,6 +549,8 @@ def analyze(
         }
         for method in (
             "no_expectation_score",
+            "expectation_gate_only_score",
+            "raw_full_residual_score",
             "semantic_with_safety_score",
             "structured_with_safety_score",
             "full_residual_score",
@@ -499,6 +575,9 @@ def analyze(
     )
     required_labels = int(config["acceptance"]["minimum_test_binary_labels"])
     minimum_gain = float(config["acceptance"]["minimum_auc_gain_over_no_expectation"])
+    full_vs_no_expectation = incremental_value["full_vs_no_expectation"]
+    raw_vs_no_expectation = incremental_value["raw_residual_vs_no_expectation"]
+    full_vs_gate_only = incremental_value["full_vs_expectation_gate_only"]
     gate = {
         "validation_threshold_feasible": bool(
             thresholds["full_residual_score"]["metrics"]["selection_feasible"]
@@ -508,11 +587,22 @@ def analyze(
         and full["safe_fast_precision"] >= float(config["acceptance"]["held_out_safe_fast_precision"]),
         "fast_path_rate": full["fast_path_rate"] >= float(config["acceptance"]["held_out_fast_path_rate"]),
         "false_fast_rate": full["false_fast_rate"] is not None and full["false_fast_rate"] <= false_fast_limit,
-        "auc_gain_over_no_expectation": bootstrap["observed_auc_gain"] is not None
-        and bootstrap["observed_auc_gain"] >= minimum_gain,
-        "auc_gain_ci_excludes_zero": bootstrap["bootstrap_ci95_low"] is not None and bootstrap["bootstrap_ci95_low"] > 0,
-        "expectation_mismatch_auc": expectation_metrics["full_residual_score"]["roc_auc"] is not None
-        and expectation_metrics["full_residual_score"]["roc_auc"]
+        "auc_gain_over_no_expectation": full_vs_no_expectation["observed_auc_gain"] is not None
+        and full_vs_no_expectation["observed_auc_gain"] >= minimum_gain,
+        "auc_gain_ci_excludes_zero": full_vs_no_expectation["bootstrap_ci95_low"] is not None
+        and full_vs_no_expectation["bootstrap_ci95_low"] > 0,
+        "raw_residual_gain_over_no_expectation": raw_vs_no_expectation["observed_auc_gain"] is not None
+        and raw_vs_no_expectation["observed_auc_gain"]
+        >= float(config["acceptance"]["minimum_raw_residual_auc_gain_over_no_expectation"]),
+        "raw_residual_gain_ci_excludes_zero": raw_vs_no_expectation["bootstrap_ci95_low"] is not None
+        and raw_vs_no_expectation["bootstrap_ci95_low"] > 0,
+        "full_gain_over_expectation_gate_only": full_vs_gate_only["observed_auc_gain"] is not None
+        and full_vs_gate_only["observed_auc_gain"]
+        >= float(config["acceptance"]["minimum_full_auc_gain_over_expectation_gate_only"]),
+        "full_gain_over_gate_only_ci_excludes_zero": full_vs_gate_only["bootstrap_ci95_low"] is not None
+        and full_vs_gate_only["bootstrap_ci95_low"] > 0,
+        "expectation_mismatch_auc": expectation_metrics["raw_full_residual_score"]["roc_auc"] is not None
+        and expectation_metrics["raw_full_residual_score"]["roc_auc"]
         >= float(config["acceptance"]["minimum_expectation_mismatch_auc"]),
         "annotation_agreement": all(
             agreement[target]["multiclass_cohen_kappa"] is not None
@@ -531,7 +621,7 @@ def analyze(
         "test_metrics": test_metrics,
         "expectation_mismatch_test_metrics": expectation_metrics,
         "subgroup_metrics": subgroup_metrics,
-        "incremental_value": bootstrap,
+        "incremental_value": incremental_value,
         "full_minus_no_expectation_fast_path_rate": full["fast_path_rate"] - no_expectation["fast_path_rate"],
         "acceptance_gate": gate,
     }

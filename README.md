@@ -274,6 +274,8 @@ bash scripts/phase1_5_audit_collection.sh
 bash scripts/phase1_5_build_evidence_bundle.sh
 ```
 
+Pilot annotation uses `scripts/phase1_5_annotate_packet.sh`; the primary and frozen 25% secondary packets must use distinct annotator IDs and remain independent. `scripts/phase1_5_review_pilot_annotations.sh` checks completeness, ambiguity, agreement, and disagreements without computing residual-effect metrics.
+
 The router remains shadow-only. Phase 3 stays locked until blind held-out labels satisfy the preregistered safety, coverage, incremental-value, and subgroup gates.
 
 ## Tests

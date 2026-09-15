@@ -1,4 +1,7 @@
+import copy
+import hashlib
 import json
+from pathlib import Path
 
 import pytest
 
@@ -9,7 +12,9 @@ from src.phase1_5_shadow.build_annotation_packet import (
 )
 from src.phase1_5_shadow.build_splits import DEFAULT_SIZES, build_split
 from src.phase1_5_shadow.audit_collection import audit
-from src.phase1_5_shadow.freeze_protocol import build_freeze_manifest
+from src.phase1_5_shadow.freeze_protocol import FROZEN_FILES, build_freeze_manifest, verify_freeze_manifest
+from src.phase1_5_shadow.run_shadow import _freeze_provenance, _validate_collection_scope
+from src.phase1_5_shadow.review_pilot_annotations import review
 from src.phase1_5_shadow.analyze_annotations import (
     _annotation_agreement,
     _apply_scores,
@@ -168,15 +173,17 @@ def test_no_expectation_baseline_cannot_read_continuation_commitment():
     _apply_scores(rows, [0.0], weight=0.5, min_quality=0.7)
 
     assert rows[0]["no_expectation_score"] == 0.0
+    assert rows[0]["expectation_gate_only_score"] == 1.0
+    assert rows[0]["raw_full_residual_score"] == 0.0
     assert rows[0]["full_residual_score"] == 1.0
 
 
 def test_annotation_agreement_requires_complete_independent_labels():
     primary = [
-        {"annotation_id": "a", "slow_reasoning_needed": "yes", "expectation_match": "mismatch"},
-        {"annotation_id": "b", "slow_reasoning_needed": "no", "expectation_match": "match"},
+        {"annotation_id": "a", "slow_reasoning_needed": "yes", "expectation_match": "mismatch", "annotator": "a"},
+        {"annotation_id": "b", "slow_reasoning_needed": "no", "expectation_match": "match", "annotator": "a"},
     ]
-    secondary = [dict(row) for row in primary]
+    secondary = [{**row, "annotator": "b"} for row in primary]
     agreement = _annotation_agreement(primary, secondary, minimum_fraction=0.25)
 
     assert agreement["complete"] is True
@@ -186,11 +193,11 @@ def test_annotation_agreement_requires_complete_independent_labels():
 
 def test_ambiguous_is_complete_for_agreement_but_excluded_from_binary_metrics():
     primary = [
-        {"annotation_id": "a", "slow_reasoning_needed": "ambiguous", "expectation_match": "ambiguous"},
-        {"annotation_id": "b", "slow_reasoning_needed": "yes", "expectation_match": "mismatch"},
-        {"annotation_id": "c", "slow_reasoning_needed": "no", "expectation_match": "match"},
+        {"annotation_id": "a", "slow_reasoning_needed": "ambiguous", "expectation_match": "ambiguous", "annotator": "a"},
+        {"annotation_id": "b", "slow_reasoning_needed": "yes", "expectation_match": "mismatch", "annotator": "a"},
+        {"annotation_id": "c", "slow_reasoning_needed": "no", "expectation_match": "match", "annotator": "a"},
     ]
-    secondary = [dict(row) for row in primary]
+    secondary = [{**row, "annotator": "b"} for row in primary]
     for index, row in enumerate(primary):
         row["score"] = float(index) / 2
     agreement = _annotation_agreement(primary, secondary, minimum_fraction=0.25)
@@ -219,6 +226,111 @@ def test_protocol_freeze_rejects_unlocked_pilot_config():
     }
     with pytest.raises(ValueError, match="protocol.locked=true"):
         build_freeze_manifest(config, {"readiness": {"ready": False}})
+
+
+def _valid_freeze_fixture():
+    config = {
+        "protocol": {
+            "version": "phase1.5-v1.1",
+            "stage": "formal_shadow_collection",
+            "locked": True,
+        }
+    }
+    manifest = {
+        "protocol_version": "phase1.5-v1.1",
+        "stage": "formal_shadow_collection",
+        "locked": True,
+        "files": {
+            path: {"sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest()}
+            for path in FROZEN_FILES
+        },
+    }
+    return config, manifest
+
+
+def test_freeze_verification_rejects_missing_and_unexpected_entries():
+    config, manifest = _valid_freeze_fixture()
+    missing = copy.deepcopy(manifest)
+    missing["files"].pop(FROZEN_FILES[0])
+    with pytest.raises(ValueError, match="file set mismatch"):
+        verify_freeze_manifest(config, missing)
+
+    unexpected = copy.deepcopy(manifest)
+    unexpected["files"]["README.md"] = {"sha256": hashlib.sha256(Path("README.md").read_bytes()).hexdigest()}
+    with pytest.raises(ValueError, match="file set mismatch"):
+        verify_freeze_manifest(config, unexpected)
+
+
+def test_freeze_verification_rejects_modified_hash_and_version():
+    config, manifest = _valid_freeze_fixture()
+    modified = copy.deepcopy(manifest)
+    modified["files"][FROZEN_FILES[0]]["sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="artifact changed"):
+        verify_freeze_manifest(config, modified)
+
+    wrong_version = copy.deepcopy(manifest)
+    wrong_version["protocol_version"] = "phase1.5-other"
+    with pytest.raises(ValueError, match="version"):
+        verify_freeze_manifest(config, wrong_version)
+
+
+def test_unlocked_pilot_provenance_does_not_require_external_runtimes(tmp_path):
+    config = {"protocol": {"version": "phase1.5-v1.1", "stage": "pilot_review", "locked": False}}
+    provenance = _freeze_provenance(config, [], tmp_path / "missing.json")
+
+    assert provenance["protocol_locked"] is False
+    assert provenance["freeze_manifest_sha256"] is None
+    assert provenance["model_artifact"] is None
+
+
+def test_collection_scope_blocks_unfrozen_or_partial_formal_runs():
+    pilot = {"protocol": {"locked": False}}
+    _validate_collection_scope(pilot, "shadow_development", 10)
+    with pytest.raises(ValueError, match="Unlocked protocol"):
+        _validate_collection_scope(pilot, "shadow_test", 10)
+    with pytest.raises(ValueError, match="Unlocked protocol"):
+        _validate_collection_scope(pilot, "shadow_development", 0)
+
+    formal = {"protocol": {"locked": True}}
+    _validate_collection_scope(formal, "shadow_test", 0)
+    with pytest.raises(ValueError, match="forbids task limits"):
+        _validate_collection_scope(formal, "shadow_test", 10)
+
+
+def test_pilot_review_reports_agreement_without_residual_metrics():
+    primary = []
+    for index in range(8):
+        positive = index % 2 == 0
+        primary.append(
+            {
+                "annotation_id": f"a-{index}",
+                "expectation_match": "mismatch" if positive else "match",
+                "slow_reasoning_needed": "yes" if positive else "no",
+                "annotation_confidence": "high",
+                "annotation_notes": "",
+                "annotator": "primary",
+            }
+        )
+    secondary = [{**primary[index], "annotator": "secondary"} for index in (0, 1)]
+    result, disagreements = review(
+        primary,
+        secondary,
+        {"annotation": {"secondary_fraction": 0.25, "minimum_cohen_kappa": 0.70}},
+    )
+
+    assert result["readiness"]["ready"] is True
+    assert result["readiness"]["paper_agreement_result"] is False
+    assert disagreements == []
+    assert "residual" not in result
+
+    same_annotator = [{**row, "annotator": "primary"} for row in secondary]
+    rejected, _ = review(
+        primary,
+        same_annotator,
+        {"annotation": {"secondary_fraction": 0.25, "minimum_cohen_kappa": 0.70}},
+    )
+    assert rejected["readiness"]["ready"] is False
+    assert rejected["readiness"]["agreement"]["independent_annotator_ids"] is False
 
 
 def test_shadow_parser_extracts_balanced_nested_json():
@@ -399,15 +511,26 @@ def test_completed_annotations_run_full_held_out_analysis():
             "maximum_subgroup_false_fast_rate": 0.10,
             "minimum_test_binary_labels": 4,
             "minimum_auc_gain_over_no_expectation": 0.02,
+            "minimum_raw_residual_auc_gain_over_no_expectation": 0.02,
+            "minimum_full_auc_gain_over_expectation_gate_only": 0.02,
             "minimum_expectation_mismatch_auc": 0.8,
         },
         "analysis": {"bootstrap_samples": 20, "bootstrap_seed": 1507},
         "annotation": {"secondary_fraction": 0.25, "minimum_cohen_kappa": 0.7},
     }
 
-    _, result = analyze(annotations, sources, config, secondary_annotations=[dict(row) for row in annotations])
+    secondary = [{**row, "annotator": "b"} for row in annotations]
+    _, result = analyze(annotations, sources, config, secondary_annotations=secondary)
 
     assert result["readiness"]["ready"] is True
     assert result["thresholds"]["full_residual_score"]["metrics"]["selection_feasible"] is True
-    assert result["test_metrics"][3]["confidence_intervals"]["cluster_count"] == 4
+    full = next(row for row in result["test_metrics"] if row["method"] == "full_residual_score")
+    methods = {row["method"] for row in result["test_metrics"]}
+    assert {"expectation_gate_only_score", "raw_full_residual_score"} <= methods
+    assert set(result["incremental_value"]) == {
+        "full_vs_no_expectation",
+        "raw_residual_vs_no_expectation",
+        "full_vs_expectation_gate_only",
+    }
+    assert full["confidence_intervals"]["cluster_count"] == 4
     assert result["subgroup_metrics"]
