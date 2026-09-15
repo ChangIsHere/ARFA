@@ -1,0 +1,178 @@
+{
+  "phase": "phase1_5_shadow",
+  "protocol_version": "phase1.5-v1.2",
+  "stage": "formal_shadow_collection",
+  "locked": true,
+  "source_commit": "56aece4526f4705caa4c39e661a634d78537d03f",
+  "files": {
+    "config/phase1_5_shadow.yaml": {
+      "sha256": "be940080599aa1e96b499c397c18bf89db2f4f19dd1254615024faed85c15f3b",
+      "bytes": 2176
+    },
+    "data/phase2/intercode_nl2bash_official_200.jsonl": {
+      "sha256": "c6936840f27441f3310efdf958ef45d2adf9ac47d87c1ffa8cb04c2207dc3557",
+      "bytes": 134532
+    },
+    "data/phase1_5/task_splits.json": {
+      "sha256": "056fdb6f64638ed3afb04e7cc41624e8c5b4d5f33a2728e3639d17eaee5bbe52",
+      "bytes": 9247
+    },
+    "docs/phase1_5_annotation_guideline.md": {
+      "sha256": "33edc5d843c7921a56eb4734d5f2353278aed8d0b8630818176dca1a45707b09",
+      "bytes": 1887
+    },
+    "docs/phase1_5_protocol.md": {
+      "sha256": "5be4a43311a2bc937325741bb18169405eb1228d288693d47d24d8bbd032d318",
+      "bytes": 8570
+    },
+    "requirements.txt": {
+      "sha256": "5f551fba571129b3a578a6b9c33295c20fef6f82ab35afa8b6814d63cca76b92",
+      "bytes": 72
+    },
+    "scripts/phase1_5_run_shadow_matrix.sh": {
+      "sha256": "c1154e905055fc2f03d36befe163a3e1c0e3e168761427b42c39d43ec590a6c5",
+      "bytes": 128
+    },
+    "src/common/config.py": {
+      "sha256": "18f53ddac7866b5423fd214415a851ab90e785a431c30cab32da02e96b3bb645",
+      "bytes": 1303
+    },
+    "src/common/utils.py": {
+      "sha256": "f1bb604fe4e07ec796c17e793f2d12b7fd2b9f2ee35afca09937c48ebb082e86",
+      "bytes": 1656
+    },
+    "src/phase1_5_shadow/analyze_annotations.py": {
+      "sha256": "6e2313f0fcc468f877dba59e1bf448a8cf48f9470018324b439a221922d5261d",
+      "bytes": 33702
+    },
+    "src/phase1_5_shadow/annotate_packet.py": {
+      "sha256": "4836f8389931fbbbd4f005d7c56bd6b1bff244047240f6131f9786a21c9fa53c",
+      "bytes": 4002
+    },
+    "src/phase1_5_shadow/build_annotation_packet.py": {
+      "sha256": "ba0a1b53d1f10305bdecce95c50b8737bc3d5828dc7746be9f3b145b61b99533",
+      "bytes": 8851
+    },
+    "src/phase1_5_shadow/audit_formal_collection.py": {
+      "sha256": "1023014d47b1d96ec30cf6d54a635dfaee2006bad8a7187f114c59d191cd6516",
+      "bytes": 13123
+    },
+    "src/phase1_5_shadow/freeze_protocol.py": {
+      "sha256": "c516d45ad6026df54656a08443eda1940fe492168ad42d4f29facdd33592f0d7",
+      "bytes": 6120
+    },
+    "src/phase1_5_shadow/json_model_client.py": {
+      "sha256": "fd89cd1adeb30b43b8e8e1e9ac2ab584ebddff4e0808a71a0855360103d23590",
+      "bytes": 4382
+    },
+    "src/phase1_5_shadow/formal_matrix.py": {
+      "sha256": "f466dd473fa83b2b683c8c8ee0db45234b6797742eb49712774399336adb45ae",
+      "bytes": 1448
+    },
+    "src/phase1_5_shadow/observation_baseline.py": {
+      "sha256": "d2869d21abe33e79b164ae247d1355cb9b786b1ffa95859e88a202c11c754ae5",
+      "bytes": 4479
+    },
+    "src/phase1_5_shadow/prompts.py": {
+      "sha256": "062c47475cfdc2e069ffad2ab8b361e428133bb060fb1b3f02b85c4c05bb1bfe",
+      "bytes": 3465
+    },
+    "src/phase1_5_shadow/residual.py": {
+      "sha256": "443f7fa67a062a191e29e0370a724fae7c6813cc45c987f975ee518ff9174532",
+      "bytes": 4596
+    },
+    "src/phase1_5_shadow/review_pilot_annotations.py": {
+      "sha256": "9c45f3f81d2446fe9fb86eac3b0c4ddf2e902e4cebb571fb5df99a41d5b103c7",
+      "bytes": 4518
+    },
+    "src/phase1_5_shadow/run_shadow.py": {
+      "sha256": "9ab672024d61cb338a82e24ece944e6741c2eca3853d03e7bdf8e772a7fd15d6",
+      "bytes": 14921
+    },
+    "src/phase1_5_shadow/run_formal_matrix.py": {
+      "sha256": "feb19172236bce3955aa469ec584ef0a402aa5e1b1a86db2e35cebb3ed200fd3",
+      "bytes": 2937
+    },
+    "src/phase1_5_shadow/shadow_agent.py": {
+      "sha256": "4537f11faf383c115acce4048ed2e487a7a607277a6af1b197254ecd83d5198a",
+      "bytes": 13391
+    },
+    "src/phase1_residual/residual_calculator.py": {
+      "sha256": "a05e881ab1ef946594699e1aff8b2dc6ff2693331ebe111b1ca16add686903e5",
+      "bytes": 10371
+    },
+    "src/phase2_baseline/intercode_docker_environment.py": {
+      "sha256": "9ede7cafad642d545ad93072a7eebd20bfb92bb629c6d6949eba761ac37fb926",
+      "bytes": 9604
+    },
+    "src/phase2_baseline/model_client.py": {
+      "sha256": "8bd924f3061bebb943ce309f577ccd39bcc5490e83bf420f1151e6d65760146f",
+      "bytes": 5738
+    }
+  },
+  "pilot_annotation_readiness": {
+    "ready": true,
+    "scope": "pilot_guideline_review_only",
+    "paper_agreement_result": false,
+    "primary_items": 23,
+    "secondary_items": 6,
+    "incomplete_labels": {
+      "primary": {
+        "slow_reasoning_needed": 0,
+        "expectation_match": 0
+      },
+      "secondary": {
+        "slow_reasoning_needed": 0,
+        "expectation_match": 0
+      }
+    },
+    "ambiguous_labels": {
+      "primary": {
+        "slow_reasoning_needed": 1,
+        "expectation_match": 6
+      },
+      "secondary": {
+        "slow_reasoning_needed": 0,
+        "expectation_match": 2
+      }
+    },
+    "metadata_issues": {
+      "primary": [],
+      "secondary": []
+    },
+    "agreement": {
+      "primary_items": 23,
+      "secondary_items": 6,
+      "overlap_items": 6,
+      "overlap_fraction": 0.2608695652173913,
+      "minimum_fraction": 0.25,
+      "primary_annotator_ids": [
+        "peggy_primary"
+      ],
+      "secondary_annotator_ids": [
+        "peggy_secondary"
+      ],
+      "independent_annotator_ids": true,
+      "slow_reasoning_needed": {
+        "complete_pairs": 6,
+        "ambiguous_pair_count": 0,
+        "multiclass_cohen_kappa": 1.0,
+        "binary_pairs": 6,
+        "binary_pair_coverage": 1.0,
+        "binary_cohen_kappa": 1.0
+      },
+      "expectation_match": {
+        "complete_pairs": 6,
+        "ambiguous_pair_count": 2,
+        "multiclass_cohen_kappa": 1.0,
+        "binary_pairs": 4,
+        "binary_pair_coverage": 0.6666666666666666,
+        "binary_cohen_kappa": 1.0
+      },
+      "complete": true
+    },
+    "minimum_multiclass_kappa": 0.7,
+    "kappa_gate_passed": true,
+    "disagreement_count": 0
+  }
+}
