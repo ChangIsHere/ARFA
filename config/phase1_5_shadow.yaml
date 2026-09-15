@@ -1,8 +1,8 @@
 protocol:
   version: phase1.5-v1.2
-  stage: pilot_review
-  locked: false
-  reason: Awaiting pilot blind-annotation review before formal shadow collection.
+  stage: formal_shadow_collection
+  locked: true
+  reason: Pilot blind-annotation review passed; formal shadow collection is frozen.
 
 shadow:
   model_interface: ollama_native_structured
