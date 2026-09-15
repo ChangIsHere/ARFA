@@ -2,6 +2,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -14,6 +15,9 @@ from src.phase1_5_shadow.build_splits import DEFAULT_SIZES, build_split
 from src.phase1_5_shadow.audit_collection import audit
 from src.phase1_5_shadow.freeze_protocol import FROZEN_FILES, build_freeze_manifest, verify_freeze_manifest
 from src.phase1_5_shadow.run_shadow import _freeze_provenance, _validate_collection_scope
+from src.phase1_5_shadow.run_shadow import _provenance_fingerprint, _validate_resume
+from src.phase1_5_shadow.audit_formal_collection import audit_formal_collection
+from src.phase1_5_shadow.observation_baseline import fit_observation_only_scores
 from src.phase1_5_shadow.review_pilot_annotations import review
 from src.phase1_5_shadow.analyze_annotations import (
     _annotation_agreement,
@@ -297,6 +301,145 @@ def test_collection_scope_blocks_unfrozen_or_partial_formal_runs():
         _validate_collection_scope(formal, "shadow_test", 10)
 
 
+def test_resume_rejects_stale_provenance_and_duplicate_tasks(tmp_path):
+    provenance = {"freeze_manifest_sha256": "abc", "run_source_commit": "commit"}
+    fingerprint = _provenance_fingerprint(provenance, "model-a", "shadow_test")
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "model_name": "model-a",
+                "split": "shadow_test",
+                "task_count": 1,
+                "expected_task_count": 2,
+                "run_provenance_fingerprint": fingerprint,
+            }
+        ),
+        encoding="utf-8",
+    )
+    valid = [SimpleNamespace(task_id="task-a", provenance_fingerprint=fingerprint)]
+    _validate_resume(valid, summary_path, "model-a", "shadow_test", {"task-a", "task-b"}, 2, fingerprint)
+
+    stale = [SimpleNamespace(task_id="task-a", provenance_fingerprint="old")]
+    with pytest.raises(ValueError, match="stale provenance"):
+        _validate_resume(stale, summary_path, "model-a", "shadow_test", {"task-a", "task-b"}, 2, fingerprint)
+
+    duplicate = [
+        SimpleNamespace(task_id="task-a", provenance_fingerprint=fingerprint),
+        SimpleNamespace(task_id="task-a", provenance_fingerprint=fingerprint),
+    ]
+    summary_path.write_text(
+        json.dumps(
+            {
+                "model_name": "model-a",
+                "split": "shadow_test",
+                "task_count": 2,
+                "expected_task_count": 2,
+                "run_provenance_fingerprint": fingerprint,
+            }
+        ),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="duplicate task IDs"):
+        _validate_resume(duplicate, summary_path, "model-a", "shadow_test", {"task-a", "task-b"}, 2, fingerprint)
+
+
+def test_formal_matrix_audit_requires_exact_tasks_and_provenance(tmp_path, monkeypatch):
+    import src.phase1_5_shadow.audit_formal_collection as formal_audit_module
+
+    monkeypatch.setattr(formal_audit_module, "verify_freeze_manifest", lambda config, manifest: None)
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text("frozen config\n", encoding="utf-8")
+    task_path = tmp_path / "tasks.jsonl"
+    split_path = tmp_path / "splits.json"
+    freeze_path = tmp_path / "freeze.json"
+    result_root = tmp_path / "full"
+    split_tasks = {
+        "shadow_development": "dev-task",
+        "shadow_validation": "val-task",
+        "shadow_test": "test-task",
+    }
+    task_path.write_text(
+        "".join(
+            json.dumps({"task_id": task_id, "filesystem_version": 1}) + "\n"
+            for task_id in split_tasks.values()
+        ),
+        encoding="utf-8",
+    )
+    split_path.write_text(
+        json.dumps(
+            {
+                "sizes": {split: 1 for split in split_tasks},
+                "splits": {split: [task_id] for split, task_id in split_tasks.items()},
+            }
+        ),
+        encoding="utf-8",
+    )
+    freeze_path.write_text(json.dumps({"source_commit": "freeze-commit"}), encoding="utf-8")
+    config = {
+        "protocol": {"version": "test-v1", "stage": "formal_shadow_collection", "locked": True},
+        "formal": {"model_1": "model-a|model-a", "expected_total_runs": 3},
+        "data": {"task_path": str(task_path), "split_path": str(split_path)},
+        "environment": {"image_prefix": "image-fs"},
+    }
+
+    for split, task_id in split_tasks.items():
+        cell = result_root / "model-a" / split
+        cell.mkdir(parents=True)
+        provenance = {
+            "run_source_commit": "run-commit",
+            "config_sha256": hashlib.sha256(config_path.read_bytes()).hexdigest(),
+            "task_manifest_sha256": hashlib.sha256(task_path.read_bytes()).hexdigest(),
+            "split_manifest_sha256": hashlib.sha256(split_path.read_bytes()).hexdigest(),
+            "freeze_manifest_sha256": hashlib.sha256(freeze_path.read_bytes()).hexdigest(),
+            "freeze_source_commit": "freeze-commit",
+            "protocol_version": "test-v1",
+            "protocol_stage": "formal_shadow_collection",
+            "protocol_locked": True,
+            "model_artifact": {
+                "model_name": "model-a",
+                "base_blob_sha256": "a" * 64,
+                "modelfile_sha256": "b" * 64,
+            },
+            "docker_image_digests": {"image-fs1": "sha256:" + "c" * 64},
+        }
+        fingerprint = _provenance_fingerprint(provenance, "model-a", split)
+        trace = {
+            "task_id": task_id,
+            "model_name": "model-a",
+            "split": split,
+            "provenance_fingerprint": fingerprint,
+            "steps": [],
+        }
+        (cell / "traces.jsonl").write_text(json.dumps(trace) + "\n", encoding="utf-8")
+        provenance["run_provenance_fingerprint"] = fingerprint
+        (cell / "summary.json").write_text(
+            json.dumps(
+                {
+                    "model_name": "model-a",
+                    "split": split,
+                    "task_count": 1,
+                    "expected_task_count": 1,
+                    "run_provenance_fingerprint": fingerprint,
+                    "reproducibility": provenance,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    result = audit_formal_collection(config, config_path, result_root, freeze_path)
+    assert result["passed"] is True
+    assert result["observed_total_runs"] == 3
+
+    test_trace = result_root / "model-a" / "shadow_test" / "traces.jsonl"
+    tampered = json.loads(test_trace.read_text(encoding="utf-8"))
+    tampered["task_id"] = "wrong-task"
+    test_trace.write_text(json.dumps(tampered) + "\n", encoding="utf-8")
+    rejected = audit_formal_collection(config, config_path, result_root, freeze_path)
+    assert rejected["passed"] is False
+    assert any("missing task IDs" in error for error in rejected["errors"])
+
+
 def test_pilot_review_reports_agreement_without_residual_metrics():
     primary = []
     for index in range(8):
@@ -458,6 +601,39 @@ def test_task_clustered_bootstrap_reports_main_safety_intervals():
     assert intervals["roc_auc"]["valid_bootstrap_samples"] > 0
 
 
+def test_learned_observation_baseline_cannot_read_expectations_or_actions():
+    rows = [
+        {
+            "split": "shadow_development" if index < 4 else "shadow_test",
+            "slow_reasoning_needed": "yes" if index % 2 else "no",
+            "actual_observation": "exit_code=1\nstderr:\nerror" if index % 2 else "exit_code=0\nstdout:\nok",
+            "exit_code": 1 if index % 2 else 0,
+            "expected_outcome": "original",
+            "current_plan": "original",
+            "action": "original",
+            "next_action_if_expected": "original",
+        }
+        for index in range(6)
+    ]
+    changed = copy.deepcopy(rows)
+    for row in changed:
+        row["expected_outcome"] = "completely changed expectation"
+        row["current_plan"] = "completely changed plan"
+        row["action"] = "rm -rf irrelevant"
+        row["next_action_if_expected"] = "completely changed continuation"
+
+    original_scores, info = fit_observation_only_scores(rows, "tfidf", False, 1507)
+    changed_scores, _ = fit_observation_only_scores(changed, "tfidf", False, 1507)
+
+    assert original_scores == pytest.approx(changed_scores)
+    assert info["allowed_inputs"] == [
+        "actual_observation",
+        "exit_code",
+        "stderr_derived_from_actual_observation",
+    ]
+    assert "expectation" in info["forbidden_inputs"]
+
+
 def test_completed_annotations_run_full_held_out_analysis():
     annotations = []
     sources = []
@@ -513,7 +689,11 @@ def test_completed_annotations_run_full_held_out_analysis():
             "minimum_auc_gain_over_no_expectation": 0.02,
             "minimum_raw_residual_auc_gain_over_no_expectation": 0.02,
             "minimum_full_auc_gain_over_expectation_gate_only": 0.02,
+            "minimum_raw_residual_auc_gain_over_learned_observation_only": 0.02,
+            "minimum_full_auc_gain_over_learned_observation_only": 0.02,
             "minimum_expectation_mismatch_auc": 0.8,
+            "minimum_fast_path_decisions": 3,
+            "minimum_safe_fast_precision_ci95_low": 1.01,
         },
         "analysis": {"bootstrap_samples": 20, "bootstrap_seed": 1507},
         "annotation": {"secondary_fraction": 0.25, "minimum_cohen_kappa": 0.7},
@@ -526,11 +706,22 @@ def test_completed_annotations_run_full_held_out_analysis():
     assert result["thresholds"]["full_residual_score"]["metrics"]["selection_feasible"] is True
     full = next(row for row in result["test_metrics"] if row["method"] == "full_residual_score")
     methods = {row["method"] for row in result["test_metrics"]}
-    assert {"expectation_gate_only_score", "raw_full_residual_score"} <= methods
+    assert {
+        "learned_observation_only_score",
+        "expectation_gate_only_score",
+        "raw_full_residual_score",
+    } <= methods
     assert set(result["incremental_value"]) == {
         "full_vs_no_expectation",
         "raw_residual_vs_no_expectation",
         "full_vs_expectation_gate_only",
+        "raw_residual_vs_learned_observation_only",
+        "full_vs_learned_observation_only",
     }
     assert full["confidence_intervals"]["cluster_count"] == 4
+    assert result["learned_observation_only_baseline"]["training_split"] == "shadow_development"
+    assert "minimum_fast_path_decisions" in result["acceptance_gate"]
+    assert "safe_fast_precision_ci_lower_bound" in result["acceptance_gate"]
+    assert result["acceptance_gate"]["minimum_fast_path_decisions"] is False
+    assert result["acceptance_gate"]["safe_fast_precision_ci_lower_bound"] is False
     assert result["subgroup_metrics"]

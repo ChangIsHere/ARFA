@@ -271,10 +271,23 @@ Build the immutable task split and run the collection pilot:
 bash scripts/phase1_5_build_splits.sh
 bash scripts/phase1_5_run_pilot.sh
 bash scripts/phase1_5_audit_collection.sh
+bash scripts/phase1_5_build_annotation_packet.sh --pilot \
+  --results-root results/phase1_5_shadow/pilot \
+  --output-dir results/phase1_5_shadow/pilot_annotation
 bash scripts/phase1_5_build_evidence_bundle.sh
 ```
 
 Pilot annotation uses `scripts/phase1_5_annotate_packet.sh`; the primary and frozen 25% secondary packets must use distinct annotator IDs and remain independent. `scripts/phase1_5_review_pilot_annotations.sh` checks completeness, ambiguity, agreement, and disagreements without computing residual-effect metrics.
+
+After pilot review, the formal protocol is frozen and the resumable matrix runs three models over the `40/20/40` development, validation, and test task splits. A mandatory audit requires exactly 300 provenance-consistent runs before it will create the formal annotation packet:
+
+```bash
+bash scripts/phase1_5_freeze_protocol.sh
+bash scripts/phase1_5_run_shadow_matrix.sh
+bash scripts/phase1_5_audit_formal_collection.sh
+```
+
+Formal analysis includes the gated system, raw expectation-observation residual, expectation-gate-only control, heuristic no-expectation control, and a learned observation-only control with the same frozen embedding backbone. The Phase 3 gate also requires at least 20 fast decisions and a task-clustered safe-fast precision 95% CI lower bound of at least 85%.
 
 The router remains shadow-only. Phase 3 stays locked until blind held-out labels satisfy the preregistered safety, coverage, incremental-value, and subgroup gates.
 

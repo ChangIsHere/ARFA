@@ -114,6 +114,43 @@ def _freeze_provenance(
     return result
 
 
+def _provenance_fingerprint(provenance: dict[str, Any], model_name: str, split: str) -> str:
+    payload = {"model_name": model_name, "split": split, "provenance": provenance}
+    serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def _validate_resume(
+    runs: list[ShadowRun],
+    summary_path: Path,
+    model_name: str,
+    split: str,
+    expected_task_ids: set[str],
+    expected_task_count: int,
+    provenance_fingerprint: str,
+) -> None:
+    if not summary_path.is_file():
+        raise ValueError("Resume trace exists without its summary.json provenance record")
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if summary.get("run_provenance_fingerprint") != provenance_fingerprint:
+        raise ValueError("Resume summary provenance does not match the current frozen environment")
+    if int(summary.get("task_count", -1)) != len(runs):
+        raise ValueError("Resume summary task count does not match traces.jsonl")
+    if int(summary.get("expected_task_count", -1)) != expected_task_count:
+        raise ValueError("Resume summary expected task count does not match the frozen split")
+    if summary.get("model_name") != model_name or summary.get("split") != split:
+        raise ValueError("Resume summary model or split does not match the requested cell")
+    task_ids = [run.task_id for run in runs]
+    if len(task_ids) != len(set(task_ids)):
+        raise ValueError("Resume trace contains duplicate task IDs")
+    unexpected = sorted(set(task_ids) - expected_task_ids)
+    if unexpected:
+        raise ValueError(f"Resume trace contains tasks outside the frozen split: {unexpected}")
+    stale = [run.task_id for run in runs if run.provenance_fingerprint != provenance_fingerprint]
+    if stale:
+        raise ValueError(f"Resume trace contains stale provenance for tasks: {stale}")
+
+
 def _load_split_tasks(task_path: str, split_path: str, split: str, limit: int) -> list[dict[str, Any]]:
     if split not in ALLOWED_SPLITS:
         raise ValueError(f"Phase 1.5 refuses split '{split}'; allowed: {sorted(ALLOWED_SPLITS)}")
@@ -155,6 +192,7 @@ def _summary(runs: list[ShadowRun], config: dict[str, Any], split: str, expected
         "paper_usable": False,
         "paper_usable_reason": "Human-blind labels and held-out residual analysis are not complete.",
         "model_name": config["shadow"]["model_name"],
+        "run_provenance_fingerprint": provenance["run_provenance_fingerprint"],
         "split": split,
         "expected_task_count": expected_tasks,
         "task_count": len(runs),
@@ -244,6 +282,11 @@ def main() -> None:
         "json_client_sha256": _sha256("src/phase1_5_shadow/json_model_client.py"),
         **freeze_provenance,
     }
+    provenance["run_provenance_fingerprint"] = _provenance_fingerprint(
+        provenance,
+        str(config["shadow"]["model_name"]),
+        args.split,
+    )
 
     client = OllamaStructuredClient.from_config(config["shadow"])
     agent = ShadowReActAgent(
@@ -260,9 +303,18 @@ def main() -> None:
     trace_path = output_dir / "traces.jsonl"
     if args.resume and trace_path.exists():
         runs = [ShadowRun.from_dict(row) for row in read_jsonl(trace_path)]
-        mismatched = [run for run in runs if run.model_name != config["shadow"]["model_name"] or run.split != args.split]
-        if mismatched:
-            raise SystemExit("Refusing to mix models or splits in one shadow trace file")
+        try:
+            _validate_resume(
+                runs,
+                output_dir / "summary.json",
+                str(config["shadow"]["model_name"]),
+                args.split,
+                {str(task["task_id"]) for task in tasks},
+                expected_tasks,
+                provenance["run_provenance_fingerprint"],
+            )
+        except ValueError as exc:
+            raise SystemExit(f"Refusing stale resume data: {exc}") from exc
 
     completed = {run.task_id for run in runs}
     for task in tasks:
@@ -274,7 +326,14 @@ def main() -> None:
             run = agent.run_task(task, env)
         finally:
             env.close()
-        run = ShadowRun(**{**run.to_dict(), "steps": run.steps, "total_task_wall_seconds": time.perf_counter() - task_started})
+        run = ShadowRun(
+            **{
+                **run.to_dict(),
+                "steps": run.steps,
+                "total_task_wall_seconds": time.perf_counter() - task_started,
+                "provenance_fingerprint": provenance["run_provenance_fingerprint"],
+            }
+        )
         runs.append(run)
         _write_outputs(runs, _summary(runs, config, args.split, expected_tasks, provenance), output_dir)
 

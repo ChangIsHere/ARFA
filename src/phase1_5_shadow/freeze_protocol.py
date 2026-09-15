@@ -23,12 +23,16 @@ FROZEN_FILES = (
     "src/phase1_5_shadow/analyze_annotations.py",
     "src/phase1_5_shadow/annotate_packet.py",
     "src/phase1_5_shadow/build_annotation_packet.py",
+    "src/phase1_5_shadow/audit_formal_collection.py",
     "src/phase1_5_shadow/freeze_protocol.py",
     "src/phase1_5_shadow/json_model_client.py",
+    "src/phase1_5_shadow/formal_matrix.py",
+    "src/phase1_5_shadow/observation_baseline.py",
     "src/phase1_5_shadow/prompts.py",
     "src/phase1_5_shadow/residual.py",
     "src/phase1_5_shadow/review_pilot_annotations.py",
     "src/phase1_5_shadow/run_shadow.py",
+    "src/phase1_5_shadow/run_formal_matrix.py",
     "src/phase1_5_shadow/shadow_agent.py",
     "src/phase1_residual/residual_calculator.py",
     "src/phase2_baseline/intercode_docker_environment.py",
@@ -58,6 +62,14 @@ def build_freeze_manifest(config: dict[str, Any], pilot_analysis: dict[str, Any]
     missing = [path for path in FROZEN_FILES if not Path(path).is_file()]
     if missing:
         raise ValueError(f"Cannot freeze missing protocol files: {missing}")
+    dirty = subprocess.run(
+        ["git", "status", "--porcelain", "--", *FROZEN_FILES],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    if dirty:
+        raise ValueError("Commit all frozen protocol artifacts before creating the freeze manifest")
     commit = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         check=True,

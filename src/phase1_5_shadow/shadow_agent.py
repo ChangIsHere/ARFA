@@ -69,6 +69,7 @@ class ShadowRun:
     executed_steps: int
     parse_error_count: int
     total_task_wall_seconds: float
+    provenance_fingerprint: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         payload = asdict(self)

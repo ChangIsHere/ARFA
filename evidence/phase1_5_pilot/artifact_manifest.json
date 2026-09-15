@@ -64,9 +64,9 @@
   "protocol_artifacts": [
     {
       "path": "config/phase1_5_shadow.yaml",
-      "sha256": "09ff4e151900a4ec78dd42fcfe0d3d4369c44998184c857d951b10fe490a80a0",
-      "bytes": 1769,
-      "records": 55
+      "sha256": "6a24c8f481532073af1316e075307e7bfbc4c17e218104765b787dc07d993192",
+      "bytes": 2163,
+      "records": 64
     },
     {
       "path": "data/phase2/intercode_nl2bash_official_200.jsonl",
@@ -88,21 +88,21 @@
     },
     {
       "path": "docs/phase1_5_protocol.md",
-      "sha256": "2a2877a8ab341e0ec5128e6502d6bfff1c3e6cdf027da2d72ca0838177fd0fa2",
-      "bytes": 6823,
-      "records": 60
+      "sha256": "5be4a43311a2bc937325741bb18169405eb1228d288693d47d24d8bbd032d318",
+      "bytes": 8570,
+      "records": 70
     },
     {
       "path": "requirements.txt",
-      "sha256": "2ba32c7108fc8c7cf8cbbb6978370e2040ae7200832f74f8e950ff8d36987fc6",
-      "bytes": 66,
-      "records": 6
+      "sha256": "5f551fba571129b3a578a6b9c33295c20fef6f82ab35afa8b6814d63cca76b92",
+      "bytes": 72,
+      "records": 7
     },
     {
       "path": "scripts/phase1_5_run_shadow_matrix.sh",
-      "sha256": "027b8edeba657b2635c09cb060c672281426e211b855e5b26d993735e2135707",
-      "bytes": 791,
-      "records": 23
+      "sha256": "c1154e905055fc2f03d36befe163a3e1c0e3e168761427b42c39d43ec590a6c5",
+      "bytes": 128,
+      "records": 4
     },
     {
       "path": "src/common/config.py",
@@ -118,9 +118,9 @@
     },
     {
       "path": "src/phase1_5_shadow/analyze_annotations.py",
-      "sha256": "7be22b425d8fdc84c125b694229a90b2344017dbff27e570a030a41ee8271dc5",
-      "bytes": 30616,
-      "records": 640
+      "sha256": "6e2313f0fcc468f877dba59e1bf448a8cf48f9470018324b439a221922d5261d",
+      "bytes": 33702,
+      "records": 701
     },
     {
       "path": "src/phase1_5_shadow/annotate_packet.py",
@@ -130,21 +130,39 @@
     },
     {
       "path": "src/phase1_5_shadow/build_annotation_packet.py",
-      "sha256": "7e0d26e763aeb6894cbc343dfb2227579e726ceba2ae4af012b02d8d265e7fb5",
-      "bytes": 7107,
-      "records": 149
+      "sha256": "ba0a1b53d1f10305bdecce95c50b8737bc3d5828dc7746be9f3b145b61b99533",
+      "bytes": 8851,
+      "records": 187
+    },
+    {
+      "path": "src/phase1_5_shadow/audit_formal_collection.py",
+      "sha256": "1023014d47b1d96ec30cf6d54a635dfaee2006bad8a7187f114c59d191cd6516",
+      "bytes": 13123,
+      "records": 231
     },
     {
       "path": "src/phase1_5_shadow/freeze_protocol.py",
-      "sha256": "957d85f2fbf57d1f3ef61f7e19d255bb1a4371b57f6323a084609fd1e574ec68",
-      "bytes": 5628,
-      "records": 112
+      "sha256": "c516d45ad6026df54656a08443eda1940fe492168ad42d4f29facdd33592f0d7",
+      "bytes": 6120,
+      "records": 124
     },
     {
       "path": "src/phase1_5_shadow/json_model_client.py",
       "sha256": "fd89cd1adeb30b43b8e8e1e9ac2ab584ebddff4e0808a71a0855360103d23590",
       "bytes": 4382,
       "records": 109
+    },
+    {
+      "path": "src/phase1_5_shadow/formal_matrix.py",
+      "sha256": "f466dd473fa83b2b683c8c8ee0db45234b6797742eb49712774399336adb45ae",
+      "bytes": 1448,
+      "records": 32
+    },
+    {
+      "path": "src/phase1_5_shadow/observation_baseline.py",
+      "sha256": "d2869d21abe33e79b164ae247d1355cb9b786b1ffa95859e88a202c11c754ae5",
+      "bytes": 4479,
+      "records": 94
     },
     {
       "path": "src/phase1_5_shadow/prompts.py",
@@ -166,15 +184,21 @@
     },
     {
       "path": "src/phase1_5_shadow/run_shadow.py",
-      "sha256": "08331635dc055df6c0a0627ea3c7a29cc546b0e7349fc0d60d341121b0b9500f",
-      "bytes": 12342,
-      "records": 252
+      "sha256": "9ab672024d61cb338a82e24ece944e6741c2eca3853d03e7bdf8e772a7fd15d6",
+      "bytes": 14921,
+      "records": 307
+    },
+    {
+      "path": "src/phase1_5_shadow/run_formal_matrix.py",
+      "sha256": "feb19172236bce3955aa469ec584ef0a402aa5e1b1a86db2e35cebb3ed200fd3",
+      "bytes": 2937,
+      "records": 70
     },
     {
       "path": "src/phase1_5_shadow/shadow_agent.py",
-      "sha256": "a45de8f716c711498d4b56dd0d644a0fb39d1d6605d4ce1e5c5c7b1aed72b516",
-      "bytes": 13354,
-      "records": 315
+      "sha256": "4537f11faf383c115acce4048ed2e487a7a607277a6af1b197254ecd83d5198a",
+      "bytes": 13391,
+      "records": 316
     },
     {
       "path": "src/phase1_residual/residual_calculator.py",
@@ -204,9 +228,9 @@
     },
     {
       "path": "evidence/phase1_5_pilot/annotation_manifest.json",
-      "sha256": "dbf0ae6fcbd1a8ea47f2234400cf122dac7248e9793f5c10ce71f9eb0b6382fe",
-      "bytes": 868,
-      "records": 39
+      "sha256": "43739fefbd9482085b3f2ff6a50ed73c430eb24803ef9cba60ec691fa9a7922e",
+      "bytes": 996,
+      "records": 42
     },
     {
       "path": "evidence/phase1_5_pilot/pilot_blind_packet_unlabeled.jsonl",

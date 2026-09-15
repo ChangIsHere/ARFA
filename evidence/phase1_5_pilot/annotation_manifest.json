@@ -35,5 +35,8 @@
     "success"
   ],
   "labels_complete": false,
+  "packet_scope": "pilot_guideline_review",
+  "formal_collection_audit_passed": null,
+  "formal_collection_audit_sha256": null,
   "private_trace_file_count": 1
 }

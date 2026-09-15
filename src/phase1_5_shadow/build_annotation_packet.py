@@ -8,6 +8,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from src.common.utils import read_jsonl, write_jsonl
+from src.common.config import load_simple_yaml
+from src.phase1_5_shadow.audit_formal_collection import audit_formal_collection
+from src.phase1_5_shadow.formal_matrix import expected_trace_paths
 
 
 ALLOWED_PACKET_FIELDS = {
@@ -133,14 +136,37 @@ def main() -> None:
     parser.add_argument("--results-root", default="results/phase1_5_shadow/full")
     parser.add_argument("--output-dir", default="data/phase1_5/annotation")
     parser.add_argument("--tasks", default="data/phase2/intercode_nl2bash_official_200.jsonl")
+    parser.add_argument("--config", default="config/phase1_5_shadow.yaml")
+    parser.add_argument("--freeze-manifest", default="data/phase1_5/protocol_freeze_manifest.json")
+    parser.add_argument("--pilot", action="store_true", help="Permit a non-formal packet for guideline review only.")
     args = parser.parse_args()
 
-    trace_paths = list(Path(args.results_root).glob("**/traces.jsonl"))
+    config = load_simple_yaml(args.config)
+    formal_audit = None
+    if not args.pilot:
+        formal_audit = audit_formal_collection(
+            config,
+            args.config,
+            args.results_root,
+            args.freeze_manifest,
+        )
+        if not formal_audit["passed"]:
+            print(json.dumps(formal_audit, indent=2))
+            raise SystemExit("Formal matrix audit failed; refusing to generate annotation packets")
+
+    trace_paths = (
+        list(Path(args.results_root).glob("**/traces.jsonl"))
+        if args.pilot
+        else list(expected_trace_paths(config, args.results_root).values())
+    )
     if not trace_paths:
         raise SystemExit(f"No traces found below {args.results_root}")
     task_metadata = {str(row["task_id"]): row for row in read_jsonl(args.tasks)}
     annotations, sources = build_packets(trace_paths, task_metadata)
-    secondary = secondary_annotation_sample(annotations)
+    secondary = secondary_annotation_sample(
+        annotations,
+        fraction=float(config["annotation"]["secondary_fraction"]),
+    )
     output = Path(args.output_dir)
     write_jsonl(output / "blind_annotation_packet.jsonl", annotations)
     write_jsonl(output / "blind_annotation_packet_secondary_25pct.jsonl", secondary)
@@ -156,9 +182,22 @@ def main() -> None:
         "packet_fields": sorted(ALLOWED_PACKET_FIELDS),
         "forbidden_fields": sorted(FORBIDDEN_PACKET_FIELDS),
         "labels_complete": False,
+        "packet_scope": "pilot_guideline_review" if args.pilot else "formal_held_out_analysis",
+        "formal_collection_audit_passed": None if args.pilot else True,
+        "formal_collection_audit_sha256": (
+            None
+            if formal_audit is None
+            else hashlib.sha256(
+                json.dumps(formal_audit, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            ).hexdigest()
+        ),
     }
     output.mkdir(parents=True, exist_ok=True)
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    if formal_audit is not None:
+        (output / "formal_collection_audit.json").write_text(
+            json.dumps(formal_audit, indent=2) + "\n", encoding="utf-8"
+        )
     print(json.dumps(manifest, indent=2))
 
 

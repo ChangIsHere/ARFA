@@ -13,6 +13,7 @@ from sklearn.metrics import average_precision_score, balanced_accuracy_score, co
 from src.common.config import load_simple_yaml
 from src.common.utils import read_jsonl, write_csv, write_jsonl
 from src.phase1_5_shadow.residual import continuation_is_self_contained
+from src.phase1_5_shadow.observation_baseline import fit_observation_only_scores
 from src.phase1_residual.residual_calculator import embedding_residuals
 
 
@@ -467,8 +468,17 @@ def analyze(
         weights,
         float(config["shadow"]["minimum_expectation_quality"]),
     )
+    learned_observation_scores, learned_observation_info = fit_observation_only_scores(
+        rows,
+        str(residual_config["embedding_model"]),
+        bool(residual_config.get("require_embedding_model", True)),
+        int(config["analysis"]["bootstrap_seed"]),
+    )
+    for row, score in zip(rows, learned_observation_scores):
+        row["learned_observation_only_score"] = score
     methods = [
         "no_expectation_score",
+        "learned_observation_only_score",
         "expectation_gate_only_score",
         "raw_full_residual_score",
         "semantic_with_safety_score",
@@ -509,6 +519,9 @@ def analyze(
 
     full = next(row for row in test_metrics if row["method"] == "full_residual_score")
     no_expectation = next(row for row in test_metrics if row["method"] == "no_expectation_score")
+    learned_observation = next(
+        row for row in test_metrics if row["method"] == "learned_observation_only_score"
+    )
     incremental_value = {
         "full_vs_no_expectation": _bootstrap_auc_difference(
             test,
@@ -534,6 +547,22 @@ def analyze(
             "full_residual_score",
             "expectation_gate_only_score",
         ),
+        "raw_residual_vs_learned_observation_only": _bootstrap_auc_difference(
+            test,
+            "slow_reasoning_needed",
+            bootstrap_samples,
+            bootstrap_seed + 3,
+            "raw_full_residual_score",
+            "learned_observation_only_score",
+        ),
+        "full_vs_learned_observation_only": _bootstrap_auc_difference(
+            test,
+            "slow_reasoning_needed",
+            bootstrap_samples,
+            bootstrap_seed + 4,
+            "full_residual_score",
+            "learned_observation_only_score",
+        ),
     }
     expectation_metrics = {
         method: {
@@ -549,6 +578,7 @@ def analyze(
         }
         for method in (
             "no_expectation_score",
+            "learned_observation_only_score",
             "expectation_gate_only_score",
             "raw_full_residual_score",
             "semantic_with_safety_score",
@@ -578,6 +608,9 @@ def analyze(
     full_vs_no_expectation = incremental_value["full_vs_no_expectation"]
     raw_vs_no_expectation = incremental_value["raw_residual_vs_no_expectation"]
     full_vs_gate_only = incremental_value["full_vs_expectation_gate_only"]
+    raw_vs_learned_observation = incremental_value["raw_residual_vs_learned_observation_only"]
+    full_vs_learned_observation = incremental_value["full_vs_learned_observation_only"]
+    full_safe_fast_ci_low = full["confidence_intervals"]["safe_fast_precision"]["ci95_low"]
     gate = {
         "validation_threshold_feasible": bool(
             thresholds["full_residual_score"]["metrics"]["selection_feasible"]
@@ -586,6 +619,11 @@ def analyze(
         "safe_fast_precision": full["safe_fast_precision"] is not None
         and full["safe_fast_precision"] >= float(config["acceptance"]["held_out_safe_fast_precision"]),
         "fast_path_rate": full["fast_path_rate"] >= float(config["acceptance"]["held_out_fast_path_rate"]),
+        "minimum_fast_path_decisions": full["fast_path_count"]
+        >= int(config["acceptance"]["minimum_fast_path_decisions"]),
+        "safe_fast_precision_ci_lower_bound": full_safe_fast_ci_low is not None
+        and full_safe_fast_ci_low
+        >= float(config["acceptance"]["minimum_safe_fast_precision_ci95_low"]),
         "false_fast_rate": full["false_fast_rate"] is not None and full["false_fast_rate"] <= false_fast_limit,
         "auc_gain_over_no_expectation": full_vs_no_expectation["observed_auc_gain"] is not None
         and full_vs_no_expectation["observed_auc_gain"] >= minimum_gain,
@@ -601,6 +639,26 @@ def analyze(
         >= float(config["acceptance"]["minimum_full_auc_gain_over_expectation_gate_only"]),
         "full_gain_over_gate_only_ci_excludes_zero": full_vs_gate_only["bootstrap_ci95_low"] is not None
         and full_vs_gate_only["bootstrap_ci95_low"] > 0,
+        "raw_residual_gain_over_learned_observation_only": raw_vs_learned_observation[
+            "observed_auc_gain"
+        ]
+        is not None
+        and raw_vs_learned_observation["observed_auc_gain"]
+        >= float(config["acceptance"]["minimum_raw_residual_auc_gain_over_learned_observation_only"]),
+        "raw_residual_vs_learned_observation_ci_excludes_zero": raw_vs_learned_observation[
+            "bootstrap_ci95_low"
+        ]
+        is not None
+        and raw_vs_learned_observation["bootstrap_ci95_low"] > 0,
+        "full_gain_over_learned_observation_only": full_vs_learned_observation["observed_auc_gain"]
+        is not None
+        and full_vs_learned_observation["observed_auc_gain"]
+        >= float(config["acceptance"]["minimum_full_auc_gain_over_learned_observation_only"]),
+        "full_vs_learned_observation_ci_excludes_zero": full_vs_learned_observation[
+            "bootstrap_ci95_low"
+        ]
+        is not None
+        and full_vs_learned_observation["bootstrap_ci95_low"] > 0,
         "expectation_mismatch_auc": expectation_metrics["raw_full_residual_score"]["roc_auc"] is not None
         and expectation_metrics["raw_full_residual_score"]["roc_auc"]
         >= float(config["acceptance"]["minimum_expectation_mismatch_auc"]),
@@ -616,6 +674,7 @@ def analyze(
     return rows, {
         "readiness": readiness,
         "embedding_backend": backend,
+        "learned_observation_only_baseline": learned_observation_info,
         "selected_semantic_weight": selected_weight,
         "thresholds": thresholds,
         "test_metrics": test_metrics,
@@ -623,6 +682,8 @@ def analyze(
         "subgroup_metrics": subgroup_metrics,
         "incremental_value": incremental_value,
         "full_minus_no_expectation_fast_path_rate": full["fast_path_rate"] - no_expectation["fast_path_rate"],
+        "full_minus_learned_observation_fast_path_rate": full["fast_path_rate"]
+        - learned_observation["fast_path_rate"],
         "acceptance_gate": gate,
     }
 

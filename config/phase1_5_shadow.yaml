@@ -1,5 +1,5 @@
 protocol:
-  version: phase1.5-v1.1
+  version: phase1.5-v1.2
   stage: pilot_review
   locked: false
   reason: Awaiting pilot blind-annotation review before formal shadow collection.
@@ -32,6 +32,12 @@ environment:
   container_memory: 1g
   network_mode: bridge
 
+formal:
+  model_1: arfa-qwen2.5-coder:7b-8k|qwen2.5-coder-7b
+  model_2: arfa-llama3.1:8b-8k|llama3.1-8b
+  model_3: arfa-qwen2.5-coder:14b-8k|qwen2.5-coder-14b
+  expected_total_runs: 300
+
 residual:
   embedding_model: sentence-transformers/all-MiniLM-L6-v2
   require_embedding_model: true
@@ -45,7 +51,11 @@ acceptance:
   minimum_auc_gain_over_no_expectation: 0.02
   minimum_raw_residual_auc_gain_over_no_expectation: 0.02
   minimum_full_auc_gain_over_expectation_gate_only: 0.02
+  minimum_raw_residual_auc_gain_over_learned_observation_only: 0.02
+  minimum_full_auc_gain_over_learned_observation_only: 0.02
   minimum_expectation_mismatch_auc: 0.80
+  minimum_fast_path_decisions: 20
+  minimum_safe_fast_precision_ci95_low: 0.85
   minimum_subgroup_items: 20
   minimum_subgroup_safe_fast_precision: 0.85
   maximum_subgroup_false_fast_rate: 0.10
