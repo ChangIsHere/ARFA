@@ -1,0 +1,151 @@
+{
+  "phase": "phase1_5_shadow",
+  "scope": "10-task engineering pilot; no residual-effect labels or metrics",
+  "audit": {
+    "task_count": 10,
+    "expected_task_count": 10,
+    "complete": true,
+    "executed_steps": 25,
+    "unique_annotation_items": 23,
+    "deduplicated_source_steps": 2,
+    "parse_error_count": 0,
+    "parse_error_rate": 0.0,
+    "complete_preexecution_commitment_rate": 1.0,
+    "mean_expectation_quality": 0.8711111111111114,
+    "self_contained_action_rate": 0.92,
+    "self_contained_non_reason_continuation_rate": 1.0,
+    "shadow_fast_candidate_rate": 0.28,
+    "decision_counts": {
+      "fast_candidate": 7,
+      "reason": 18
+    },
+    "reason_counts": {
+      "executed_action_depended_on_missing_stdin": 2,
+      "insufficient_expectation_quality": 3,
+      "model_declared_observation_dependent_continuation": 7,
+      "shadow_only_expectation_matched": 7,
+      "structured_residual_above_threshold": 6
+    },
+    "expected_signal_any_counts": {
+      "exit_code": 16,
+      "stderr": 5,
+      "stdout": 5
+    },
+    "collection_gate": {
+      "complete": true,
+      "zero_parse_errors": true,
+      "commitment_rate_at_least_95_percent": true,
+      "at_least_20_unique_annotation_items": true,
+      "passed": true
+    }
+  },
+  "source_trace_files": [
+    {
+      "path": "private://pilot_trace_001",
+      "sha256": "e5b5ed7dedd6c7a46e0f28a12bcb7af5612dc00308bb15476df6c965ae8f6df5",
+      "bytes": 98595,
+      "records": 10
+    }
+  ],
+  "private_annotation_artifacts": [
+    {
+      "path": "private://blind_annotation_packet",
+      "sha256": "fe5695a91de035d005b7f2ea98cf49bb6434eafdbed072a5d705385b01b6a451",
+      "bytes": 24671,
+      "records": 23
+    },
+    {
+      "path": "private://source_map",
+      "sha256": "9419aa50a67654fb3cd369b9a6bf6a7d28bf2d223f77300b4f4eac04f7eb3bc0",
+      "bytes": 13834,
+      "records": 25
+    }
+  ],
+  "protocol_artifacts": [
+    {
+      "path": "config/phase1_5_shadow.yaml",
+      "sha256": "4335698d2635f0c02c9ac8f77fa0a8d09339c94bdc6f27e8ad56727196293d75",
+      "bytes": 1748,
+      "records": 55
+    },
+    {
+      "path": "data/phase1_5/task_splits.json",
+      "sha256": "056fdb6f64638ed3afb04e7cc41624e8c5b4d5f33a2728e3639d17eaee5bbe52",
+      "bytes": 9247,
+      "records": 308
+    },
+    {
+      "path": "docs/phase1_5_annotation_guideline.md",
+      "sha256": "de87ad76dda9f5edc421da44f572422c63fa2d3994ed1998108292ad44d92b9c",
+      "bytes": 1494,
+      "records": 13
+    },
+    {
+      "path": "docs/phase1_5_protocol.md",
+      "sha256": "57d82550489354f8b7c54bb92f10c70f6946ff1a39f2a5e4f143cefceb88b1f5",
+      "bytes": 5251,
+      "records": 51
+    },
+    {
+      "path": "src/phase1_5_shadow/analyze_annotations.py",
+      "sha256": "7c6d126458a3ccb9309dfe2b91fd05f1e7d2e2f0f6aeb20ac0d338f0a0428447",
+      "bytes": 26300,
+      "records": 552
+    },
+    {
+      "path": "src/phase1_5_shadow/prompts.py",
+      "sha256": "062c47475cfdc2e069ffad2ab8b361e428133bb060fb1b3f02b85c4c05bb1bfe",
+      "bytes": 3465,
+      "records": 47
+    }
+  ],
+  "published_artifacts": [
+    {
+      "path": "evidence/phase1_5_pilot/pilot_audit.json",
+      "sha256": "3d8b62a07cfb8b252655d0cefaf4014cacaa97be1c2f0132839fb65f9b70b54f",
+      "bytes": 1073,
+      "records": 38
+    },
+    {
+      "path": "evidence/phase1_5_pilot/annotation_manifest.json",
+      "sha256": "dbf0ae6fcbd1a8ea47f2234400cf122dac7248e9793f5c10ce71f9eb0b6382fe",
+      "bytes": 868,
+      "records": 39
+    },
+    {
+      "path": "evidence/phase1_5_pilot/pilot_blind_packet_unlabeled.jsonl",
+      "sha256": "8ad93da0cef269322c49c09275cfdec893994de3968532377a8a65c547492c55",
+      "bytes": 21819,
+      "records": 23
+    },
+    {
+      "path": "evidence/phase1_5_pilot/pilot_source_index_redacted.jsonl",
+      "sha256": "434ab2319769f59e7c6475a6300193fa0227a808e0db34c3f24b341fa5db12c3",
+      "bytes": 4475,
+      "records": 25
+    }
+  ],
+  "redaction": {
+    "published_packet_fields": [
+      "annotation_id",
+      "task_instruction",
+      "current_plan",
+      "action",
+      "expected_outcome",
+      "expected_signals",
+      "next_action_if_expected",
+      "actual_observation",
+      "exit_code"
+    ],
+    "excluded": [
+      "model identity",
+      "split",
+      "residual scores",
+      "shadow decision",
+      "raw model response",
+      "reward",
+      "success",
+      "labels and annotator identity"
+    ]
+  }
+}

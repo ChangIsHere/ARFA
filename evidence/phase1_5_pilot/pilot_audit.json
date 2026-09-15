@@ -1,0 +1,38 @@
+{
+  "task_count": 10,
+  "expected_task_count": 10,
+  "complete": true,
+  "executed_steps": 25,
+  "unique_annotation_items": 23,
+  "deduplicated_source_steps": 2,
+  "parse_error_count": 0,
+  "parse_error_rate": 0.0,
+  "complete_preexecution_commitment_rate": 1.0,
+  "mean_expectation_quality": 0.8711111111111114,
+  "self_contained_action_rate": 0.92,
+  "self_contained_non_reason_continuation_rate": 1.0,
+  "shadow_fast_candidate_rate": 0.28,
+  "decision_counts": {
+    "fast_candidate": 7,
+    "reason": 18
+  },
+  "reason_counts": {
+    "executed_action_depended_on_missing_stdin": 2,
+    "insufficient_expectation_quality": 3,
+    "model_declared_observation_dependent_continuation": 7,
+    "shadow_only_expectation_matched": 7,
+    "structured_residual_above_threshold": 6
+  },
+  "expected_signal_any_counts": {
+    "exit_code": 16,
+    "stderr": 5,
+    "stdout": 5
+  },
+  "collection_gate": {
+    "complete": true,
+    "zero_parse_errors": true,
+    "commitment_rate_at_least_95_percent": true,
+    "at_least_20_unique_annotation_items": true,
+    "passed": true
+  }
+}

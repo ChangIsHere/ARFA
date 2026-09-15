@@ -1,5 +1,8 @@
-locked: false
-reason: Online pre-execution expectation collection with shadow-only routing.
+protocol:
+  version: phase1.5-v1.1
+  stage: pilot_review
+  locked: false
+  reason: Awaiting pilot blind-annotation review before formal shadow collection.
 
 shadow:
   model_interface: ollama_native_structured
@@ -50,6 +53,7 @@ acceptance:
 annotation:
   secondary_fraction: 0.25
   minimum_cohen_kappa: 0.70
+  agreement_label_space: match_mismatch_ambiguous
 
 analysis:
   bootstrap_samples: 2000

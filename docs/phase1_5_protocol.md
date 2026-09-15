@@ -14,6 +14,8 @@ An action that depends on missing stdin is handled by a shared safety gate and c
 
 Phase 1.5 must never execute tasks assigned to `phase3_final`.
 
+Protocol version `phase1.5-v1.1` is in pilot review. `protocol.locked` remains false until the pilot labels and independent agreement check are complete. Formal shadow collection is forbidden before a tracked freeze manifest records the config, prompt, schema, splits, annotation guide, analyzer, runner, and residual implementation hashes.
+
 ## Frozen Splits
 
 - `shadow_development`: 40 tasks for representation development.
@@ -45,13 +47,28 @@ Phase 3 remains locked unless the held-out shadow test satisfies all of the foll
 
 Only subgroups with at least 20 held-out items enter the subgroup gate. All smaller groups are reported but treated as descriptive.
 
-These thresholds are frozen before collection. Failure to pass is a research result and must not be repaired by retuning on the held-out test.
+Threshold constraints are frozen before collection. Validation threshold selection must satisfy both the false-fast and safe-fast constraints before maximizing fast-path coverage. If no threshold is feasible, the analyzer records infeasibility, falls back to always-reason for descriptive test evaluation, and fails the Phase 3 gate. Failure to pass must not be repaired by retuning on the held-out test.
+
+Blank labels are incomplete. `ambiguous` is a completed annotation that is excluded from binary metrics and reported separately. Inter-annotator analysis uses three-class Cohen's kappa and also reports non-ambiguous binary-pair coverage.
+
+Task-clustered bootstrap 95% confidence intervals accompany safe-fast precision, fast-path rate, false-fast rate, ROC-AUC, AUC gain, and eligible subgroup results. Acceptance remains based on the preregistered point estimates, with denominators and intervals reported alongside them.
 
 ## Reproducible Commands
 
 ```bash
 bash scripts/phase1_5_build_splits.sh
 bash scripts/phase1_5_run_pilot.sh
+bash scripts/phase1_5_audit_collection.sh
+bash scripts/phase1_5_build_annotation_packet.sh --results-root results/phase1_5_shadow/pilot --output-dir results/phase1_5_shadow/pilot_annotation
+# Complete both pilot annotation packets, then run the pilot analysis.
+bash scripts/phase1_5_analyze_annotations.sh \
+  --annotations results/phase1_5_shadow/pilot_annotation/blind_annotation_packet.jsonl \
+  --secondary-annotations results/phase1_5_shadow/pilot_annotation/blind_annotation_packet_secondary_25pct.jsonl \
+  --source-map results/phase1_5_shadow/pilot_annotation/private_source_map.jsonl \
+  --output-dir results/phase1_5_shadow/pilot_analysis
+bash scripts/phase1_5_freeze_protocol.sh
 bash scripts/phase1_5_run_shadow_matrix.sh
+# Complete both formal annotation packets, then run held-out analysis once.
 bash scripts/phase1_5_analyze_annotations.sh
+bash scripts/phase1_5_build_evidence_bundle.sh
 ```

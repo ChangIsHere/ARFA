@@ -22,6 +22,8 @@ The two non-self-contained current actions were caught by the shared action-safe
 
 The collector, native Ollama JSON-schema interface, content deduplication, blind packet builder, and incomplete-label refusal are working. The analyzer correctly emits no accuracy, AUC, or routing claim while either annotation packet is incomplete.
 
+The tracked redacted evidence bundle is in `evidence/phase1_5_pilot/`. It contains the collection audit, unlabeled blind packet, redacted 25-step source index, record counts, and SHA-256 metadata. Raw traces and the private source map remain local.
+
 ## Required Before Full Collection
 
 Independently label the 23-item primary pilot packet and the frozen 6-item secondary packet using `docs/phase1_5_annotation_guideline.md`. Use the pilot only to resolve guideline ambiguity and verify annotator agreement. Do not tune the residual representation or acceptance thresholds on pilot labels.

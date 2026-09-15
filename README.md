@@ -262,6 +262,7 @@ Phase 1.5 supplements rather than repeats Phase 1. The frozen protocol and annot
 docs/phase1_5_protocol.md
 docs/phase1_5_annotation_guideline.md
 docs/phase1_5_pilot_report.md
+evidence/phase1_5_pilot/
 ```
 
 Build the immutable task split and run the collection pilot:
@@ -270,6 +271,7 @@ Build the immutable task split and run the collection pilot:
 bash scripts/phase1_5_build_splits.sh
 bash scripts/phase1_5_run_pilot.sh
 bash scripts/phase1_5_audit_collection.sh
+bash scripts/phase1_5_build_evidence_bundle.sh
 ```
 
 The router remains shadow-only. Phase 3 stays locked until blind held-out labels satisfy the preregistered safety, coverage, incremental-value, and subgroup gates.

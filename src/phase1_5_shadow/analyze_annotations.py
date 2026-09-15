@@ -20,10 +20,23 @@ LABELS = {
     "slow_reasoning_needed": {"yes": 1, "no": 0},
     "expectation_match": {"mismatch": 1, "match": 0},
 }
+AMBIGUOUS_LABEL = "ambiguous"
 
 
 def _binary_label(row: dict[str, Any], target: str) -> int | None:
     return LABELS[target].get(str(row.get(target, "")).strip().lower())
+
+
+def _raw_label(row: dict[str, Any], target: str) -> str:
+    return str(row.get(target, "")).strip().lower()
+
+
+def _validate_label_values(rows: list[dict[str, Any]]) -> None:
+    for row in rows:
+        for target, binary_values in LABELS.items():
+            value = _raw_label(row, target)
+            if value and value not in {*binary_values, AMBIGUOUS_LABEL}:
+                raise ValueError(f"Invalid {target} label '{value}' for {row.get('annotation_id', '<unknown>')}")
 
 
 def _metrics(rows: list[dict[str, Any]], score_key: str, threshold: float, target: str) -> dict[str, Any]:
@@ -49,7 +62,7 @@ def _metrics(rows: list[dict[str, Any]], score_key: str, threshold: float, targe
         "roc_auc": roc_auc_score(y_true, scores) if both_classes else None,
         "pr_auc": average_precision_score(y_true, scores) if positives and usable else None,
         "false_fast_count": fn,
-        "false_fast_rate": fn / positives if positives else 0.0,
+        "false_fast_rate": fn / positives if positives else None,
         "fast_path_count": fast,
         "fast_path_rate": fast / len(usable) if usable else 0.0,
         "safe_fast_precision": tn / fast if fast else None,
@@ -62,20 +75,37 @@ def _metrics(rows: list[dict[str, Any]], score_key: str, threshold: float, targe
     }
 
 
-def _select_threshold(rows: list[dict[str, Any]], score_key: str, target: str, false_fast_limit: float) -> tuple[float, dict[str, Any]]:
+def _select_threshold(
+    rows: list[dict[str, Any]],
+    score_key: str,
+    target: str,
+    false_fast_limit: float,
+    safe_fast_minimum: float,
+) -> tuple[float, dict[str, Any]]:
     scores = sorted({float(row[score_key]) for row in rows})
     candidates = [min(scores) - 1e-9, *scores, max(scores) + 1e-9] if scores else [0.5]
     evaluated = [_metrics(rows, score_key, threshold, target) for threshold in candidates]
-    feasible = [row for row in evaluated if row["false_fast_rate"] <= false_fast_limit]
-    pool = feasible or evaluated
-    selected = max(
-        pool,
-        key=lambda row: (
-            row["fast_path_rate"],
-            row["safe_fast_precision"] if row["safe_fast_precision"] is not None else -1.0,
-            row["f1"],
-        ),
-    )
+    feasible = [
+        row
+        for row in evaluated
+        if row["false_fast_rate"] is not None
+        and row["false_fast_rate"] <= false_fast_limit
+        and row["safe_fast_precision"] is not None
+        and row["safe_fast_precision"] >= safe_fast_minimum
+    ]
+    if feasible:
+        selected = max(feasible, key=lambda row: (row["fast_path_rate"], row["safe_fast_precision"], row["f1"]))
+        status = "feasible"
+    else:
+        selected = evaluated[0]
+        status = "infeasible_conservative_all_reason_fallback"
+    selected = {
+        **selected,
+        "selection_status": status,
+        "selection_feasible": bool(feasible),
+        "required_false_fast_rate_max": false_fast_limit,
+        "required_safe_fast_precision_min": safe_fast_minimum,
+    }
     return float(selected["threshold"]), selected
 
 
@@ -193,9 +223,50 @@ def _bootstrap_auc_difference(rows: list[dict[str, Any]], target: str, samples: 
     }
 
 
+def _cluster_bootstrap_intervals(
+    rows: list[dict[str, Any]],
+    score_key: str,
+    threshold: float,
+    target: str,
+    samples: int,
+    seed: int,
+) -> dict[str, Any]:
+    usable = [row for row in rows if _binary_label(row, target) is not None]
+    by_task: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in usable:
+        by_task[str(row["task_id"])].append(row)
+    task_ids = sorted(by_task)
+    metric_names = ("safe_fast_precision", "fast_path_rate", "false_fast_rate", "roc_auc")
+    draws: dict[str, list[float]] = {name: [] for name in metric_names}
+    if task_ids:
+        rng = np.random.default_rng(seed)
+        for _ in range(samples):
+            sampled = rng.choice(task_ids, size=len(task_ids), replace=True)
+            sample_rows = [row for task_id in sampled for row in by_task[str(task_id)]]
+            metrics = _metrics(sample_rows, score_key, threshold, target)
+            for name in metric_names:
+                value = metrics[name]
+                if value is not None and math.isfinite(float(value)):
+                    draws[name].append(float(value))
+    return {
+        name: {
+            "ci95_low": float(np.percentile(values, 2.5)) if values else None,
+            "ci95_high": float(np.percentile(values, 97.5)) if values else None,
+            "valid_bootstrap_samples": len(values),
+        }
+        for name, values in draws.items()
+    } | {
+        "bootstrap_samples_requested": samples,
+        "cluster_unit": "task_id",
+        "cluster_count": len(task_ids),
+    }
+
+
 def _annotation_agreement(
     primary: list[dict[str, Any]], secondary: list[dict[str, Any]], minimum_fraction: float
 ) -> dict[str, Any]:
+    _validate_label_values(primary)
+    _validate_label_values(secondary)
     primary_by_id = {str(row["annotation_id"]): row for row in primary}
     overlap = [
         (primary_by_id[str(row["annotation_id"])], row)
@@ -211,22 +282,45 @@ def _annotation_agreement(
     }
     complete = True
     for target in LABELS:
-        pairs = [(_binary_label(a, target), _binary_label(b, target)) for a, b in overlap]
-        pairs = [(a, b) for a, b in pairs if a is not None and b is not None]
-        if len(pairs) < len(overlap) or not pairs:
+        raw_pairs = [(_raw_label(a, target), _raw_label(b, target)) for a, b in overlap]
+        complete_pairs = [(a, b) for a, b in raw_pairs if a and b]
+        binary_pairs = [
+            (LABELS[target][a], LABELS[target][b])
+            for a, b in complete_pairs
+            if a in LABELS[target] and b in LABELS[target]
+        ]
+        if len(complete_pairs) < len(overlap) or not complete_pairs:
             complete = False
-            kappa = None
+            multiclass_kappa = None
         else:
-            left, right = zip(*pairs)
+            left, right = zip(*complete_pairs)
             raw_kappa = float(cohen_kappa_score(left, right))
-            kappa = raw_kappa if math.isfinite(raw_kappa) else None
-        result[target] = {"binary_pairs": len(pairs), "cohen_kappa": kappa}
+            multiclass_kappa = raw_kappa if math.isfinite(raw_kappa) else None
+        if binary_pairs:
+            binary_left, binary_right = zip(*binary_pairs)
+            raw_binary_kappa = float(cohen_kappa_score(binary_left, binary_right))
+            binary_kappa = raw_binary_kappa if math.isfinite(raw_binary_kappa) else None
+        else:
+            binary_kappa = None
+        result[target] = {
+            "complete_pairs": len(complete_pairs),
+            "ambiguous_pair_count": sum(AMBIGUOUS_LABEL in pair for pair in complete_pairs),
+            "multiclass_cohen_kappa": multiclass_kappa,
+            "binary_pairs": len(binary_pairs),
+            "binary_pair_coverage": len(binary_pairs) / len(complete_pairs) if complete_pairs else 0.0,
+            "binary_cohen_kappa": binary_kappa,
+        }
     result["complete"] = complete and result["overlap_fraction"] >= minimum_fraction
     return result
 
 
 def _subgroup_metrics(
-    rows: list[dict[str, Any]], threshold: float, target: str, minimum_items: int
+    rows: list[dict[str, Any]],
+    threshold: float,
+    target: str,
+    minimum_items: int,
+    bootstrap_samples: int,
+    bootstrap_seed: int,
 ) -> list[dict[str, Any]]:
     groups: list[dict[str, Any]] = []
     dimensions: dict[str, set[str]] = {
@@ -240,15 +334,36 @@ def _subgroup_metrics(
             else:
                 selected = [row for row in rows if value in str(row["source_models"]).split(",")]
             metrics = _metrics(selected, "full_residual_score", threshold, target)
+            intervals = _cluster_bootstrap_intervals(
+                selected,
+                "full_residual_score",
+                threshold,
+                target,
+                bootstrap_samples,
+                bootstrap_seed + len(groups),
+            )
             groups.append(
                 {
                     "dimension": dimension,
                     "value": value,
                     "eligible_for_gate": metrics["n"] >= minimum_items,
                     **metrics,
+                    "confidence_intervals": intervals,
                 }
             )
     return groups
+
+
+def _flatten_confidence_intervals(row: dict[str, Any]) -> dict[str, Any]:
+    flattened = {key: value for key, value in row.items() if key != "confidence_intervals"}
+    intervals = row.get("confidence_intervals", {})
+    for metric in ("safe_fast_precision", "fast_path_rate", "false_fast_rate", "roc_auc"):
+        interval = intervals.get(metric, {})
+        flattened[f"{metric}_ci95_low"] = interval.get("ci95_low")
+        flattened[f"{metric}_ci95_high"] = interval.get("ci95_high")
+        flattened[f"{metric}_bootstrap_samples"] = interval.get("valid_bootstrap_samples")
+    flattened["bootstrap_cluster_count"] = intervals.get("cluster_count")
+    return flattened
 
 
 def analyze(
@@ -257,9 +372,15 @@ def analyze(
     config: dict[str, Any],
     secondary_annotations: list[dict[str, Any]] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    _validate_label_values(annotations)
+    _validate_label_values(secondary_annotations or [])
     rows = _join_annotations(annotations, sources)
     incomplete_by_target = {
-        target: [row["annotation_id"] for row in rows if _binary_label(row, target) is None]
+        target: [row["annotation_id"] for row in rows if not _raw_label(row, target)]
+        for target in LABELS
+    }
+    ambiguous_by_target = {
+        target: [row["annotation_id"] for row in rows if _raw_label(row, target) == AMBIGUOUS_LABEL]
         for target in LABELS
     }
     agreement = _annotation_agreement(
@@ -271,6 +392,10 @@ def analyze(
         "annotation_items": len(rows),
         "complete_labels": {target: len(rows) - len(items) for target, items in incomplete_by_target.items()},
         "incomplete_labels": {target: len(items) for target, items in incomplete_by_target.items()},
+        "ambiguous_labels": {target: len(items) for target, items in ambiguous_by_target.items()},
+        "ambiguous_rates": {
+            target: len(items) / len(rows) if rows else 0.0 for target, items in ambiguous_by_target.items()
+        },
         "agreement": agreement,
         "ready": not any(incomplete_by_target.values()) and agreement["complete"],
     }
@@ -301,21 +426,53 @@ def analyze(
     thresholds: dict[str, Any] = {}
     test_metrics: list[dict[str, Any]] = []
     false_fast_limit = float(config["acceptance"]["held_out_false_fast_rate"])
+    safe_fast_minimum = float(config["acceptance"]["held_out_safe_fast_precision"])
+    bootstrap_samples = int(config["analysis"]["bootstrap_samples"])
+    bootstrap_seed = int(config["analysis"]["bootstrap_seed"])
     for method in methods:
-        threshold, validation_metrics = _select_threshold(validation, method, "slow_reasoning_needed", false_fast_limit)
+        threshold, validation_metrics = _select_threshold(
+            validation,
+            method,
+            "slow_reasoning_needed",
+            false_fast_limit,
+            safe_fast_minimum,
+        )
         thresholds[method] = {"threshold": threshold, "selection_split": "shadow_validation", "metrics": validation_metrics}
-        test_metrics.append({"method": method, **_metrics(test, method, threshold, "slow_reasoning_needed")})
+        test_metrics.append(
+            {
+                "method": method,
+                **_metrics(test, method, threshold, "slow_reasoning_needed"),
+                "confidence_intervals": _cluster_bootstrap_intervals(
+                    test,
+                    method,
+                    threshold,
+                    "slow_reasoning_needed",
+                    bootstrap_samples,
+                    bootstrap_seed,
+                ),
+            }
+        )
 
     full = next(row for row in test_metrics if row["method"] == "full_residual_score")
     no_expectation = next(row for row in test_metrics if row["method"] == "no_expectation_score")
     bootstrap = _bootstrap_auc_difference(
         test,
         "slow_reasoning_needed",
-        int(config["analysis"]["bootstrap_samples"]),
-        int(config["analysis"]["bootstrap_seed"]),
+        bootstrap_samples,
+        bootstrap_seed,
     )
     expectation_metrics = {
-        method: _metrics(test, method, 0.5, "expectation_match")
+        method: {
+            **_metrics(test, method, 0.5, "expectation_match"),
+            "confidence_intervals": _cluster_bootstrap_intervals(
+                test,
+                method,
+                0.5,
+                "expectation_match",
+                bootstrap_samples,
+                bootstrap_seed,
+            ),
+        }
         for method in (
             "no_expectation_score",
             "semantic_with_safety_score",
@@ -329,22 +486,28 @@ def analyze(
         float(thresholds["full_residual_score"]["threshold"]),
         "slow_reasoning_needed",
         minimum_subgroup_items,
+        bootstrap_samples,
+        bootstrap_seed,
     )
     eligible_subgroups = [row for row in subgroup_metrics if row["eligible_for_gate"]]
     subgroup_passed = bool(eligible_subgroups) and all(
         row["safe_fast_precision"] is not None
         and row["safe_fast_precision"] >= float(config["acceptance"]["minimum_subgroup_safe_fast_precision"])
+        and row["false_fast_rate"] is not None
         and row["false_fast_rate"] <= float(config["acceptance"]["maximum_subgroup_false_fast_rate"])
         for row in eligible_subgroups
     )
     required_labels = int(config["acceptance"]["minimum_test_binary_labels"])
     minimum_gain = float(config["acceptance"]["minimum_auc_gain_over_no_expectation"])
     gate = {
+        "validation_threshold_feasible": bool(
+            thresholds["full_residual_score"]["metrics"]["selection_feasible"]
+        ),
         "minimum_test_labels": full["n"] >= required_labels,
         "safe_fast_precision": full["safe_fast_precision"] is not None
         and full["safe_fast_precision"] >= float(config["acceptance"]["held_out_safe_fast_precision"]),
         "fast_path_rate": full["fast_path_rate"] >= float(config["acceptance"]["held_out_fast_path_rate"]),
-        "false_fast_rate": full["false_fast_rate"] <= false_fast_limit,
+        "false_fast_rate": full["false_fast_rate"] is not None and full["false_fast_rate"] <= false_fast_limit,
         "auc_gain_over_no_expectation": bootstrap["observed_auc_gain"] is not None
         and bootstrap["observed_auc_gain"] >= minimum_gain,
         "auc_gain_ci_excludes_zero": bootstrap["bootstrap_ci95_low"] is not None and bootstrap["bootstrap_ci95_low"] > 0,
@@ -352,8 +515,9 @@ def analyze(
         and expectation_metrics["full_residual_score"]["roc_auc"]
         >= float(config["acceptance"]["minimum_expectation_mismatch_auc"]),
         "annotation_agreement": all(
-            agreement[target]["cohen_kappa"] is not None
-            and agreement[target]["cohen_kappa"] >= float(config["annotation"]["minimum_cohen_kappa"])
+            agreement[target]["multiclass_cohen_kappa"] is not None
+            and agreement[target]["multiclass_cohen_kappa"]
+            >= float(config["annotation"]["minimum_cohen_kappa"])
             for target in LABELS
         ),
         "no_major_subgroup_collapse": subgroup_passed,
@@ -400,7 +564,18 @@ def main() -> None:
         print(json.dumps(result["readiness"], indent=2))
         raise SystemExit("Blind annotations or independent agreement labels are incomplete; no residual metrics were computed.")
 
-    write_csv(output / "test_metrics.csv", result["test_metrics"])
+    write_csv(output / "test_metrics.csv", [_flatten_confidence_intervals(row) for row in result["test_metrics"]])
+    write_csv(
+        output / "expectation_mismatch_test_metrics.csv",
+        [
+            _flatten_confidence_intervals({"method": method, **metrics})
+            for method, metrics in result["expectation_mismatch_test_metrics"].items()
+        ],
+    )
+    write_csv(
+        output / "subgroup_metrics.csv",
+        [_flatten_confidence_intervals(row) for row in result["subgroup_metrics"]],
+    )
     write_jsonl(
         output / "false_fast_cases.jsonl",
         [

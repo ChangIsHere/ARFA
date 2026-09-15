@@ -2,6 +2,8 @@
 set -euo pipefail
 
 export PYTHONUNBUFFERED=1
+.venv/bin/python -m src.phase1_5_shadow.freeze_protocol --verify-existing
+
 models=(
   "arfa-qwen2.5-coder:7b-8k|qwen2.5-coder-7b"
   "arfa-llama3.1:8b-8k|llama3.1-8b"

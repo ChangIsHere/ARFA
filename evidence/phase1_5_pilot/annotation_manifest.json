@@ -1,0 +1,39 @@
+{
+  "phase": "phase1_5_shadow",
+  "source_steps": 25,
+  "unique_annotation_items": 23,
+  "secondary_annotation_items": 6,
+  "secondary_annotation_fraction": 0.2608695652173913,
+  "deduplicated_steps": 2,
+  "packet_fields": [
+    "action",
+    "actual_observation",
+    "annotation_confidence",
+    "annotation_id",
+    "annotation_notes",
+    "annotator",
+    "current_plan",
+    "exit_code",
+    "expectation_match",
+    "expected_outcome",
+    "expected_signals",
+    "next_action_if_expected",
+    "slow_reasoning_needed",
+    "task_instruction"
+  ],
+  "forbidden_fields": [
+    "evaluator",
+    "final_answer",
+    "future_action",
+    "model_name",
+    "observation_only_score",
+    "raw_model_response",
+    "reward",
+    "shadow_decision",
+    "split",
+    "structured_residual",
+    "success"
+  ],
+  "labels_complete": false,
+  "private_trace_file_count": 1
+}
