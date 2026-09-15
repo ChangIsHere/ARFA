@@ -1,0 +1,59 @@
+locked: false
+reason: Online pre-execution expectation collection with shadow-only routing.
+
+shadow:
+  model_interface: ollama_native_structured
+  base_url: http://localhost:11434/v1
+  api_key_env: ARFA_LOCAL_MODEL_API_KEY
+  model_name: arfa-qwen2.5-coder:7b-8k
+  temperature: 0.0
+  max_tokens: 900
+  context_length: 8192
+  request_timeout_seconds: 180
+  request_attempts: 3
+  max_steps: 12
+  provisional_threshold: 0.35
+  minimum_expectation_quality: 0.70
+  maximum_identical_action_occurrences: 2
+  router_controls_execution: false
+
+data:
+  task_path: data/phase2/intercode_nl2bash_official_200.jsonl
+  split_path: data/phase1_5/task_splits.json
+  phase3_reserved_tasks: 100
+
+environment:
+  image_prefix: arfa/intercode-nl2bash:fs
+  command_timeout_seconds: 20
+  max_observation_chars: 4000
+  container_memory: 1g
+  network_mode: bridge
+
+residual:
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  require_embedding_model: true
+  candidate_semantic_weights: 0.0,0.25,0.5,0.75,1.0
+
+acceptance:
+  held_out_safe_fast_precision: 0.95
+  held_out_fast_path_rate: 0.15
+  held_out_false_fast_rate: 0.05
+  require_full_residual_beats_no_expectation: true
+  require_no_major_subgroup_collapse: true
+  minimum_test_binary_labels: 100
+  minimum_auc_gain_over_no_expectation: 0.02
+  minimum_expectation_mismatch_auc: 0.80
+  minimum_subgroup_items: 20
+  minimum_subgroup_safe_fast_precision: 0.85
+  maximum_subgroup_false_fast_rate: 0.10
+
+annotation:
+  secondary_fraction: 0.25
+  minimum_cohen_kappa: 0.70
+
+analysis:
+  bootstrap_samples: 2000
+  bootstrap_seed: 1507
+
+outputs:
+  result_dir: results/phase1_5_shadow/pilot/qwen2.5-coder-7b

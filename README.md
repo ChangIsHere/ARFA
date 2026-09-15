@@ -6,6 +6,8 @@ Current status: **Phase 2 complete: 600 real local-model runs across the full re
 
 Phase 1 produced the external-trajectory residual analysis. Phase 2 establishes the standard always-reason ReAct baseline without ARFA routing. Phase 3 has not started.
 
+Phase 1.5 is the active milestone. It collects real pre-execution expectations and hypothetical residual decisions in always-reason shadow mode, adds blind human labels, and reserves 100 tasks from all Phase 1.5 fitting and threshold selection for Phase 3.
+
 ## For Paper Writing
 
 The compact Phase 1 writing bundle is tracked in git:
@@ -251,6 +253,26 @@ Local model setup notes:
 ```text
 docs/phase2_local_model_setup.md
 ```
+
+## Phase 1.5 Shadow Validation
+
+Phase 1.5 supplements rather than repeats Phase 1. The frozen protocol and annotation guide are:
+
+```text
+docs/phase1_5_protocol.md
+docs/phase1_5_annotation_guideline.md
+docs/phase1_5_pilot_report.md
+```
+
+Build the immutable task split and run the collection pilot:
+
+```bash
+bash scripts/phase1_5_build_splits.sh
+bash scripts/phase1_5_run_pilot.sh
+bash scripts/phase1_5_audit_collection.sh
+```
+
+The router remains shadow-only. Phase 3 stays locked until blind held-out labels satisfy the preregistered safety, coverage, incremental-value, and subgroup gates.
 
 ## Tests
 
