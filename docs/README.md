@@ -1,21 +1,30 @@
 # Documentation Index
 
-## Current Results
+## Current Reading Order
 
-- `phase1_writing_bundle/README_FOR_WRITING.md`: Phase 1 external-trajectory study.
-- `phase2_writing_bundle/README_FOR_WRITING.md`: complete 600-run always-reason baseline.
-- `../evidence/phase1_5_exploratory/README.md`: Phase 1.5 engineering-readiness result.
+For manuscript drafting, start with [the writing handoff](README_FOR_WRITING.md).
 
-## Protocols
+1. [Residual diagnostics](residual_diagnostics.md): combined Phase 1/1.5, equations,
+   score locations, model associations, and interpretation.
+2. [Phase 2 writing bundle](phase2_writing_bundle/README_FOR_WRITING.md): completed
+   baseline matrix; unchanged by the consolidation.
+3. [Phase 3 plan](04_phase3_arfa_dual_track.md): what must actually be implemented.
+4. [Constraints](residual_constraints.md): historical strict gate, annotation
+   provenance, and the limits of offline residual evidence.
 
-- `phase1_experiment_protocol.md`: original Phase 1 protocol.
-- `phase1_5_protocol.md`: frozen Phase 1.5 formal shadow protocol.
-- `phase1_5_annotation_guideline.md`: blind-label definitions.
-- `04_phase3_arfa_dual_track.md`: Phase 3-P and formal Phase 3 boundary.
+## Historical And Reproduction Material
 
-## Project Memory
+- [Archive](archive/README.md): old planning and supplementary external-trajectory
+  results. Not the current execution plan.
+- `phase1_5_protocol.md` and `phase1_5_annotation_guideline.md` are preserved,
+  byte-identical frozen collection documents. Their acceptance thresholds are
+  historical constraints, not current Phase 3 development requirements.
+- `phase1_experiment_protocol.md`, `phase1_annotation_guideline.md`,
+  `phase1_leakage_audit.md`, and `phase1_5_pilot_report.md` describe earlier studies.
+- `00_research_problem.md`, `07_research_log.md`, and `08_research_memory.md` preserve
+  research history; claims there are superseded by the current reading order above.
+- `03_phase2_baseline_agent.md` and `phase2_local_model_setup.md` remain Phase 2 references.
 
-- `08_research_memory.md`: stable project framing and terminology.
-- `09_next_steps_workshop.md`: current implementation and writing tasks.
-
-Generated raw data and full traces remain under `data/` and `results/` and are intentionally ignored by git. Compact evidence intended for repository review belongs under `evidence/`.
+Full traces stay in their original local paths. Compact current evidence lives in
+`evidence/residual_diagnostics/`; the older engineering-readiness snapshot lives in
+`evidence/phase1_5_exploratory/`.

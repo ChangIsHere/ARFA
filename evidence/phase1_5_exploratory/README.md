@@ -1,5 +1,12 @@
 # Phase 1.5 Exploratory Engineering Gate
 
+This is a historical, label-dependent engineering-readiness snapshot. A compact-code
+AI-annotation prompt defect was subsequently found; its impact on reviewed labels
+is unmeasured. Numeric label-based results remain provisional. See
+[current constraints](../../docs/residual_constraints.md) and
+[task-outcome diagnostics](../../docs/residual_diagnostics.md). This qualification
+does not rewrite the stored result as a different experiment.
+
 Engineering gate: **PASS**.
 
 Engineering readiness for a guarded exploratory Phase 3 pilot. This is not a deployment-safety or confirmatory residual-evidence gate.

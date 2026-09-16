@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-python3 -m src.phase3_arfa.run_arfa
+cd "$(dirname "$0")/.."
+.venv/bin/python -m src.phase3_arfa.run_arfa "$@"

@@ -24,3 +24,5 @@ def test_exploratory_phase3_scaffold_can_be_unlocked():
     assert status["formal_claims_enabled"] is False
     assert status["use_phase3_final_tasks"] is False
     assert status["router"]["fail_open_to_reasoning"] is True
+    assert status["controller_implemented"] is False
+    assert status["execution_started"] is False

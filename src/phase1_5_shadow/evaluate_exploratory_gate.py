@@ -103,6 +103,12 @@ def _report(result: dict[str, Any]) -> str:
         "",
         result["interpretation"],
         "",
+        "This is a stored label-dependent engineering criterion, not confirmatory "
+        "evidence. A compact-code AI-annotation prompt defect was subsequently found; "
+        "its impact on reviewed labels is unmeasured. Numeric label-based results "
+        "remain provisional. See [current constraints](../../docs/residual_constraints.md) "
+        "and [label-free outcome diagnostics](../../docs/residual_diagnostics.md).",
+        "",
         "## Evidence Summary",
         "",
         f"- Formal shadow collection: {observed['formal_shadow_runs']}/300 runs",
@@ -128,9 +134,9 @@ def _report(result: dict[str, Any]) -> str:
         "simultaneously, because Phase 3-P directly measures end-to-end task success, recovery, "
         "and reasoning-call savings under a fail-open controller.",
         "",
-        "The stricter formal evidence gate remains recorded as a diagnostic result. Its failure "
-        "is interpreted as evidence that the first offline threshold is too coarse for direct "
-        "deployment, not as an engineering blocker for a conservative exploratory pilot.",
+        "The stricter formal evidence gate is retired from the active development workflow. "
+        "Its original outcome remains a historical constraint on the evaluated score, "
+        "labels, and operating point, not a requirement to build an online experiment.",
         "",
         "## Unlock Status",
         "",
@@ -175,4 +181,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

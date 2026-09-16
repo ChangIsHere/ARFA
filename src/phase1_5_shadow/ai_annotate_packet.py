@@ -84,7 +84,17 @@ Slow reasoning needed:
 and <DONE> should have been used. A nonzero exit can be expected, and a zero exit can
 still hide an error. Judge semantic content, not exit code alone. Select the single
 evidence_code that best identifies the decisive visible evidence. Do not provide
-chain-of-thought."""
+chain-of-thought.
+
+Return the compact schema fields with these exact meanings:
+i = annotation_id; e = expectation_match; r = slow_reasoning_needed;
+c = annotation_confidence; v = evidence_code.
+e: m=match, x=mismatch, a=ambiguous.
+r: y=yes, n=no, a=ambiguous.
+c: h=high, m=medium, l=low.
+v: s=observation_supports_expectation, g=expected_signal_conflict,
+c=semantic_output_conflict, e=execution_error, i=committed_continuation_invalid,
+r=explicit_reason_required, t=task_complete, u=insufficient_evidence, o=other."""
 
 
 def _schema(expected_ids: list[str]) -> dict[str, Any]:
@@ -122,7 +132,7 @@ def _blind_item(row: dict[str, Any]) -> dict[str, Any]:
     return {key: row.get(key) for key in ALLOWED_INPUT_FIELDS}
 
 
-def _input_hash(items: list[dict[str, Any]]) -> str:
+def _input_hash(items: list[dict[str, Any]] | dict[str, Any]) -> str:
     payload = json.dumps(items, sort_keys=True, ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
 
@@ -205,6 +215,8 @@ def _request_batch(
                 if item["evidence_code"] not in EVIDENCE_CODES:
                     raise ValueError(f"Invalid evidence code for {annotation_id}")
             metadata = {
+                "system_prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
+                "schema_sha256": _input_hash(_schema(expected_ids)),
                 "prompt_eval_count": raw.get("prompt_eval_count"),
                 "eval_count": raw.get("eval_count"),
                 "total_duration": raw.get("total_duration"),

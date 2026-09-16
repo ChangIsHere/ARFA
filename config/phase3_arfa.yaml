@@ -1,7 +1,13 @@
-locked: true
-reason: Phase 3 starts only after Phase 1 and Phase 2 acceptance criteria are reviewed.
+locked: false
+stage: phase3_p_exploratory
+scope: engineering_pilot
+formal_claims_enabled: false
+use_phase3_final_tasks: false
+engineering_gate_result: evidence/phase1_5_exploratory/exploratory_gate.json
+reason: Guarded controller development uses the engineering gate, not the historical strict offline gate.
 
 router:
-  threshold_source: phase1_results
-  max_consecutive_fast_steps: 3
-  residual_method: hybrid
+  threshold_source: phase3_pilot_calibration
+  max_consecutive_fast_steps: 1
+  residual_method: fused
+  fail_open_to_reasoning: true

@@ -1,331 +1,111 @@
-# ARFA Research
+# ARFA
 
-ARFA studies whether an execution residual, the gap between an expected terminal outcome and the actual terminal observation, can help decide when a terminal-based coding agent needs another reasoning call.
+**Residual-Guided Reasoning Control for Terminal-Based Coding Agents**
 
-Current status: **Phase 2 complete (600/600 runs), Phase 1.5 engineering-readiness gate passed, and the guarded Phase 3-P exploratory scaffold is unlocked**.
+ARFA studies whether the difference between an expected execution outcome and an
+observed terminal result can help decide when an agent should reason again.
+**Execution residuals can be used as an auxiliary decision signal for fast/slow
+reasoning-model invocation.** The offline evidence motivates testing this use in
+Phase 3; it does not establish reliable routing or guarantee that a plan is safe.
 
-Phase 1 produced the external-trajectory residual analysis. Phase 2 establishes the standard always-reason ReAct baseline without ARFA routing. Phase 1.5 completed 300 real shadow-agent runs and 751 blind annotation items. Phase 3-P is now available for conservative engineering pilots; the reserved Phase 3 final evaluation has not started.
+## Current Work
 
-Phase 1.5 records real pre-execution expectations and hypothetical residual decisions in always-reason shadow mode. Its first complete annotation pass is human-reviewed and AI-assisted: the project owner reports that six people independently divided and reviewed the packet. The repository retains the AI judge audit; separate raw reviewer files are not available, so formal agreement numbers remain inter-model. A separate set of 100 tasks remains excluded from Phase 1.5 fitting and reserved for later Phase 3 evaluation.
+1. **Residual diagnostics (Phase 1, incorporating Phase 1.5):** 300 local shadow
+   runs, three models on the same 100 tasks, 790 executed steps. Expectations were
+   committed before execution. Per-step residuals and model comparisons are now
+   exported together. The old external-trajectory Phase 1 study is supplementary.
+2. **Always-reason baseline (Phase 2):** complete, 600 runs across three models and
+   200 InterCode NL2Bash tasks. Its code, results, and writing bundle are unchanged.
+3. **Online control (Phase 3):** engineering development is permitted using the
+   existing lighter readiness gate. The agent/router files are still placeholders;
+   no online ARFA savings or safe-routing result has been obtained.
 
-## For Paper Writing
+The historical strict offline acceptance gate is **retired from the current
+development workflow**, not rewritten as a pass. Frozen protocols and original
+outputs are retained for reproduction. See [constraints](docs/residual_constraints.md).
 
-The compact Phase 1 writing bundle is tracked in git:
+## Start Here
 
-```text
-docs/phase1_writing_bundle/
-```
+- [Residual study, formulas, and model association](docs/residual_diagnostics.md)
+- [Paper-writing handoff and supported claims](docs/README_FOR_WRITING.md)
+- [Per-step residual values](evidence/residual_diagnostics/step_scores.csv)
+- [Task-level residuals and outcomes](evidence/residual_diagnostics/task_scores.csv)
+- [Model summaries](evidence/residual_diagnostics/summary.json)
+- [Paired model comparisons](evidence/residual_diagnostics/model_comparisons.csv)
+- [Phase 2 writing bundle](docs/phase2_writing_bundle/README_FOR_WRITING.md)
+- [Phase 3 implementation plan](docs/04_phase3_arfa_dual_track.md)
 
-Start with:
+## What The Evidence Says
 
-```text
-docs/phase1_writing_bundle/README_FOR_WRITING.md
-```
+In the shadow collection, Qwen 14B has a lower task-averaged structured residual
+(0.088) than Qwen 7B (0.123) and Llama 8B (0.211). Their shadow task success rates
+are 42%, 22%, and 21%, respectively. These are descriptive results under one
+protocol, not evidence that residual determines the best model for each task.
 
-It contains the Phase 1 report, paper-ready tables, selected figures, metrics, subgroup results, ablations, failure-case analysis, and leakage audit. This is the best entry point for another ChatGPT conversation that needs to write the workshop draft.
+Within the held-out shadow task split, structured-residual task-failure AUC is
+approximately 0.60-0.61. Observation-only scoring is competitive. Semantic
+similarity alone does not consistently identify failures, and the historical
+development-selected semantic weight was zero. The next experiment must test
+whether residual-informed control adds value over observation-only control.
 
-The corresponding compact Phase 2 evidence package is:
+Against the existing human-reviewed, AI-assisted reasoning-necessity labels,
+full residual has held-out AUC 0.743 (task-bootstrap 95% CI 0.681-0.811; 313
+binary items across 40 tasks). This is preliminary label association, subject to
+the provenance and prompt limitations below, not independent human-gold validation.
+The [annotation association snapshot](evidence/residual_diagnostics/annotation_association.json)
+includes raw residual and competing baselines, not only the full system score.
 
-```text
-docs/phase2_writing_bundle/README_FOR_WRITING.md
-```
+Phase 2 success rates are 40.0% (Qwen 14B), 26.0% (Qwen 7B), and 25.5% (Llama 8B)
+on its **200-task** matrix. Do not mix these with the 100-task shadow results.
 
-## Repository Branches
+## Reproduce And Inspect
 
-- `main`: code, experiment scripts, configs, documentation, and tests.
-- `paper`: manuscript text, section drafts, paper figures/tables selected for writing, and notes that connect claims back to code/results.
-
-The branches are intentionally connected: paper claims should reference experiment outputs generated by the code in `main`.
-
-## Project Layout
-
-```text
-config/                  experiment configuration
-docs/                    research protocol, annotation guideline, leakage audit notes
-scripts/                 reproducible command-line entry points
-src/                     implementation
-tests/                   lightweight regression tests
-data/phase1/             local data workspace, external datasets ignored by git
-results/phase1_residual/ local generated outputs, ignored by git
-```
-
-## Data Source
-
-The current final Phase 1 dataset is derived from external InterCode Bash trajectories downloaded from the official Princeton NLP InterCode repository into:
-
-```text
-data/phase1/external_intercode/
-```
-
-That directory is intentionally ignored by git. Re-download or restore it locally before rebuilding final Phase 1 artifacts.
-
-The previous 50-record local dataset is preserved only as a pilot sanity check. It is not evidence that residual generalizes.
-
-## Current Phase 1 Result
-
-The latest full Phase 1 run uses all locally available InterCode Bash result files with `sentence-transformers/all-MiniLM-L6-v2` as the semantic residual backend.
-
-Dataset summary:
-
-```text
-execution steps: 10,500
-binary-labeled steps: 6,087
-ambiguous steps retained: 4,413
-distinct tasks: 200
-distinct trajectories: 1,648
-source result files: 33
-```
-
-Held-out test result for the hybrid residual:
-
-```text
-F1: 0.849
-PR-AUC: 0.919
-false-fast rate: 0.032
-fast-path rate: 0.070
-safe-fast precision: 0.671
-evidence gate: not passed
-```
-
-Interpretation:
-
-```text
-Residual contains useful signal, but the current routing criterion is not yet strong enough to unlock Phase 2/3 claims about live-agent efficiency.
-```
-
-Supported writing claim:
-
-```text
-Phase 1 provides preliminary external-trajectory evidence that residual is useful for reasoning-necessity prediction, while showing that safer and higher-coverage routing still requires better expectation quality, annotation review, and policy refinement.
-```
-
-Unsupported claims:
-
-```text
-Do not claim ARFA has reduced token usage, latency, or large-model calls yet.
-Do not claim ARFA-Min has been evaluated as a live agent yet.
-Do not claim labels are human gold labels yet.
-```
-
-## Pilot Phase 1
+Use the existing `.venv` and cached MiniLM model. The following export is offline;
+it does not call an agent, relabel items, tune a threshold, or rerun Docker tasks:
 
 ```bash
-bash scripts/phase1_build_dataset.sh
-bash scripts/phase1_run_analysis.sh
+bash scripts/phase1_export_diagnostics.sh
+.venv/bin/python -m pytest -q
+bash scripts/phase3_run_arfa.sh
 ```
 
-Generated artifacts:
+The last command reports development readiness only; it does **not** run an ARFA
+agent. The `phase3_run_exploratory.sh` compatibility entry point uses the same
+configuration, `config/phase3_arfa.yaml`.
+
+## Data And Layout
+
+InterCode tasks and external trajectories originate from the official
+[Princeton NLP InterCode repository](https://github.com/princeton-nlp/intercode).
+Downloaded external files remain locally in `data/phase1/external_intercode/`.
+Shadow trajectories were produced by our local agents; they are not downloaded
+model answers. Full raw traces, model caches, and environments are kept locally
+and are intentionally excluded from git.
 
 ```text
-results/phase1_residual/pilot_50/
+src/phase1_residual/             legacy external-trajectory implementation
+src/phase1_5_shadow/             shadow collection and unified diagnostic export
+src/phase2_baseline/             completed always-reason baseline
+src/phase3_arfa/                 online-controller scaffold
+config/                         runtime configs and preserved frozen protocols
+scripts/                        command entry points
+tests/                          focused regression tests
+evidence/residual_diagnostics/  current compact numeric evidence
+docs/phase2_writing_bundle/     unchanged baseline writing package
+docs/archive/                   historical planning and supplementary Phase 1
+data/phase1_5/annotation/        local packets, labels, and source mapping
+results/phase1_5_shadow/full/    local original shadow traces
 ```
 
-Limitations:
+Collection filenames retain `phase1_5` to keep provenance paths and frozen hashes
+valid. The merge is a research/documentation consolidation, not a raw-data rewrite.
 
-- 50 records are insufficient for a final conclusion.
-- The 25/25 class balance is artificial.
-- Thresholds selected and evaluated on the same small dataset may be optimistically biased.
-- Perfect rule and hybrid performance may indicate overfitting, feature-label alignment, or leakage.
-- TF-IDF fallback is not treated as the final embedding method.
+Annotation provenance is **owner-reported human-reviewed AI-assisted**: six people
+reportedly divided the review. Raw per-reviewer files are unavailable; stored
+AI-judge agreement is not human inter-annotator agreement. A short-code prompt
+defect was found in the AI annotator and corrected for future use; existing labels
+were not silently regenerated. Label-dependent findings remain provisional.
 
-## Final Phase 1
-
-Set up the local environment and cache the embedding model:
-
-```bash
-bash scripts/setup_phase1_env.sh
-bash scripts/phase1_verify_embedding.sh
-```
-
-Build the full external-data dataset and residual scores:
-
-```bash
-bash scripts/phase1_build_final_dataset.sh
-```
-
-Run held-out analysis:
-
-```bash
-bash scripts/phase1_run_final_analysis.sh
-```
-
-Generate paper-facing figures and tables:
-
-```bash
-bash scripts/phase1_make_paper_artifacts.sh
-```
-
-Generated artifacts:
-
-```text
-data/phase1/final/intercode_bash_phase1.jsonl
-data/phase1/annotation/second_pass_self_agreement.json
-results/phase1_residual/final/
-```
-
-These artifacts are generated locally and ignored by git.
-
-## Research Discipline
-
-Phase 1 validates whether residual is a useful reasoning-trigger signal.
-Phase 2 builds the standard ReAct coding-agent baseline.
-Phase 3 builds the dual-track ARFA agent. Phase 3-P is the guarded engineering pilot; Phase 3 final is the reserved evaluation.
-
-Phase 2 is a baseline only: it always calls the reasoning model after each terminal observation. Phase 3-P is where residual-guided fast/slow control is first exercised with one-step fast limits and fail-open recovery.
-
-## Project Memory
-
-Stable research framing is recorded in:
-
-```text
-docs/08_research_memory.md
-docs/09_next_steps_workshop.md
-```
-
-ARFA currently expands to **Action Residual Fused Agent**.
-
-## Residual Gates
-
-Phase 1 produced the required dataset, metrics, failure-case analysis, and written report, so the independent always-reason Phase 2 baseline was allowed to proceed. Two gates now serve different purposes.
-
-The strict formal residual-evidence gate remains a diagnostic standard for deployment-level claims:
-
-- hybrid residual beats always-reason, never-reason, keyword, and TF-IDF baselines on F1 or PR-AUC
-- held-out false-fast rate is at most 5%
-- fast-path rate is at least 15%
-- safe-fast precision is at least 95%
-- performance does not collapse across major task and step categories
-- results are not explained by leakage
-
-The Phase 1.5 exploratory engineering gate asks a narrower question: whether the collection is complete, the analysis is reproducible, the residual has useful ranking signal, and the baseline infrastructure is sufficient to justify a guarded online pilot. It passed on:
-
-```text
-formal shadow collection: 300/300
-complete annotation items: 751
-full residual held-out ROC-AUC: 0.743
-gain over expectation-gate-only: +0.124
-gain bootstrap 95% CI: [0.092, 0.159]
-Phase 2 baseline completeness: 600/600
-engineering-readiness gate: passed
-```
-
-The stricter offline gate did not find a threshold that simultaneously delivered deployment-level precision and fast-path coverage. This is treated as a limitation of the first coarse offline threshold, not as a blocker for a fail-open, one-fast-step engineering pilot whose end-to-end success and recovery are measured directly.
-
-## Current Caveat
-
-The current external-data run uses InterCode Bash trajectories and the intended MiniLM semantic backend. The Phase 1.5 labels are human-reviewed and AI-assisted according to the project owner's six-reviewer report, but reviewer-specific raw files are not present in the repository. The exploratory gate supports implementation and pilot use; stronger deployment and confirmatory claims still require the reserved end-to-end evaluation.
-
-## Phase 2 Baseline
-
-Phase 2 is implemented and evaluated as a local terminal ReAct baseline:
-
-```text
-data/phase2/intercode_bash_local_tasks.jsonl
-src/phase2_baseline/
-config/phase2_baseline.yaml
-config/phase2_paper.yaml
-```
-
-Validate the harness without a real model:
-
-```bash
-bash scripts/phase2_run_baseline.sh --dry-run
-```
-
-Run the real baseline after starting a local OpenAI-compatible model server:
-
-```bash
-bash scripts/phase2_run_baseline.sh
-```
-
-Default local model target:
-
-```text
-base_url: http://localhost:11434/v1
-model_name: qwen2.5-coder:7b
-```
-
-Dry-run results are not paper evidence. Paper-usable Phase 2 results require a real model endpoint.
-
-The frozen paper run uses all 200 tasks in the released InterCode NL2Bash suite with three local models: `qwen2.5-coder:7b`, `llama3.1:8b`, and `qwen2.5-coder:14b`. This is the ARFA Phase 2 evaluation set, not an upstream official test split. Paper aliases fix all three to an 8192-token context. Create the aliases, build and validate the Docker environments, then launch the resumable matrix:
-
-```bash
-bash scripts/phase2_create_ollama_models.sh
-bash scripts/phase2_build_intercode_images.sh
-bash scripts/phase2_validate_official_environment.sh
-bash scripts/phase2_run_paper_matrix.sh
-```
-
-Phase 2 contains no residual-guided routing. Its outputs establish the always-reason comparison point for Phase 3.
-
-The complete Phase 2 matrix contains 600 runs. Qwen2.5-Coder 7B reaches 26.0%, Llama 3.1 8B reaches 25.5%, and Qwen2.5-Coder 14B reaches 40.0% task success. The tracked paper-writing evidence is in:
-
-```text
-docs/phase2_writing_bundle/README_FOR_WRITING.md
-```
-
-Local model setup notes:
-
-```text
-docs/phase2_local_model_setup.md
-```
-
-## Phase 1.5 Shadow Validation
-
-Phase 1.5 supplements rather than repeats Phase 1. The frozen protocol and annotation guide are:
-
-```text
-docs/phase1_5_protocol.md
-docs/phase1_5_annotation_guideline.md
-docs/phase1_5_pilot_report.md
-evidence/phase1_5_pilot/
-```
-
-Build the immutable task split and run the collection pilot:
-
-```bash
-bash scripts/phase1_5_build_splits.sh
-bash scripts/phase1_5_run_pilot.sh
-bash scripts/phase1_5_audit_collection.sh
-bash scripts/phase1_5_build_annotation_packet.sh --pilot \
-  --results-root results/phase1_5_shadow/pilot \
-  --output-dir results/phase1_5_shadow/pilot_annotation
-bash scripts/phase1_5_build_evidence_bundle.sh
-```
-
-Pilot annotation uses `scripts/phase1_5_annotate_packet.sh`; the primary and frozen 25% secondary packets must use distinct annotator IDs and remain independent. `scripts/phase1_5_review_pilot_annotations.sh` checks completeness, ambiguity, agreement, and disagreements without computing residual-effect metrics.
-
-After pilot review, the formal protocol is frozen and the resumable matrix runs three models over the `40/20/40` development, validation, and test task splits. A mandatory audit requires exactly 300 provenance-consistent runs before it will create the formal annotation packet:
-
-```bash
-bash scripts/phase1_5_freeze_protocol.sh
-bash scripts/phase1_5_run_shadow_matrix.sh
-bash scripts/phase1_5_audit_formal_collection.sh
-```
-
-Formal analysis includes the gated system, raw expectation-observation residual, expectation-gate-only control, heuristic no-expectation control, and a learned observation-only control with the same frozen embedding backbone. The Phase 3 gate also requires at least 20 fast decisions and a task-clustered safe-fast precision 95% CI lower bound of at least 85%.
-
-The complete Phase 1.5 collection contains 300/300 provenance-consistent runs and 751/751 labeled blind items. The strict formal gate remains recorded as a diagnostic result: it was conservative enough to select no held-out fast decisions, and the full residual did not beat the learned observation-only control. At the same time, the full residual achieved 0.743 held-out ROC-AUC and significantly improved over expectation-gate-only by 0.124 AUC, which is sufficient for the separately scoped engineering-readiness gate.
-
-Generate the tracked exploratory evidence bundle and inspect the unlocked Phase 3-P scaffold with:
-
-```bash
-bash scripts/phase1_5_evaluate_exploratory_gate.sh
-bash scripts/phase3_run_exploratory.sh
-```
-
-Tracked outputs and configuration:
-
-```text
-evidence/phase1_5_exploratory/
-config/phase1_5_exploratory_gate.yaml
-config/phase3_exploratory.yaml
-```
-
-Phase 3-P is restricted to development tasks, one consecutive fast step, and fail-open recovery. The separate formal Phase 3 configuration remains locked until the exploratory controller and its evaluation protocol are reviewed.
-
-## Tests
-
-```bash
-python3 -m pytest -q
-```
+`main` contains code and traceable evidence; `paper` is intended for manuscript
+sections. Manuscript results should reference a code commit and artifact manifest.
+See the [documentation index](docs/README.md) for current versus historical material.

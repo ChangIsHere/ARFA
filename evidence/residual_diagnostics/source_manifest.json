@@ -1,0 +1,20 @@
+{
+  "inputs": {
+    "results/phase1_5_shadow/full/llama3.1-8b/shadow_development/traces.jsonl": "2ab049ca8df01e5c0238bfc757deac68c0cdb3e56150fa206125e09bff9bd9de",
+    "results/phase1_5_shadow/full/llama3.1-8b/shadow_test/traces.jsonl": "8f4ae367d082f00415b9b204df99329d307006231700e14e427bf51c44632d30",
+    "results/phase1_5_shadow/full/llama3.1-8b/shadow_validation/traces.jsonl": "6990d0e10741682a13bda25d6a166b5009d7f6e4f10bad8934c7fdb3faf2ca0a",
+    "results/phase1_5_shadow/full/qwen2.5-coder-14b/shadow_development/traces.jsonl": "53fce404a47dd36807a02571c2056c2f3bc24c74191bebce880e6d3fe36cc579",
+    "results/phase1_5_shadow/full/qwen2.5-coder-14b/shadow_test/traces.jsonl": "d4b95774c6d73ae004ea77bdcc72b406f325b33bc1c6d2ea4e6512221cc4dbda",
+    "results/phase1_5_shadow/full/qwen2.5-coder-14b/shadow_validation/traces.jsonl": "5cd61e4749333ae356c9aa7e2cf26a70419851ab62f46dabf56608c8e01ca8a8",
+    "results/phase1_5_shadow/full/qwen2.5-coder-7b/shadow_development/traces.jsonl": "4bf50d4b0522ea1be23d295ac29e6a00dcf99fd194c0daeb8e22a4205a076e91",
+    "results/phase1_5_shadow/full/qwen2.5-coder-7b/shadow_test/traces.jsonl": "a649f2d116a4b3f118276463e00066b82dc86f60868f683afaa826950f2d11da",
+    "results/phase1_5_shadow/full/qwen2.5-coder-7b/shadow_validation/traces.jsonl": "0821d96542deea82813cf873e853aa2ee4cbe71f3db74ae209545bd15901c1ff",
+    "results/phase1_5_shadow/analysis_ai_blind/analysis.json": "0703deadc969cdddd985743422475560da3e2c4ca590fe435a62ff4e50cd5107",
+    "config/phase1_5_shadow.yaml": "be940080599aa1e96b499c397c18bf89db2f4f19dd1254615024faed85c15f3b",
+    "/Users/peggy/Documents/ARFA/src/phase1_5_shadow/export_diagnostics.py": "f51b223a167da32690ef9bde1eaa8a591fb2f46f6d845684935953a6f849f1bb",
+    "src/phase1_5_shadow/residual.py": "443f7fa67a062a191e29e0370a724fae7c6813cc45c987f975ee518ff9174532",
+    "src/phase1_5_shadow/analyze_annotations.py": "6e2313f0fcc468f877dba59e1bf448a8cf48f9470018324b439a221922d5261d",
+    "src/phase1_residual/residual_calculator.py": "a05e881ab1ef946594699e1aff8b2dc6ff2693331ebe111b1ca16add686903e5"
+  },
+  "cached_embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+}

@@ -1,0 +1,139 @@
+{
+  "source": "results/phase1_5_shadow/analysis_ai_blind/analysis.json",
+  "source_sha256": "0703deadc969cdddd985743422475560da3e2c4ca590fe435a62ff4e50cd5107",
+  "target": "slow_reasoning_needed",
+  "scope": "historical held-out annotation association, not online reliability",
+  "label_provenance": "Owner reports six-person review of AI-assisted labels; separate per-reviewer records unavailable.",
+  "qualification": "Original judge prompt omitted compact-code meanings. Its impact on reviewed labels is unmeasured; label-based findings are provisional.",
+  "methods": [
+    {
+      "method": "no_expectation_score",
+      "binary_items": 313,
+      "roc_auc": 0.7318563789152025,
+      "roc_auc_ci95": {
+        "ci95_low": 0.67059223479425,
+        "ci95_high": 0.792089502632874,
+        "valid_bootstrap_samples": 2000
+      },
+      "cluster_count": 40
+    },
+    {
+      "method": "learned_observation_only_score",
+      "binary_items": 313,
+      "roc_auc": 0.7492148374501315,
+      "roc_auc_ci95": {
+        "ci95_low": 0.6696308840505019,
+        "ci95_high": 0.821378458172207,
+        "valid_bootstrap_samples": 2000
+      },
+      "cluster_count": 40
+    },
+    {
+      "method": "expectation_gate_only_score",
+      "binary_items": 313,
+      "roc_auc": 0.6190688396570749,
+      "roc_auc_ci95": {
+        "ci95_low": 0.5638701418720179,
+        "ci95_high": 0.6843387372925828,
+        "valid_bootstrap_samples": 2000
+      },
+      "cluster_count": 40
+    },
+    {
+      "method": "raw_full_residual_score",
+      "binary_items": 313,
+      "roc_auc": 0.7388167388167388,
+      "roc_auc_ci95": {
+        "ci95_low": 0.6847015730662863,
+        "ci95_high": 0.7909005238890991,
+        "valid_bootstrap_samples": 2000
+      },
+      "cluster_count": 40
+    },
+    {
+      "method": "semantic_with_safety_score",
+      "binary_items": 313,
+      "roc_auc": 0.5887233681351329,
+      "roc_auc_ci95": {
+        "ci95_low": 0.5322043432091006,
+        "ci95_high": 0.6550376066001067,
+        "valid_bootstrap_samples": 2000
+      },
+      "cluster_count": 40
+    },
+    {
+      "method": "structured_with_safety_score",
+      "binary_items": 313,
+      "roc_auc": 0.7431033019268313,
+      "roc_auc_ci95": {
+        "ci95_low": 0.6805860935507171,
+        "ci95_high": 0.8114274692164406,
+        "valid_bootstrap_samples": 2000
+      },
+      "cluster_count": 40
+    },
+    {
+      "method": "full_residual_score",
+      "binary_items": 313,
+      "roc_auc": 0.7431033019268313,
+      "roc_auc_ci95": {
+        "ci95_low": 0.6805860935507171,
+        "ci95_high": 0.8114274692164406,
+        "valid_bootstrap_samples": 2000
+      },
+      "cluster_count": 40
+    }
+  ],
+  "incremental_value": {
+    "full_vs_no_expectation": {
+      "score_method": "full_residual_score",
+      "baseline_method": "no_expectation_score",
+      "observed_auc_gain": 0.011246923011628773,
+      "bootstrap_ci95_low": -0.046115060880398906,
+      "bootstrap_ci95_high": 0.07645519486225075,
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 2000,
+      "cluster_unit": "task_id"
+    },
+    "raw_residual_vs_no_expectation": {
+      "score_method": "raw_full_residual_score",
+      "baseline_method": "no_expectation_score",
+      "observed_auc_gain": 0.006960359901536317,
+      "bootstrap_ci95_low": -0.03420688283369296,
+      "bootstrap_ci95_high": 0.04950360343048459,
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 2000,
+      "cluster_unit": "task_id"
+    },
+    "full_vs_expectation_gate_only": {
+      "score_method": "full_residual_score",
+      "baseline_method": "expectation_gate_only_score",
+      "observed_auc_gain": 0.12403446226975634,
+      "bootstrap_ci95_low": 0.09191878070804496,
+      "bootstrap_ci95_high": 0.1593056618315698,
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 2000,
+      "cluster_unit": "task_id"
+    },
+    "raw_residual_vs_learned_observation_only": {
+      "score_method": "raw_full_residual_score",
+      "baseline_method": "learned_observation_only_score",
+      "observed_auc_gain": -0.010398098633392694,
+      "bootstrap_ci95_low": -0.06564650601743004,
+      "bootstrap_ci95_high": 0.046764315995078035,
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 2000,
+      "cluster_unit": "task_id"
+    },
+    "full_vs_learned_observation_only": {
+      "score_method": "full_residual_score",
+      "baseline_method": "learned_observation_only_score",
+      "observed_auc_gain": -0.006111535523300238,
+      "bootstrap_ci95_low": -0.08659920039980008,
+      "bootstrap_ci95_high": 0.08225215266198778,
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 2000,
+      "cluster_unit": "task_id"
+    }
+  }
+}
