@@ -2,7 +2,7 @@
 
 ## Current Milestone
 
-Phase 1 has a complete external-trajectory evidence package. Phase 2 has completed the full always-reason baseline matrix: three local models across 200 released InterCode NL2Bash tasks, for 600 runs total. Phase 3 has not started.
+Phase 1 has a complete external-trajectory evidence package. Phase 2 has completed the full always-reason baseline matrix: three local models across 200 released InterCode NL2Bash tasks, for 600 runs total. Phase 1.5 completed 300 shadow runs and 751 human-reviewed, AI-assisted blind labels. Its engineering-readiness gate passed, so Phase 3-P implementation can proceed on development tasks.
 
 ## Immediate Research Tasks
 
@@ -51,13 +51,15 @@ Completed:
 - validate all 200 environments and run the same frozen task set on three local models
 - generate aggregate, paired, subgroup, diagnostic, and sensitivity analyses
 
-The next research decision is whether and how to improve the Phase 1 residual policy enough to begin Phase 3:
+The next implementation milestone is the guarded Phase 3-P pilot:
 
-- implement ARFA-Min fast-slow routing
-- compare against ReAct
-- report reasoning-call, token, and latency reductions
+- implement fused ARFA fast-slow routing
+- limit the pilot to development tasks and one consecutive fast step
+- fail open to slow reasoning after errors or uncertainty
+- compare against ReAct and observation-only routing
+- report task success, recovery, calls, tokens, and latency
 
-Do not implement Phase 3 until the residual deployment gate and the Phase 3 protocol are explicitly reviewed.
+Do not consume the reserved `phase3_final` split during Phase 3-P. Formal Phase 3 starts only after the exploratory controller and its protocol are reviewed.
 
 ## Workshop Draft Tasks
 

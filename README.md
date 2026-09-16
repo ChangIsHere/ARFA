@@ -2,11 +2,11 @@
 
 ARFA studies whether an execution residual, the gap between an expected terminal outcome and the actual terminal observation, can help decide when a terminal-based coding agent needs another reasoning call.
 
-Current status: **Phase 2 complete: 600 real local-model runs across the full released InterCode NL2Bash suite**.
+Current status: **Phase 2 complete (600/600 runs), Phase 1.5 engineering-readiness gate passed, and the guarded Phase 3-P exploratory scaffold is unlocked**.
 
-Phase 1 produced the external-trajectory residual analysis. Phase 2 establishes the standard always-reason ReAct baseline without ARFA routing. Phase 3 has not started.
+Phase 1 produced the external-trajectory residual analysis. Phase 2 establishes the standard always-reason ReAct baseline without ARFA routing. Phase 1.5 completed 300 real shadow-agent runs and 751 blind annotation items. Phase 3-P is now available for conservative engineering pilots; the reserved Phase 3 final evaluation has not started.
 
-Phase 1.5 is the active milestone. It collects real pre-execution expectations and hypothetical residual decisions in always-reason shadow mode, adds blind human labels, and reserves 100 tasks from all Phase 1.5 fitting and threshold selection for Phase 3.
+Phase 1.5 records real pre-execution expectations and hypothetical residual decisions in always-reason shadow mode. Its first complete annotation pass is human-reviewed and AI-assisted: the project owner reports that six people independently divided and reviewed the packet. The repository retains the AI judge audit; separate raw reviewer files are not available, so formal agreement numbers remain inter-model. A separate set of 100 tasks remains excluded from Phase 1.5 fitting and reserved for later Phase 3 evaluation.
 
 ## For Paper Writing
 
@@ -169,9 +169,9 @@ These artifacts are generated locally and ignored by git.
 
 Phase 1 validates whether residual is a useful reasoning-trigger signal.
 Phase 2 builds the standard ReAct coding-agent baseline.
-Phase 3 builds the dual-track ARFA agent.
+Phase 3 builds the dual-track ARFA agent. Phase 3-P is the guarded engineering pilot; Phase 3 final is the reserved evaluation.
 
-Phase 2 is a baseline only: it always calls the reasoning model after each terminal observation. Phase 3 is where residual-guided fast/slow control belongs.
+Phase 2 is a baseline only: it always calls the reasoning model after each terminal observation. Phase 3-P is where residual-guided fast/slow control is first exercised with one-step fast limits and fail-open recovery.
 
 ## Project Memory
 
@@ -184,9 +184,11 @@ docs/09_next_steps_workshop.md
 
 ARFA currently expands to **Action Residual Fused Agent**.
 
-## Residual Deployment Gate
+## Residual Gates
 
-Phase 1 produced the required dataset, metrics, failure-case analysis, and written report, so the independent always-reason Phase 2 baseline was allowed to proceed. The residual policy still does not pass the following provisional deployment gate and must be improved before Phase 3 routing claims:
+Phase 1 produced the required dataset, metrics, failure-case analysis, and written report, so the independent always-reason Phase 2 baseline was allowed to proceed. Two gates now serve different purposes.
+
+The strict formal residual-evidence gate remains a diagnostic standard for deployment-level claims:
 
 - hybrid residual beats always-reason, never-reason, keyword, and TF-IDF baselines on F1 or PR-AUC
 - held-out false-fast rate is at most 5%
@@ -195,9 +197,23 @@ Phase 1 produced the required dataset, metrics, failure-case analysis, and writt
 - performance does not collapse across major task and step categories
 - results are not explained by leakage
 
+The Phase 1.5 exploratory engineering gate asks a narrower question: whether the collection is complete, the analysis is reproducible, the residual has useful ranking signal, and the baseline infrastructure is sufficient to justify a guarded online pilot. It passed on:
+
+```text
+formal shadow collection: 300/300
+complete annotation items: 751
+full residual held-out ROC-AUC: 0.743
+gain over expectation-gate-only: +0.124
+gain bootstrap 95% CI: [0.092, 0.159]
+Phase 2 baseline completeness: 600/600
+engineering-readiness gate: passed
+```
+
+The stricter offline gate did not find a threshold that simultaneously delivered deployment-level precision and fast-path coverage. This is treated as a limitation of the first coarse offline threshold, not as a blocker for a fail-open, one-fast-step engineering pilot whose end-to-end success and recovery are measured directly.
+
 ## Current Caveat
 
-The current external-data run uses InterCode Bash trajectories and the intended MiniLM semantic backend. The remaining caveats are annotation quality, expectation-generation quality, and benchmark scope.
+The current external-data run uses InterCode Bash trajectories and the intended MiniLM semantic backend. The Phase 1.5 labels are human-reviewed and AI-assisted according to the project owner's six-reviewer report, but reviewer-specific raw files are not present in the repository. The exploratory gate supports implementation and pilot use; stronger deployment and confirmatory claims still require the reserved end-to-end evaluation.
 
 ## Phase 2 Baseline
 
@@ -289,7 +305,24 @@ bash scripts/phase1_5_audit_formal_collection.sh
 
 Formal analysis includes the gated system, raw expectation-observation residual, expectation-gate-only control, heuristic no-expectation control, and a learned observation-only control with the same frozen embedding backbone. The Phase 3 gate also requires at least 20 fast decisions and a task-clustered safe-fast precision 95% CI lower bound of at least 85%.
 
-The router remains shadow-only. Phase 3 stays locked until blind held-out labels satisfy the preregistered safety, coverage, incremental-value, and subgroup gates.
+The complete Phase 1.5 collection contains 300/300 provenance-consistent runs and 751/751 labeled blind items. The strict formal gate remains recorded as a diagnostic result: it was conservative enough to select no held-out fast decisions, and the full residual did not beat the learned observation-only control. At the same time, the full residual achieved 0.743 held-out ROC-AUC and significantly improved over expectation-gate-only by 0.124 AUC, which is sufficient for the separately scoped engineering-readiness gate.
+
+Generate the tracked exploratory evidence bundle and inspect the unlocked Phase 3-P scaffold with:
+
+```bash
+bash scripts/phase1_5_evaluate_exploratory_gate.sh
+bash scripts/phase3_run_exploratory.sh
+```
+
+Tracked outputs and configuration:
+
+```text
+evidence/phase1_5_exploratory/
+config/phase1_5_exploratory_gate.yaml
+config/phase3_exploratory.yaml
+```
+
+Phase 3-P is restricted to development tasks, one consecutive fast step, and fail-open recovery. The separate formal Phase 3 configuration remains locked until the exploratory controller and its evaluation protocol are reviewed.
 
 ## Tests
 

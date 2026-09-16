@@ -28,6 +28,8 @@ from src.phase1_5_shadow.analyze_annotations import (
     _validate_label_values,
     analyze,
 )
+from src.phase1_5_shadow.ai_annotate_packet import _blind_item, _make_batches
+from src.phase1_5_shadow.evaluate_exploratory_gate import evaluate_engineering_gate
 from src.phase1_5_shadow.json_model_client import OllamaStructuredClient
 from src.phase1_5_shadow.residual import (
     continuation_is_self_contained,
@@ -37,6 +39,107 @@ from src.phase1_5_shadow.residual import (
     structured_residual,
 )
 from src.phase1_5_shadow.shadow_agent import ShadowReActAgent
+
+
+def test_ai_annotation_input_is_strictly_blinded():
+    row = {
+        "annotation_id": "item-1",
+        "task_instruction": "Inspect a file",
+        "current_plan": "Run cat",
+        "action": "cat file.txt",
+        "expected_outcome": "Print alpha",
+        "expected_signals": {"exit_code": "0"},
+        "next_action_if_expected": "<DONE>",
+        "actual_observation": "exit_code=0\nstdout:\nalpha",
+        "exit_code": 0,
+        "residual_score": 0.99,
+        "split": "shadow_test",
+        "model_name": "hidden-model",
+        "reward": 1,
+        "gold_command": "cat file.txt",
+        "success": True,
+    }
+
+    blinded = _blind_item(row)
+
+    assert set(blinded) == {
+        "annotation_id",
+        "task_instruction",
+        "current_plan",
+        "action",
+        "expected_outcome",
+        "expected_signals",
+        "next_action_if_expected",
+        "actual_observation",
+        "exit_code",
+    }
+    assert not ({"residual_score", "split", "model_name", "reward", "gold_command", "success"} & set(blinded))
+
+
+def test_ai_annotation_batches_respect_count_and_character_limits():
+    rows = [
+        {"annotation_id": f"item-{index}", "actual_observation": "x" * 20}
+        for index in range(5)
+    ]
+
+    batches = _make_batches(rows, batch_size=2, max_chars=10_000)
+
+    assert [len(batch) for batch in batches] == [2, 2, 1]
+    assert [row["annotation_id"] for batch in batches for row in batch] == [
+        "item-0",
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4",
+    ]
+
+
+def test_exploratory_engineering_gate_unlocks_pilot_without_rewriting_formal_gate():
+    analysis = {
+        "readiness": {"ready": True, "annotation_items": 751},
+        "embedding_backend": "sentence-transformers/all-MiniLM-L6-v2",
+        "test_metrics": [
+            {
+                "method": "full_residual_score",
+                "roc_auc": 0.743,
+                "confidence_intervals": {"roc_auc": {"ci95_low": 0.68, "ci95_high": 0.81}},
+            }
+        ],
+        "incremental_value": {
+            "full_vs_expectation_gate_only": {
+                "observed_auc_gain": 0.124,
+                "bootstrap_ci95_low": 0.092,
+                "bootstrap_ci95_high": 0.159,
+            }
+        },
+        "acceptance_gate": {"passed": False},
+    }
+    collection = {"passed": True, "observed_total_runs": 300, "expected_total_runs": 300}
+    phase2 = {"complete": True, "observed_runs": 600}
+    config = {
+        "gate": {
+            "version": "test-engineering-v1",
+            "scope": "exploratory_phase3_readiness",
+            "minimum_annotation_items": 700,
+            "minimum_full_residual_auc": 0.70,
+            "minimum_auc_gain_over_expectation_gate_only": 0.05,
+            "require_gain_ci_excludes_zero": True,
+        },
+        "review": {
+            "mode": "human_reviewed_ai_assisted",
+            "reviewer_count_reported_by_project_owner": 6,
+            "independently_partitioned_review_reported": True,
+            "per_reviewer_raw_files_available": False,
+        },
+        "unlock": {"phase3_exploratory_pilot": True, "phase3_formal_evaluation": False},
+    }
+
+    result = evaluate_engineering_gate(analysis, collection, phase2, config)
+
+    assert result["passed"] is True
+    assert result["phase3_p_exploratory_unlocked"] is True
+    assert result["phase3_formal_unlocked"] is False
+    assert result["formal_evidence_gate_passed"] is False
 
 
 def _tasks():

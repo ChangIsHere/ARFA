@@ -1,0 +1,40 @@
+{
+  "gate_version": "phase1.5-engineering-v1",
+  "gate_scope": "exploratory_phase3_readiness",
+  "interpretation": "Engineering readiness for a guarded exploratory Phase 3 pilot. This is not a deployment-safety or confirmatory residual-evidence gate.",
+  "review_provenance": {
+    "mode": "human_reviewed_ai_assisted",
+    "reviewer_count_reported_by_project_owner": 6,
+    "independently_partitioned_review_reported": true,
+    "per_reviewer_raw_files_available": false
+  },
+  "observed": {
+    "formal_shadow_runs": 300,
+    "annotation_items": 751,
+    "full_residual_roc_auc": 0.7431033019268313,
+    "full_residual_auc_ci95": {
+      "ci95_low": 0.6805860935507171,
+      "ci95_high": 0.8114274692164406,
+      "valid_bootstrap_samples": 2000
+    },
+    "auc_gain_over_expectation_gate_only": 0.12403446226975634,
+    "auc_gain_ci95": [
+      0.09191878070804496,
+      0.1593056618315698
+    ],
+    "phase2_runs": 600
+  },
+  "checks": {
+    "formal_collection_complete": true,
+    "blind_labels_complete": true,
+    "embedding_backend_available": true,
+    "full_residual_auc_above_engineering_floor": true,
+    "gain_over_expectation_gate_only": true,
+    "gain_interval_excludes_zero": true,
+    "phase2_baseline_complete": true
+  },
+  "passed": true,
+  "phase3_p_exploratory_unlocked": true,
+  "phase3_formal_unlocked": false,
+  "formal_evidence_gate_passed": false
+}

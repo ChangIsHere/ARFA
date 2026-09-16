@@ -1,0 +1,20 @@
+gate:
+  version: phase1.5-engineering-v1
+  scope: exploratory_phase3_readiness
+  minimum_annotation_items: 700
+  minimum_full_residual_auc: 0.70
+  minimum_auc_gain_over_expectation_gate_only: 0.05
+  require_gain_ci_excludes_zero: true
+  require_complete_formal_collection: true
+  require_complete_phase2_baseline: true
+
+review:
+  mode: human_reviewed_ai_assisted
+  reviewer_count_reported_by_project_owner: 6
+  independently_partitioned_review_reported: true
+  per_reviewer_raw_files_available: false
+
+unlock:
+  phase3_exploratory_pilot: true
+  phase3_formal_evaluation: false
+

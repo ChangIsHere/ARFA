@@ -1,0 +1,13 @@
+locked: false
+stage: phase3_p_exploratory
+scope: engineering_pilot
+formal_claims_enabled: false
+use_phase3_final_tasks: false
+reason: Phase 1.5 engineering-readiness gate passed; formal residual-evidence gate remains diagnostic.
+
+router:
+  threshold_source: phase3_pilot_calibration
+  max_consecutive_fast_steps: 1
+  residual_method: fused
+  fail_open_to_reasoning: true
+
