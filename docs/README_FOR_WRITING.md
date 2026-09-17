@@ -1,65 +1,41 @@
-# ARFA Writing Handoff
+# Writing Guide
 
-## Central Statement
+## Main Idea
 
-Execution residuals can be used as an auxiliary decision signal for fast/slow
-reasoning-model invocation. The offline diagnostics identify model-conditioned
-patterns and preliminary associations with task outcomes and reviewed
-reasoning-necessity labels, motivating an online evaluation in Phase 3.
+Residual compares an agent's expected command result with the actual output. It
+can serve as a reference for fast/slow reasoning decisions. The current studies
+examine that signal; Phase 3 will test its effect on task success and cost.
 
-This is the current supported positioning, not a claim that ARFA already controls
-an agent reliably, reduces costs, or selects the best model.
+## What To Use
 
-## Evidence Chain
+1. **Phase 1/1.5:** start with [residual formulas and results](residual_diagnostics.md).
+   There are 300 shadow runs and 790 executed steps. Expectations were written
+   before execution, but no reasoning calls were skipped.
+2. **Label comparison:** full residual AUC is 0.743, raw residual AUC is 0.739,
+   and learned observation-only AUC is 0.749 on 313 binary test items from 40 tasks.
+   These use human-reviewed, AI-assisted labels and remain provisional; see the
+   [study notes](residual_constraints.md). The numeric snapshot is in
+   `evidence/residual_diagnostics/annotation_association.json`.
+3. **Phase 2:** use the [baseline package](phase2_writing_bundle/README_FOR_WRITING.md)
+   for its 600-run results, tables, and figures. Its task set and prompt differ
+   from the shadow study.
+4. **Phase 3:** use the [implementation plan](04_phase3_arfa_dual_track.md) for the
+   proposed experiment. Results have not been collected yet.
 
-1. **Combined Phase 1/1.5: residual diagnostics.** Three models, 100 shared tasks,
-   300 shadow runs, 790 executed steps. Expectations precede execution. Use
-   [formulas and model results](residual_diagnostics.md) and the numeric artifacts
-   in `evidence/residual_diagnostics/`. The original downloaded-trajectory Phase 1
-   is supplementary and lives in `docs/archive/phase1_writing_bundle/`.
-2. **Reviewed-label association.** The historical full-score AUC is 0.743 with
-   task-bootstrap 95% CI 0.681-0.811 on 313 binary test items from 40 tasks. Raw
-   residual AUC is 0.739. Cite these as associations with owner-reported
-   human-reviewed AI-assisted labels, with the prompt/provenance qualification.
-   They are not independent-human gold validation. The tracked snapshot includes
-   observation-only and expectation-gate-only comparisons to avoid selective claims.
-3. **Phase 2: reference cost and task success.** The unchanged
-   [600-run baseline package](phase2_writing_bundle/README_FOR_WRITING.md) provides
-   methods, paired comparisons, tables, and figures. Its task set and prompt differ
-   from the shadow collection; do not directly attribute cross-phase differences
-   to residual control.
-4. **Phase 3: online evaluation to perform.** The implementation is still a
-   scaffold. Test task success and total reasoning cost under matched controls.
-   Current fast continuation is not an already deployed small fast model.
+## Draft Wording
 
-## Suggested Preliminary-Study Text
+> We study execution residuals as a reference for fast/slow reasoning decisions.
+> In the shadow study, residual distributions differed across models and showed
+> modest associations with task failure. The full score reached AUC 0.743
+> (95% CI 0.681-0.811) against the existing human-reviewed, AI-assisted labels.
+> This label comparison is preliminary and did not show an advantage over the
+> learned observation-only baseline. We next test whether using residual in an
+> online agent improves the balance between task success and reasoning cost.
 
-> Execution residuals provide a usable auxiliary signal for investigating
-> fast/slow reasoning decisions. In our shadow study, residual distributions
-> differed across model conditions and were modestly associated with task failure.
-> Against the existing human-reviewed, AI-assisted reasoning-necessity labels, the
-> full residual score achieved a held-out ROC-AUC of 0.743 (task-bootstrap 95% CI:
-> 0.681-0.811). These findings motivate online evaluation rather than establish
-> safe routing: the reviewed-label evidence remains provisional, and residual did
-> not show a clear advantage over the learned observation-only baseline.
+The [study notes](residual_constraints.md) collect annotation details, previous
+selection criteria, and the scope of these results. Keep those details with the
+experiment description rather than repeating them throughout the draft.
 
-## Constraints To Include
-
-Link [constraints](residual_constraints.md), retaining these points in the draft:
-label provenance and the corrected AI prompt defect; limited transfer across
-models; possible incorrect expectations/continuations; zero selected semantic
-weight; no consistent advantage over strong observation-only controls; one
-benchmark and no completed online ARFA experiment. Retired strict-gate outcomes
-remain historical operating constraints, not rewritten successful experiments.
-
-The lighter gate permits development. It is not a statistical proof of partial
-reliability. A manuscript can use the completed methods, diagnostics, and baseline
-now, but its Phase 3 results section must remain pending.
-
-## Artifact Use
-
-Use only current artifacts linked above as main results. Archived figures are
-supplementary. Full traces, models, and raw labels remain local; compact evidence,
-input hashes, source code, and the Phase 2 writing package are tracked on GitHub.
-Record the code commit used by each manuscript version. Do not present the
-repository as a public release of the full raw dataset.
+Current numeric exports are in `evidence/residual_diagnostics/`. Earlier Phase 1
+figures are supplementary and stored in `docs/archive/phase1_writing_bundle/`.
+Full raw data remains local. Record the code commit used for each paper version.

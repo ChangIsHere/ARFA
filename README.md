@@ -2,66 +2,47 @@
 
 **Residual-Guided Reasoning Control for Terminal-Based Coding Agents**
 
-ARFA studies whether the difference between an expected execution outcome and an
-observed terminal result can help decide when an agent should reason again.
-**Execution residuals can be used as an auxiliary decision signal for fast/slow
-reasoning-model invocation.** The offline evidence motivates testing this use in
-Phase 3; it does not establish reliable routing or guarantee that a plan is safe.
+An agent runs a command, observes the result, and decides what to do next. ARFA
+compares that result with what the agent expected. We call the difference an
+execution residual and use it as a reference for deciding when to reason again.
 
-## Current Work
+## Progress
 
-1. **Residual diagnostics (Phase 1, incorporating Phase 1.5):** 300 local shadow
-   runs, three models on the same 100 tasks, 790 executed steps. Expectations were
-   committed before execution. Per-step residuals and model comparisons are now
-   exported together. The old external-trajectory Phase 1 study is supplementary.
-2. **Always-reason baseline (Phase 2):** complete, 600 runs across three models and
-   200 InterCode NL2Bash tasks. Its code, results, and writing bundle are unchanged.
-3. **Online control (Phase 3):** engineering development is permitted using the
-   existing lighter readiness gate. The agent/router files are still placeholders;
-   no online ARFA savings or safe-routing result has been obtained.
+- **Phase 1/1.5:** collected 300 shadow runs from three models on 100 shared tasks.
+  The 790 executed steps have recorded expectations, outputs, and residual values.
+  The agent still reasoned after every observation during collection.
+- **Phase 2:** completed 600 always-reason baseline runs on 200 InterCode tasks.
+- **Phase 3:** next is to implement and test fast/slow execution. The current code
+  is a scaffold, not a running controller.
 
-The historical strict offline acceptance gate is **retired from the current
-development workflow**, not rewritten as a pass. Frozen protocols and original
-outputs are retained for reproduction. See [constraints](docs/residual_constraints.md).
+## Results
 
-## Start Here
+In the shadow study, mean structured residual was 0.088 for Qwen 14B, 0.123 for
+Qwen 7B, and 0.211 for Llama 8B. Task success was 42%, 22%, and 21%, respectively.
+These patterns support studying residual as a decision signal; they do not yet
+show which model to call for an individual task.
 
-- [Residual study, formulas, and model association](docs/residual_diagnostics.md)
-- [Paper-writing handoff and supported claims](docs/README_FOR_WRITING.md)
-- [Per-step residual values](evidence/residual_diagnostics/step_scores.csv)
-- [Task-level residuals and outcomes](evidence/residual_diagnostics/task_scores.csv)
-- [Model summaries](evidence/residual_diagnostics/summary.json)
-- [Paired model comparisons](evidence/residual_diagnostics/model_comparisons.csv)
-- [Phase 2 writing bundle](docs/phase2_writing_bundle/README_FOR_WRITING.md)
-- [Phase 3 implementation plan](docs/04_phase3_arfa_dual_track.md)
+Against the existing human-reviewed, AI-assisted labels, the full residual score
+had test AUC 0.743 (95% CI 0.681-0.811). Learned observation-only scoring reached
+0.749. Label-based results remain provisional because of an earlier judge-prompt
+issue; [study notes](docs/residual_constraints.md) explain the source and scope.
 
-## What The Evidence Says
+Phase 2 success rates were 40.0%, 26.0%, and 25.5% on its separate 200-task matrix.
+Phase 3 will measure whether consulting residual reduces reasoning cost while
+preserving task success.
 
-In the shadow collection, Qwen 14B has a lower task-averaged structured residual
-(0.088) than Qwen 7B (0.123) and Llama 8B (0.211). Their shadow task success rates
-are 42%, 22%, and 21%, respectively. These are descriptive results under one
-protocol, not evidence that residual determines the best model for each task.
+## Read And Reproduce
 
-Within the held-out shadow task split, structured-residual task-failure AUC is
-approximately 0.60-0.61. Observation-only scoring is competitive. Semantic
-similarity alone does not consistently identify failures, and the historical
-development-selected semantic weight was zero. The next experiment must test
-whether residual-informed control adds value over observation-only control.
+- [Writing guide](docs/README_FOR_WRITING.md)
+- [Residual formulas and results](docs/residual_diagnostics.md)
+- [Per-step scores](evidence/residual_diagnostics/step_scores.csv) and
+  [task scores](evidence/residual_diagnostics/task_scores.csv)
+- [Model summaries](evidence/residual_diagnostics/summary.json) and
+  [label comparisons](evidence/residual_diagnostics/annotation_association.json)
+- [Phase 2 results](docs/phase2_writing_bundle/README_FOR_WRITING.md)
+- [Phase 3 plan](docs/04_phase3_arfa_dual_track.md)
 
-Against the existing human-reviewed, AI-assisted reasoning-necessity labels,
-full residual has held-out AUC 0.743 (task-bootstrap 95% CI 0.681-0.811; 313
-binary items across 40 tasks). This is preliminary label association, subject to
-the provenance and prompt limitations below, not independent human-gold validation.
-The [annotation association snapshot](evidence/residual_diagnostics/annotation_association.json)
-includes raw residual and competing baselines, not only the full system score.
-
-Phase 2 success rates are 40.0% (Qwen 14B), 26.0% (Qwen 7B), and 25.5% (Llama 8B)
-on its **200-task** matrix. Do not mix these with the 100-task shadow results.
-
-## Reproduce And Inspect
-
-Use the existing `.venv` and cached MiniLM model. The following export is offline;
-it does not call an agent, relabel items, tune a threshold, or rerun Docker tasks:
+With the existing Python environment and cached MiniLM model:
 
 ```bash
 bash scripts/phase1_export_diagnostics.sh
@@ -69,43 +50,19 @@ bash scripts/phase1_export_diagnostics.sh
 bash scripts/phase3_run_arfa.sh
 ```
 
-The last command reports development readiness only; it does **not** run an ARFA
-agent. The `phase3_run_exploratory.sh` compatibility entry point uses the same
-configuration, `config/phase3_arfa.yaml`.
+The first command exports scores from saved traces. The last reports development
+readiness; it does not launch an agent.
 
-## Data And Layout
+## Repository
 
-InterCode tasks and external trajectories originate from the official
-[Princeton NLP InterCode repository](https://github.com/princeton-nlp/intercode).
-Downloaded external files remain locally in `data/phase1/external_intercode/`.
-Shadow trajectories were produced by our local agents; they are not downloaded
-model answers. Full raw traces, model caches, and environments are kept locally
-and are intentionally excluded from git.
+Code is in `src/`, settings in `config/`, and command entry points in `scripts/`.
+Current numeric evidence is in `evidence/residual_diagnostics/`; older reports are
+in `docs/archive/`. The completed Phase 2 writing package is unchanged.
 
-```text
-src/phase1_residual/             legacy external-trajectory implementation
-src/phase1_5_shadow/             shadow collection and unified diagnostic export
-src/phase2_baseline/             completed always-reason baseline
-src/phase3_arfa/                 online-controller scaffold
-config/                         runtime configs and preserved frozen protocols
-scripts/                        command entry points
-tests/                          focused regression tests
-evidence/residual_diagnostics/  current compact numeric evidence
-docs/phase2_writing_bundle/     unchanged baseline writing package
-docs/archive/                   historical planning and supplementary Phase 1
-data/phase1_5/annotation/        local packets, labels, and source mapping
-results/phase1_5_shadow/full/    local original shadow traces
-```
+Tasks come from [InterCode](https://github.com/princeton-nlp/intercode). Downloaded
+external data stays in `data/phase1/external_intercode/`; our local shadow runs stay
+in `results/phase1_5_shadow/full/`. Full traces, raw labels, and model caches are
+not uploaded. Existing source paths and frozen files are kept for reproduction.
 
-Collection filenames retain `phase1_5` to keep provenance paths and frozen hashes
-valid. The merge is a research/documentation consolidation, not a raw-data rewrite.
-
-Annotation provenance is **owner-reported human-reviewed AI-assisted**: six people
-reportedly divided the review. Raw per-reviewer files are unavailable; stored
-AI-judge agreement is not human inter-annotator agreement. A short-code prompt
-defect was found in the AI annotator and corrected for future use; existing labels
-were not silently regenerated. Label-dependent findings remain provisional.
-
-`main` contains code and traceable evidence; `paper` is intended for manuscript
-sections. Manuscript results should reference a code commit and artifact manifest.
-See the [documentation index](docs/README.md) for current versus historical material.
+`main` holds code and results; `paper` is intended for manuscript drafts. Use a
+code commit and the artifact manifests to identify the results behind each draft.
