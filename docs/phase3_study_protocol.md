@@ -1,11 +1,13 @@
 # Phase 3 Qwen Study: Decision Rules Before Formal Runs
 
-**Design version:** `phase3-qwen-pair-v1`, in
+**Design version:** `phase3-qwen-pair-v1.1`, in
 [`config/phase3_study.yaml`](../config/phase3_study.yaml). This document fixes
 the proposed decision rules before collecting Phase 3 formal outcomes. Phase 3
 still needs an implemented controller, a matched baseline, and a runnable
 measurement setup. A later design change should get a new version and be reported
 as a change, not presented as part of this version.
+Version 1.1 adds cost per successful task to version 1; neither version has
+Phase 3 outcomes.
 
 ## Why Five Percentage Points?
 
@@ -62,6 +64,32 @@ above zero. A similar or better success rate with slower total execution would
 not establish an efficiency benefit. Report the total 14B-call reduction as a
 separate target of 25%; all 7B calls and tokens still count. Energy is reported
 only if actual measurement works on this Mac and covers the same task window.
+
+Also report **total wall seconds divided by the number of successful tasks**,
+using time from failures as well as successes. If energy is measured, report
+**total joules divided by successful tasks** in the same way. Estimate paired
+bootstrap intervals for the ARFA-to-comparator ratios. A ratio below 1 indicates
+less resource spent per completed task; an interval crossing 1 leaves the gain
+uncertain. Report ratios against both matched 14B-only and 7B-only, alongside
+their task success rates. If a policy solves no tasks, the ratio is undefined
+and the zero-success result takes precedence.
+
+This check matters at the allowed success boundary. Using historical Phase 2
+rates only as an illustration, 14B used 85.70 seconds/task at 40% success:
+`85.70 / 0.40 = 214.25` seconds per successful task. If ARFA succeeds on only
+35%, it must average below `214.25 * 0.35 = 74.99` seconds/task, a reduction
+greater than **12.5%**, to improve on that ratio. At the planned 15% time
+reduction, it would use about `85.70 * 0.85 / 0.35 = 208.13` seconds per
+successful task, only 2.9% better than historical 14B. Historical 7B used
+`47.29 / 0.26 = 181.90` seconds per successful task while solving fewer tasks.
+These are planning calculations; matched Phase 3 runs determine actual values.
+
+The same break-even formula applies to energy only after system energy has been
+measured for every policy over matching task windows. Neither model size, token
+count, nor 14B-call reduction proves a joule saving. Model loading, routing, and
+failed-task effort can erase a nominal saving. A paper claim of net energy
+benefit therefore requires both measured joules/task and joules/success to
+improve with uncertainty reported; otherwise the energy result is descriptive.
 
 To show value beyond choosing a smaller model, compare ARFA success against
 7B-only. To attribute a gain to residual, compare against observation-only

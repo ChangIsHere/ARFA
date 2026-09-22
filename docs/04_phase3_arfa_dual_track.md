@@ -1,6 +1,6 @@
 # Phase 3 Plan
 
-The proposed Qwen 14B/7B comparison, success margin, and efficiency targets are
+The proposed Qwen 14B/7B comparison, success margin, and cost-per-success analysis are
 recorded in [the pre-run study protocol](phase3_study_protocol.md). Verify task
 coverage and the historical baselines with `bash scripts/phase3_study_preflight.sh`.
 

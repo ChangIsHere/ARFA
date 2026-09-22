@@ -1,7 +1,7 @@
 {
-  "version": "phase3-qwen-pair-v1",
+  "version": "phase3-qwen-pair-v1.1",
   "status": "design_inputs_checked_no_phase3_outcomes",
-  "config_sha256": "817ccf5fb12d3b98e39e7345a27587b61072b8c2169691c6595b3268f9f7978f",
+  "config_sha256": "36ec4389630d3ccb74c2e67387b3c22fd1e3160c93571f527e74ad6fef5d3522",
   "task_manifest_sha256": "c6936840f27441f3310efdf958ef45d2adf9ac47d87c1ffa8cb04c2207dc3557",
   "split_sha256": "056fdb6f64638ed3afb04e7cc41624e8c5b4d5f33a2728e3639d17eaee5bbe52",
   "slow_metrics_sha256": "f2ace756a11d112d6e709376387d984028c20b94dc18435483fdd3a87e178328",

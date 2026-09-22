@@ -1,6 +1,6 @@
 # Fixed before any Phase 3 formal outcomes are observed. Revisions require a new version.
 study:
-  version: phase3-qwen-pair-v1
+  version: phase3-qwen-pair-v1.1
   benchmark: intercode_nl2bash
   task_path: data/phase2/intercode_nl2bash_official_200.jsonl
   split_path: data/phase1_5/task_splits.json
@@ -16,6 +16,8 @@ primary:
   success_drop_margin: 0.05
   efficiency_metric: total_task_wall_seconds
   minimum_time_reduction: 0.15
+  report_wall_seconds_per_success: true
+  report_energy_per_success_if_measured: true
   bootstrap_samples: 10000
   bootstrap_seed: 1507
 
