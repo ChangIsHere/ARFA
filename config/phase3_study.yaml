@@ -1,0 +1,27 @@
+# Fixed before any Phase 3 formal outcomes are observed. Revisions require a new version.
+study:
+  version: phase3-qwen-pair-v1
+  benchmark: intercode_nl2bash
+  task_path: data/phase2/intercode_nl2bash_official_200.jsonl
+  split_path: data/phase1_5/task_splits.json
+  development_tasks: 100
+  primary_test_tasks: 100
+  slow_model: arfa-qwen2.5-coder:14b-8k
+  fast_model: arfa-qwen2.5-coder:7b-8k
+  step_cap: 12
+  context_length: 8192
+  temperature: 0.0
+
+primary:
+  success_drop_margin: 0.05
+  efficiency_metric: total_task_wall_seconds
+  minimum_time_reduction: 0.15
+  bootstrap_samples: 10000
+  bootstrap_seed: 1507
+
+secondary:
+  minimum_slow_call_reduction: 0.25
+  compare_fast_only_success: true
+  compare_observation_only_routing: true
+  report_total_tokens: true
+  report_energy_if_measured: true

@@ -1,5 +1,9 @@
 # Phase 3 Plan
 
+The proposed Qwen 14B/7B comparison, success margin, and efficiency targets are
+recorded in [the pre-run study protocol](phase3_study_protocol.md). Verify task
+coverage and the historical baselines with `bash scripts/phase3_study_preflight.sh`.
+
 Phase 3 will test whether using residual to decide when to reason again improves
 the balance between task success and cost. Development can proceed under the
 lighter engineering check; the previous strict check is described in

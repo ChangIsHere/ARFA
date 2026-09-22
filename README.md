@@ -41,6 +41,7 @@ preserving task success.
   [label comparisons](evidence/residual_diagnostics/annotation_association.json)
 - [Phase 2 results](docs/phase2_writing_bundle/README_FOR_WRITING.md)
 - [Phase 3 plan](docs/04_phase3_arfa_dual_track.md)
+- [Phase 3 pre-run study protocol](docs/phase3_study_protocol.md)
 
 With the existing Python environment and cached MiniLM model:
 

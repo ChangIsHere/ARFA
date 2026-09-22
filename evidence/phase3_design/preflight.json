@@ -1,0 +1,27 @@
+{
+  "version": "phase3-qwen-pair-v1",
+  "status": "design_inputs_checked_no_phase3_outcomes",
+  "config_sha256": "817ccf5fb12d3b98e39e7345a27587b61072b8c2169691c6595b3268f9f7978f",
+  "task_manifest_sha256": "c6936840f27441f3310efdf958ef45d2adf9ac47d87c1ffa8cb04c2207dc3557",
+  "split_sha256": "056fdb6f64638ed3afb04e7cc41624e8c5b4d5f33a2728e3639d17eaee5bbe52",
+  "slow_metrics_sha256": "f2ace756a11d112d6e709376387d984028c20b94dc18435483fdd3a87e178328",
+  "fast_metrics_sha256": "d0f7b4d4c29239c9d7f1cac2e54e589e40b563c693278f91bb0675a0cb95d881",
+  "all_200": {
+    "tasks": 200,
+    "slow_successes": 80,
+    "fast_successes": 52,
+    "slow_only_successes": 38,
+    "fast_only_successes": 10
+  },
+  "phase3_final_100": {
+    "tasks": 100,
+    "slow_successes": 43,
+    "fast_successes": 30,
+    "slow_only_successes": 19,
+    "fast_only_successes": 6
+  },
+  "success_gap_points": 14.0,
+  "acceptable_drop_points": 5.0,
+  "share_of_observed_gap_preserved": 0.6428571428571429,
+  "decision_rule": "paired 95% bootstrap lower bound for ARFA minus matched slow-only > -margin"
+}
