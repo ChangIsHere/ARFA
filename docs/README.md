@@ -7,7 +7,7 @@ For manuscript drafting, start with [the writing handoff](README_FOR_WRITING.md)
 1. [Residual diagnostics](residual_diagnostics.md): combined Phase 1/1.5, equations,
    score locations, model associations, and interpretation.
 2. [Phase 2 writing bundle](phase2_writing_bundle/README_FOR_WRITING.md): completed
-   baseline matrix; unchanged by the consolidation.
+   eight-model baseline matrix, 1,600 attempts, figures, and paired comparisons.
 3. [Phase 3 plan](04_phase3_arfa_dual_track.md): what must actually be implemented.
    The [pre-run study protocol](phase3_study_protocol.md) fixes the Qwen comparison.
 4. [Constraints](residual_constraints.md): historical strict gate, annotation

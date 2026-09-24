@@ -10,20 +10,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from src.common.utils import read_csv
-
-
-COLORS = ["#2A6F97", "#D97706", "#2F855A"]
+from src.phase2_baseline.analyze_paper_results import MODEL_LABELS, PLANNED_PAIRS
 
 
 def _label(model: str) -> str:
-    return (
-        model.replace("arfa-", "")
-        .replace(":7b-8k", " 7B")
-        .replace(":8b-8k", " 8B")
-        .replace(":14b-8k", " 14B")
-        .replace("qwen2.5-coder", "Qwen2.5-Coder")
-        .replace("llama3.1", "Llama 3.1")
-    )
+    return MODEL_LABELS.get(model, model)
+
+
+def _colors(count: int):
+    palette = plt.get_cmap("tab10")
+    return [palette(index % 10) for index in range(count)]
 
 
 def _save(fig: plt.Figure, output_dir: Path, name: str) -> None:
@@ -39,17 +35,17 @@ def _main_results(rows: list[dict[str, str]], output_dir: Path) -> None:
     rates = np.array([float(row["success_rate"]) for row in rows])
     lows = np.array([float(row["success_ci95_low"]) for row in rows])
     highs = np.array([float(row["success_ci95_high"]) for row in rows])
-    fig, ax = plt.subplots(figsize=(8, 4.8))
+    fig, ax = plt.subplots(figsize=(max(8, len(rows) * 1.65), 5.3))
     x = np.arange(len(rows))
-    ax.bar(x, rates, color=COLORS[: len(rows)], width=0.62)
+    ax.bar(x, rates, color=_colors(len(rows)), width=0.62)
     ax.errorbar(x, rates, yerr=np.vstack([rates - lows, highs - rates]), fmt="none", color="#202020", capsize=5)
-    ax.set_xticks(x, labels)
+    ax.set_xticks(x, labels, rotation=35, ha="right", fontsize=8)
     ax.set_ylim(0, min(1.0, float(max(highs)) + 0.10))
     ax.set_ylabel("Task success rate")
     ax.set_title("Standard ReAct Baseline on InterCode NL2Bash")
     ax.spines[["top", "right"]].set_visible(False)
     for idx, rate in enumerate(rates):
-        ax.text(idx, rate + 0.035, f"{rate:.1%}", ha="center", fontsize=10)
+        ax.text(idx, highs[idx] + 0.015, f"{rate:.1%}", ha="center", fontsize=10)
     _save(fig, output_dir, "fig1_phase2_success")
 
 
@@ -60,12 +56,12 @@ def _efficiency(rows: list[dict[str, str]], output_dir: Path) -> None:
         ("mean_tokens", "Tokens per task"),
         ("mean_task_wall_seconds", "Wall time per task (s)"),
     ]
-    fig, axes = plt.subplots(1, 3, figsize=(13, 4.4))
+    fig, axes = plt.subplots(1, 3, figsize=(max(13, len(rows) * 2.3), 5.2))
     x = np.arange(len(rows))
     for ax, (field, title) in zip(axes, metrics):
         values = [float(row[field]) for row in rows]
-        ax.bar(x, values, color=COLORS[: len(rows)], width=0.62)
-        ax.set_xticks(x, labels, rotation=18, ha="right")
+        ax.bar(x, values, color=_colors(len(rows)), width=0.62)
+        ax.set_xticks(x, labels, rotation=35, ha="right", fontsize=8)
         ax.set_title(title)
         ax.spines[["top", "right"]].set_visible(False)
     fig.suptitle("Baseline Computation Cost", fontsize=14, fontweight="bold")
@@ -77,7 +73,7 @@ def _category_heatmap(rows: list[dict[str, str]], output_dir: Path) -> None:
     categories = sorted(dict.fromkeys(row["task_category"] for row in rows))
     lookup = {(row["model"], row["task_category"]): float(row["success_rate"]) for row in rows}
     matrix = np.array([[lookup.get((model, category), np.nan) for category in categories] for model in models])
-    fig, ax = plt.subplots(figsize=(11, 4.2))
+    fig, ax = plt.subplots(figsize=(11, max(4.2, len(models) * 0.55 + 1.8)))
     image = ax.imshow(matrix, cmap="YlGnBu", vmin=0, vmax=1, aspect="auto")
     ax.set_xticks(np.arange(len(categories)), [c.replace("_", " ").title() for c in categories], rotation=28, ha="right")
     ax.set_yticks(np.arange(len(models)), [_label(model) for model in models])
@@ -94,7 +90,7 @@ def _failure_modes(rows: list[dict[str, str]], output_dir: Path) -> None:
     models = list(dict.fromkeys(row["model"] for row in rows))
     categories = sorted(dict.fromkeys(row["failure_category"] for row in rows))
     lookup = {(row["model"], row["failure_category"]): int(row["count"]) for row in rows}
-    fig, ax = plt.subplots(figsize=(10, 4.8))
+    fig, ax = plt.subplots(figsize=(12, max(4.8, len(models) * 0.58 + 2)))
     left = np.zeros(len(models))
     palette = plt.get_cmap("tab10")
     for index, category in enumerate(categories):
@@ -116,6 +112,8 @@ def _write_tables(
     table_dir: Path,
 ) -> None:
     table_dir.mkdir(parents=True, exist_ok=True)
+    planned = {frozenset(pair) for pair in PLANNED_PAIRS}
+    paired_rows = [row for row in paired_rows if frozenset((row["model_a"], row["model_b"])) in planned]
     headers = ["Model", "Success", "95% CI", "Mean reward", "Calls/task", "Tokens/task", "Wall/task (s)"]
     body = [
         [

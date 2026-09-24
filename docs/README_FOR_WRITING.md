@@ -17,7 +17,7 @@ examine that signal; Phase 3 will test its effect on task success and cost.
    [study notes](residual_constraints.md). The numeric snapshot is in
    `evidence/residual_diagnostics/annotation_association.json`.
 3. **Phase 2:** use the [baseline package](phase2_writing_bundle/README_FOR_WRITING.md)
-   for its 600-run results, tables, and figures. Its task set and prompt differ
+   for its 1,600-run results (eight models, 200 shared tasks), tables, and figures. Its task set and prompt differ
    from the shadow study.
 4. **Phase 3:** use the [implementation plan](04_phase3_arfa_dual_track.md) for the
    proposed experiment. Results have not been collected yet.

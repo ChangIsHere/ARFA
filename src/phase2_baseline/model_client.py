@@ -24,6 +24,10 @@ class ChatClient(Protocol):
         ...
 
 
+class ModelRequestError(RuntimeError):
+    """Raised when a model endpoint fails after all configured retries."""
+
+
 class OpenAICompatibleClient:
     """Small OpenAI-compatible chat client for local model servers."""
 
@@ -83,14 +87,22 @@ class OpenAICompatibleClient:
                 with urllib.request.urlopen(request, timeout=self.timeout_seconds) as response:
                     raw = json.loads(response.read().decode("utf-8"))
                 break
+            except urllib.error.HTTPError as exc:
+                try:
+                    details = exc.read().decode("utf-8", errors="replace")
+                except Exception:
+                    details = ""
+                last_error = RuntimeError(f"HTTP {exc.code}: {details or exc.reason}")
+                if attempt < self.request_attempts:
+                    time.sleep(2 ** (attempt - 1))
             except (urllib.error.URLError, TimeoutError) as exc:
                 last_error = exc
                 if attempt < self.request_attempts:
                     time.sleep(2 ** (attempt - 1))
         else:
-            raise RuntimeError(
-                "Could not reach the local OpenAI-compatible model server after retries. "
-                "Start Ollama/LM Studio/vLLM and check the Phase 2 config."
+            details = f" Last error: {last_error}" if last_error else ""
+            raise ModelRequestError(
+                "Local model request failed after all configured retries." + details
             ) from last_error
         latency = time.perf_counter() - started
         content = raw["choices"][0]["message"]["content"]

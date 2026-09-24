@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import random
@@ -16,11 +17,94 @@ MODEL_ORDER = {
     "arfa-qwen2.5-coder:7b-8k": 0,
     "arfa-llama3.1:8b-8k": 1,
     "arfa-qwen2.5-coder:14b-8k": 2,
+    "arfa-llama3.2:3b-8k": 3,
+    "arfa-gemma3:4b-8k": 4,
+    "arfa-gemma3:12b-8k": 5,
+    "arfa-phi4-mini:3.8b-8k": 6,
+    "arfa-phi4:14b-8k": 7,
 }
+
+MODEL_LABELS = {
+    "arfa-qwen2.5-coder:7b-8k": "Qwen2.5-Coder 7B",
+    "arfa-llama3.1:8b-8k": "Llama 3.1 8B",
+    "arfa-qwen2.5-coder:14b-8k": "Qwen2.5-Coder 14B",
+    "arfa-llama3.2:3b-8k": "Llama 3.2 3B",
+    "arfa-gemma3:4b-8k": "Gemma 3 4B",
+    "arfa-gemma3:12b-8k": "Gemma 3 12B",
+    "arfa-phi4-mini:3.8b-8k": "Phi-4 Mini 3.8B",
+    "arfa-phi4:14b-8k": "Phi-4 14B",
+}
+
+PLANNED_PAIRS = (
+    ("arfa-qwen2.5-coder:7b-8k", "arfa-qwen2.5-coder:14b-8k"),
+    ("arfa-llama3.2:3b-8k", "arfa-llama3.1:8b-8k"),
+    ("arfa-gemma3:4b-8k", "arfa-gemma3:12b-8k"),
+    ("arfa-phi4-mini:3.8b-8k", "arfa-phi4:14b-8k"),
+)
 
 
 def _model_key(model: str) -> tuple[int, str]:
     return MODEL_ORDER.get(model, len(MODEL_ORDER)), model
+
+
+def _audit_completeness(
+    all_runs: dict[str, list[dict[str, Any]]],
+    summaries: dict[str, dict[str, Any]],
+    expected_models: set[str],
+    task_ids: set[str],
+    task_manifest_sha256: str,
+) -> dict[str, Any]:
+    protocol_hashes = ("prompt_sha256", "agent_sha256", "environment_sha256")
+    reference = next((summaries[name].get("reproducibility", {}) for name in sorted(summaries)), {})
+    reference_protocol = next((summaries[name].get("protocol") for name in sorted(summaries)), None)
+    per_model = {}
+    for model in sorted(expected_models | set(all_runs), key=_model_key):
+        runs = all_runs.get(model, [])
+        summary = summaries.get(model, {})
+        observed = [str(run["task_id"]) for run in runs]
+        observed_set = set(observed)
+        provenance = summary.get("reproducibility", {})
+        issues = []
+        if model not in expected_models:
+            issues.append("unexpected_model")
+        if model not in summaries:
+            issues.append("missing_summary")
+        if len(observed) != len(observed_set):
+            issues.append("duplicate_task_ids")
+        if observed_set != task_ids:
+            issues.append("task_id_set_mismatch")
+        if summary.get("model_name") != model or summary.get("task_count") != len(runs):
+            issues.append("summary_mismatch")
+        if summary.get("dry_run") is not False or summary.get("paper_protocol") is not True:
+            issues.append("not_paper_protocol")
+        if summary.get("protocol") != reference_protocol:
+            issues.append("protocol_mismatch")
+        if provenance.get("task_manifest_sha256") != task_manifest_sha256:
+            issues.append("task_manifest_hash_mismatch")
+        for key in protocol_hashes:
+            if not provenance.get(key) or provenance.get(key) != reference.get(key):
+                issues.append(f"{key}_mismatch")
+        per_model[model] = {
+            "run_count": len(runs),
+            "unique_task_count": len(observed_set),
+            "missing_task_count": len(task_ids - observed_set),
+            "unexpected_task_count": len(observed_set - task_ids),
+            "issues": issues,
+            "complete": not issues,
+        }
+    config_hashes = sorted({str(summary.get("reproducibility", {}).get("config_sha256") or "") for summary in summaries.values()})
+    return {
+        "expected_models": len(expected_models),
+        "observed_models": len(all_runs),
+        "expected_tasks_per_model": len(task_ids),
+        "observed_runs": sum(len(runs) for runs in all_runs.values()),
+        "missing_models": sorted(expected_models - set(all_runs)),
+        "unexpected_models": sorted(set(all_runs) - expected_models),
+        "config_hashes": config_hashes,
+        "config_hashes_match": len(config_hashes) == 1,
+        "models": per_model,
+        "complete": set(all_runs) == expected_models and all(row["complete"] for row in per_model.values()),
+    }
 
 
 def _wilson_interval(successes: int, total: int, z: float = 1.96) -> tuple[float, float]:
@@ -69,6 +153,7 @@ def _aggregate(model_name: str, runs: list[dict[str, Any]]) -> dict[str, Any]:
         "parse_error_steps": len(parse_labels),
         "recovered_format_steps": sum(label == "extracted_json_from_non_json_response" for label in parse_labels),
         "hard_parse_failure_steps": sum(label == "json_parse_failed" for label in parse_labels),
+        "model_request_failure_steps": sum(label == "model_request_failed" for label in parse_labels),
         "nonzero_exit_steps": sum(int(run.get("nonzero_exit_count", 0)) for run in runs),
         "repeated_actions": sum(int(run.get("repeated_action_count", 0)) for run in runs),
         "complete_200": total == 200,
@@ -147,6 +232,8 @@ def _failure_category(run: dict[str, Any], gold_healthy: bool) -> str:
         return "benchmark_environment_anomaly"
     if run.get("max_steps_reached"):
         return "max_step_exhaustion"
+    if run.get("termination_reason") == "model_request_error":
+        return "model_request_error"
     if any(step.get("parse_error") == "json_parse_failed" for step in run.get("steps", [])):
         return "response_parse_failure"
     if int(run.get("repeated_action_count", 0)):
@@ -212,7 +299,7 @@ def _write_report(
     path: Path,
     aggregates: list[dict[str, Any]],
     valid_aggregates: list[dict[str, Any]],
-    expected_models: int,
+    completeness: dict[str, Any],
     valid_task_count: int,
     paired_results: list[dict[str, Any]],
 ) -> None:
@@ -249,13 +336,14 @@ def _write_report(
             "",
             "Recovered format steps contain extractable JSON wrapped in extra text; hard parse failures contain no usable JSON object.",
             "",
-            "| Model | Recovered format | Hard parse | Nonzero exits | Repeated actions |",
-            "| --- | ---: | ---: | ---: | ---: |",
+            "| Model | Recovered format | Hard parse | Request failures | Nonzero exits | Repeated actions |",
+            "| --- | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
     for row in aggregates:
         lines.append(
             f"| {row['model']} | {row['recovered_format_steps']} | {row['hard_parse_failure_steps']} | "
+            f"{row['model_request_failure_steps']} | "
             f"{row['nonzero_exit_steps']} | {row['repeated_actions']} |"
         )
     lines.extend(
@@ -273,15 +361,15 @@ def _write_report(
             "",
             "## Completeness Gate",
             "",
-            "Every model must contain exactly 200 tasks from the released InterCode NL2Bash suite before these results are treated as paper-ready.",
+            "Every model must contain the exact same 200 task IDs and matching protocol hashes before these results are treated as paper-ready.",
             "",
         ]
     )
-    for row in aggregates:
-        status = "PASS" if row["complete_200"] else "INCOMPLETE"
-        lines.append(f"- `{row['model']}`: {status} ({row['tasks']}/200)")
-    matrix_status = "PASS" if len(aggregates) == expected_models and all(row["complete_200"] for row in aggregates) else "INCOMPLETE"
-    lines.extend(["", f"Overall matrix: **{matrix_status}** ({len(aggregates)}/{expected_models} models)."])
+    for model, audit in completeness["models"].items():
+        status = "PASS" if audit["complete"] else "INCOMPLETE"
+        lines.append(f"- `{model}`: {status} ({audit['run_count']}/200; issues: {', '.join(audit['issues']) or 'none'})")
+    matrix_status = "PASS" if completeness["complete"] else "INCOMPLETE"
+    lines.extend(["", f"Overall matrix: **{matrix_status}** ({completeness['observed_models']}/{completeness['expected_models']} models)."])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -289,7 +377,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Aggregate Phase 2 paper baseline runs.")
     parser.add_argument("--results-root", default="results/phase2_baseline/paper")
     parser.add_argument("--tasks", default="data/phase2/intercode_nl2bash_official_200.jsonl")
-    parser.add_argument("--expected-models", type=int, default=3)
+    parser.add_argument("--model-matrix", default="data/phase2/model_matrix.json")
+    parser.add_argument("--expected-models", type=int, default=None)
     parser.add_argument(
         "--environment-validation",
         default="results/phase2_baseline/environment_validation/gold_validation.jsonl",
@@ -298,16 +387,27 @@ def main() -> None:
 
     root = Path(args.results_root)
     task_lookup = {row["task_id"]: row for row in read_jsonl(args.tasks)}
+    matrix = json.loads(Path(args.model_matrix).read_text(encoding="utf-8"))
+    expected_model_names = {entry["name"] for entry in matrix["models"]}
+    if args.expected_models is not None and args.expected_models != len(expected_model_names):
+        raise SystemExit("--expected-models disagrees with the model matrix")
     all_runs: dict[str, list[dict[str, Any]]] = {}
+    summaries: dict[str, dict[str, Any]] = {}
     for summary_path in sorted(root.glob("*/summary.json")):
         summary = json.loads(summary_path.read_text(encoding="utf-8"))
         traces_path = summary_path.parent / "traces.jsonl"
         if traces_path.exists():
-            all_runs[str(summary["model_name"])] = read_jsonl(traces_path)
+            model_name = str(summary["model_name"])
+            if model_name in all_runs:
+                raise SystemExit(f"Duplicate model summary: {model_name}")
+            all_runs[model_name] = read_jsonl(traces_path)
+            summaries[model_name] = summary
     if not all_runs:
         raise SystemExit(f"No model runs found under {root}")
 
     all_runs = dict(sorted(all_runs.items(), key=lambda item: _model_key(item[0])))
+    task_sha256 = hashlib.sha256(Path(args.tasks).read_bytes()).hexdigest()
+    completeness = _audit_completeness(all_runs, summaries, expected_model_names, set(task_lookup), task_sha256)
     aggregates = [_aggregate(model, runs) for model, runs in all_runs.items()]
     validation_rows = read_jsonl(args.environment_validation)
     valid_task_ids = {str(row["task_id"]) for row in validation_rows if row.get("valid")}
@@ -371,19 +471,14 @@ def main() -> None:
         analysis_dir / "phase2_report.md",
         aggregates,
         valid_aggregates,
-        args.expected_models,
+        completeness,
         len(valid_task_ids),
         paired_results,
     )
-    complete = len(aggregates) == args.expected_models and all(row["complete_200"] for row in aggregates)
     manifest = {
-        "expected_models": args.expected_models,
-        "observed_models": len(aggregates),
-        "expected_tasks_per_model": 200,
-        "observed_runs": sum(len(rows) for rows in all_runs.values()),
+        **completeness,
         "environment_validation_tasks": len(validation_rows),
         "gold_healthy_tasks": len(valid_task_ids),
-        "complete": complete,
     }
     (analysis_dir / "completeness.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(manifest, indent=2))

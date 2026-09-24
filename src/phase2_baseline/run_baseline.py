@@ -12,8 +12,8 @@ from typing import Any
 
 from src.common.config import load_simple_yaml
 from src.common.utils import ensure_parent, read_jsonl, write_csv, write_jsonl
-from src.phase2_baseline.model_client import OpenAICompatibleClient, ScriptedClient
-from src.phase2_baseline.react_agent import Phase2Run, ReActBaselineAgent
+from src.phase2_baseline.model_client import ModelRequestError, OpenAICompatibleClient, ScriptedClient
+from src.phase2_baseline.react_agent import Phase2Run, Phase2Step, ReActBaselineAgent
 from src.phase2_baseline.task_loader import load_tasks
 from src.phase2_baseline.terminal_environment import LocalTerminalEnvironment
 
@@ -93,6 +93,47 @@ def _file_sha256(path: str | Path) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def _build_model_error_run(
+    task: dict[str, Any], env: Any, error: ModelRequestError, elapsed_seconds: float
+) -> Phase2Run:
+    message = str(error)
+    evaluator = env.evaluate(task, trace_text="", final_answer="")
+    step = Phase2Step(
+        step_id=1,
+        thought="Model request failed after retries.",
+        action="",
+        expected_outcome="",
+        observation=message,
+        exit_code=None,
+        model_latency_seconds=elapsed_seconds,
+        command_latency_seconds=0.0,
+        prompt_tokens=None,
+        completion_tokens=None,
+        total_tokens=None,
+        parse_error="model_request_failed",
+    )
+    return Phase2Run(
+        task_id=str(task["task_id"]),
+        instruction=str(task["instruction"]),
+        benchmark=str(task.get("benchmark", "")),
+        success=bool(evaluator["success"]),
+        evaluator=evaluator,
+        final_answer="",
+        steps=[step],
+        model_calls=1,
+        total_model_latency_seconds=elapsed_seconds,
+        total_command_latency_seconds=0.0,
+        total_tokens=None,
+        termination_reason="model_request_error",
+        max_steps_reached=False,
+        parse_error_count=1,
+        nonzero_exit_count=0,
+        repeated_action_count=0,
+        agent_wall_seconds=elapsed_seconds,
+        total_task_wall_seconds=elapsed_seconds,
+    )
+
+
 def _write_outputs(runs: list[Phase2Run], summary: dict[str, Any], config: dict[str, Any]) -> None:
     outputs = config["outputs"]
     write_jsonl(outputs["traces_path"], [run.to_dict() for run in runs])
@@ -169,15 +210,24 @@ def main() -> None:
     traces_path = Path(config["outputs"]["traces_path"])
     if args.resume and traces_path.exists():
         summary_path = Path(config["outputs"]["summary_path"])
-        if summary_path.exists():
-            prior_summary = json.loads(summary_path.read_text(encoding="utf-8"))
-            expected_model = "scripted_harness_validator" if args.dry_run else config["baseline"]["model_name"]
-            if prior_summary.get("model_name") != expected_model:
-                raise SystemExit(
-                    f"Refusing to mix model runs in {traces_path}: "
-                    f"found {prior_summary.get('model_name')}, requested {expected_model}"
-                )
+        if not summary_path.exists():
+            raise SystemExit(f"Refusing to resume traces without a summary: {traces_path}")
+        prior_summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        expected_model = "scripted_harness_validator" if args.dry_run else config["baseline"]["model_name"]
+        if prior_summary.get("model_name") != expected_model:
+            raise SystemExit(
+                f"Refusing to mix model runs in {traces_path}: "
+                f"found {prior_summary.get('model_name')}, requested {expected_model}"
+            )
+        prior_repro = prior_summary.get("reproducibility", {})
+        for key in ("config_sha256", "task_manifest_sha256", "prompt_sha256", "agent_sha256", "environment_sha256"):
+            if prior_repro.get(key) != config["reproducibility"][key]:
+                raise SystemExit(f"Refusing to resume {traces_path}: {key} changed")
         runs = [Phase2Run.from_dict(row) for row in read_jsonl(traces_path)]
+        task_ids = {str(task["task_id"]) for task in tasks}
+        prior_ids = [run.task_id for run in runs]
+        if len(prior_ids) != len(set(prior_ids)) or not set(prior_ids) <= task_ids:
+            raise SystemExit(f"Refusing to resume {traces_path}: duplicate or unexpected task IDs")
     completed_task_ids = {run.task_id for run in runs}
     for task in tasks:
         if str(task["task_id"]) in completed_task_ids:
@@ -185,13 +235,21 @@ def main() -> None:
         task_started = time.perf_counter()
         env = _build_environment(task, config)
         try:
-            run = agent.run_task(task, env)
+            try:
+                run = agent.run_task(task, env)
+            except ModelRequestError as exc:
+                run = _build_model_error_run(task, env, exc, time.perf_counter() - task_started)
         finally:
             env.close()
         run = replace(run, total_task_wall_seconds=time.perf_counter() - task_started)
         runs.append(run)
         checkpoint = _build_summary(runs, config, dry_run=args.dry_run)
         _write_outputs(runs, checkpoint, config)
+        print(
+            f"[phase2] {config['baseline']['model_name']}: {len(runs)}/{len(tasks)} "
+            f"{run.task_id} success={run.success} wall={run.total_task_wall_seconds:.1f}s",
+            flush=True,
+        )
 
     summary = _build_summary(runs, config, dry_run=args.dry_run)
     _write_outputs(runs, summary, config)

@@ -7,6 +7,7 @@ __pycache__/
 .cache/
 .DS_Store
 .env
+screenlog.*
 
 # External datasets and generated experiment artifacts.
 data/phase1/external_intercode/

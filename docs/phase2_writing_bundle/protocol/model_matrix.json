@@ -1,6 +1,7 @@
 {
   "runtime": "Ollama",
-  "runtime_version": "0.34.0",
+  "original_runtime_version": "0.34.0",
+  "expansion_runtime_version": "0.34.1",
   "execution_order": "serial",
   "temperature": 0.0,
   "models": [
@@ -33,6 +34,56 @@
       "native_context_length": 32768,
       "experiment_context_length": 8192,
       "role": "within-family scale comparison"
+    },
+    {
+      "name": "arfa-llama3.2:3b-8k",
+      "base_model": "llama3.2:3b",
+      "ollama_id": "a80c4f17acd5",
+      "parameters": "3.2B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 131072,
+      "experiment_context_length": 8192,
+      "role": "Llama fast candidate; paired with Llama 3.1 8B"
+    },
+    {
+      "name": "arfa-gemma3:4b-8k",
+      "base_model": "gemma3:4b",
+      "ollama_id": "a2af6cc3eb7f",
+      "parameters": "4.3B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 131072,
+      "experiment_context_length": 8192,
+      "role": "Gemma 3 fast candidate"
+    },
+    {
+      "name": "arfa-gemma3:12b-8k",
+      "base_model": "gemma3:12b",
+      "ollama_id": "f4031aab637d",
+      "parameters": "12.2B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 131072,
+      "experiment_context_length": 8192,
+      "role": "Gemma 3 slow candidate"
+    },
+    {
+      "name": "arfa-phi4-mini:3.8b-8k",
+      "base_model": "phi4-mini:3.8b",
+      "ollama_id": "48d9a121d662",
+      "parameters": "3.8B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 131072,
+      "experiment_context_length": 8192,
+      "role": "Phi-4 fast candidate"
+    },
+    {
+      "name": "arfa-phi4:14b-8k",
+      "base_model": "phi4:14b",
+      "ollama_id": "8877708d24c0",
+      "parameters": "14.7B",
+      "quantization": "Q4_K_M",
+      "native_context_length": 16384,
+      "experiment_context_length": 8192,
+      "role": "Phi-4 slow candidate"
     }
   ]
 }

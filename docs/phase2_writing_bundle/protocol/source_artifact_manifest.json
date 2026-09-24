@@ -2,10 +2,40 @@
   "complete": true,
   "source_traces": [
     {
+      "path": "results/phase2_baseline/paper/gemma3-12b/traces.jsonl",
+      "bytes": 918626,
+      "records": 200,
+      "sha256": "b62a3c006a842a597e524d82e3f0b2681859ffdad0405720a8c21c47c73faa3d"
+    },
+    {
+      "path": "results/phase2_baseline/paper/gemma3-4b/traces.jsonl",
+      "bytes": 878240,
+      "records": 200,
+      "sha256": "ef42b8e5870b40f90c64d97af6d6f4c3289e02ae59fb9635ae31b4403de2ecdb"
+    },
+    {
       "path": "results/phase2_baseline/paper/llama3.1-8b/traces.jsonl",
       "bytes": 760913,
       "records": 200,
       "sha256": "0ccde167634563292ae1323e2bb52b6c54c85deb24c6f564bb0a66a37d172e39"
+    },
+    {
+      "path": "results/phase2_baseline/paper/llama3.2-3b/traces.jsonl",
+      "bytes": 1010360,
+      "records": 200,
+      "sha256": "8bf91102bcc63b92ec7c52ab02a3a939a366bf5da6f5d2d7c7b9f44853c8eda4"
+    },
+    {
+      "path": "results/phase2_baseline/paper/phi4-14b/traces.jsonl",
+      "bytes": 785201,
+      "records": 200,
+      "sha256": "1a2ff993f67bac2499c5460f10da5a5479e81e1add156960887963a8f431fab0"
+    },
+    {
+      "path": "results/phase2_baseline/paper/phi4-mini-3.8b/traces.jsonl",
+      "bytes": 841694,
+      "records": 200,
+      "sha256": "f692e82d3b70dc091cd6667cf70beb66c0198b1c12cfd28d92f26d0ec6c52d6a"
     },
     {
       "path": "results/phase2_baseline/paper/qwen2.5-coder-14b/traces.jsonl",

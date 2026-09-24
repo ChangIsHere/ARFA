@@ -1,9 +1,82 @@
 {
-  "expected_models": 3,
-  "observed_models": 3,
+  "expected_models": 8,
+  "observed_models": 8,
   "expected_tasks_per_model": 200,
-  "observed_runs": 600,
+  "observed_runs": 1600,
+  "missing_models": [],
+  "unexpected_models": [],
+  "config_hashes": [
+    "8cbbfb247403630b66e3b9150639ee0ca7c0b295a08cedaa0e839de78209da75",
+    "a5037021cbb7c3cd2e90ac8fa36823c4eb50830c68acbcf7a62907dea9251149"
+  ],
+  "config_hashes_match": false,
+  "models": {
+    "arfa-qwen2.5-coder:7b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    },
+    "arfa-llama3.1:8b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    },
+    "arfa-qwen2.5-coder:14b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    },
+    "arfa-llama3.2:3b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    },
+    "arfa-gemma3:4b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    },
+    "arfa-gemma3:12b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    },
+    "arfa-phi4-mini:3.8b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    },
+    "arfa-phi4:14b-8k": {
+      "run_count": 200,
+      "unique_task_count": 200,
+      "missing_task_count": 0,
+      "unexpected_task_count": 0,
+      "issues": [],
+      "complete": true
+    }
+  },
+  "complete": true,
   "environment_validation_tasks": 200,
-  "gold_healthy_tasks": 195,
-  "complete": true
+  "gold_healthy_tasks": 195
 }
