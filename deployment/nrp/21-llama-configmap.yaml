@@ -1,0 +1,195 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arfa-llama-residency-config
+  namespace: ucr-qzhang
+  labels:
+    app.kubernetes.io/name: arfa
+    app.kubernetes.io/component: llama-residency
+data:
+  Modelfile.llama3.2-3b-8k: |
+    FROM llama3.2:3b
+    PARAMETER num_ctx 8192
+  Modelfile.llama3.1-8b-8k: |
+    FROM llama3.1:8b
+    PARAMETER num_ctx 8192
+  serve_llama.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    RUN_ROOT="/workspace/runs/${ARFA_RUN_ID}"
+    ENV_ROOT="${RUN_ROOT}/environment"
+    mkdir -p "${ENV_ROOT}" "${RUN_ROOT}/checkpoints" "${RUN_ROOT}/raw_traces" "${RUN_ROOT}/results"
+
+    cleanup() {
+      if [[ -n "${OLLAMA_PID:-}" ]]; then
+        kill "${OLLAMA_PID}" 2>/dev/null || true
+        wait "${OLLAMA_PID}" 2>/dev/null || true
+      fi
+    }
+    trap cleanup EXIT
+
+    ollama serve > "${ENV_ROOT}/ollama-server.log" 2>&1 &
+    OLLAMA_PID=$!
+    for _ in $(seq 1 120); do
+      if ollama list >/dev/null 2>&1; then
+        break
+      fi
+      sleep 1
+    done
+    ollama list >/dev/null
+
+    ollama pull llama3.2:3b
+    ollama pull llama3.1:8b
+    ollama create arfa-llama3.2:3b-8k -f /opt/arfa/Modelfile.llama3.2-3b-8k
+    ollama create arfa-llama3.1:8b-8k -f /opt/arfa/Modelfile.llama3.1-8b-8k
+
+    [[ "$(ollama list | awk '$1 == "llama3.2:3b" {print $2}')" == "a80c4f17acd5" ]]
+    [[ "$(ollama list | awk '$1 == "llama3.1:8b" {print $2}')" == "46e0c10c039e" ]]
+    [[ "$(sha256sum /opt/arfa/Modelfile.llama3.2-3b-8k | awk '{print $1}')" == "184c9e65ebb36086a3ff9ffd7cf2da8cb314d349d69812aa0bf2e22bed317af8" ]]
+    [[ "$(sha256sum /opt/arfa/Modelfile.llama3.1-8b-8k | awk '{print $1}')" == "cc7441bcdaafed8cde8c779900b1e02891993782576e7b36c28a9f0a09d11e17" ]]
+
+    ollama list > "${ENV_ROOT}/ollama-model-list.txt"
+    ollama show arfa-llama3.2:3b-8k > "${ENV_ROOT}/model-show-3b.txt"
+    ollama show arfa-llama3.1:8b-8k > "${ENV_ROOT}/model-show-8b.txt"
+    ollama --version > "${ENV_ROOT}/ollama-version.txt"
+    nvidia-smi -q > "${ENV_ROOT}/nvidia-smi-full.txt"
+
+    ollama run arfa-llama3.2:3b-8k "Respond with exactly: OK" > /tmp/arfa-warm-3b.txt
+    ollama run arfa-llama3.1:8b-8k "Respond with exactly: OK" > /tmp/arfa-warm-8b.txt
+    RESIDENT_MODELS=$(ollama ps)
+    printf '%s\n' "${RESIDENT_MODELS}" | tee "${ENV_ROOT}/ollama-ps-ready.txt"
+    grep -q 'arfa-llama3.2:3b-8k' <<< "${RESIDENT_MODELS}"
+    grep -q 'arfa-llama3.1:8b-8k' <<< "${RESIDENT_MODELS}"
+    nvidia-smi --query-gpu=index,name,uuid,memory.total,memory.used,memory.free,driver_version --format=csv,noheader \
+      > "${ENV_ROOT}/nvidia-smi-ready.csv"
+    touch /tmp/arfa-ready
+
+    wait "${OLLAMA_PID}"
+  residency_probe.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    RUN_ROOT="/workspace/runs/${ARFA_RUN_ID}"
+    ENV_ROOT="${RUN_ROOT}/environment"
+    mkdir -p "${ENV_ROOT}"
+    exec > >(tee -a "${ENV_ROOT}/residency-probe.log") 2>&1
+
+    cleanup() {
+      if [[ -n "${OLLAMA_PID:-}" ]]; then
+        kill "${OLLAMA_PID}" 2>/dev/null || true
+        wait "${OLLAMA_PID}" 2>/dev/null || true
+      fi
+    }
+    trap cleanup EXIT
+
+    now_ms() { date +%s%3N; }
+    snapshot() {
+      local label="$1"
+      echo "--- snapshot: ${label} ---"
+      ollama ps | tee "${ENV_ROOT}/ollama-ps-${label}.txt"
+      nvidia-smi --query-gpu=index,name,uuid,memory.total,memory.used,memory.free,driver_version --format=csv,noheader \
+        | tee "${ENV_ROOT}/nvidia-smi-${label}.csv"
+    }
+    invoke() {
+      local label="$1"
+      local model="$2"
+      local started
+      local finished
+      started=$(now_ms)
+      ollama run "${model}" "Respond with exactly: OK" > "${ENV_ROOT}/response-${label}.txt"
+      finished=$(now_ms)
+      printf '%s\t%s\t%s\n' "${label}" "${model}" "$((finished - started))" \
+        | tee -a "${ENV_ROOT}/latencies-ms.tsv"
+      snapshot "${label}"
+    }
+
+    echo "run_id=${ARFA_RUN_ID}"
+    echo "git_commit=${ARFA_GIT_COMMIT}"
+    echo "worktree_dirty=${ARFA_WORKTREE_DIRTY}"
+    echo "phase3_config_sha256=${ARFA_CONFIG_SHA256}"
+    echo "node_name=${NODE_NAME}"
+    echo "pod_name=${POD_NAME}"
+    echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    cat /proc/cpuinfo > "${ENV_ROOT}/cpuinfo.txt"
+    cat /proc/meminfo > "${ENV_ROOT}/meminfo.txt"
+    nvidia-smi -q > "${ENV_ROOT}/nvidia-smi-full.txt"
+
+    ollama serve > "${ENV_ROOT}/ollama-server.log" 2>&1 &
+    OLLAMA_PID=$!
+    for _ in $(seq 1 120); do
+      if ollama list >/dev/null 2>&1; then break; fi
+      sleep 1
+    done
+    ollama list >/dev/null
+    ollama --version | tee "${ENV_ROOT}/ollama-version.txt"
+
+    ollama pull llama3.2:3b
+    ollama pull llama3.1:8b
+    ollama create arfa-llama3.2:3b-8k -f /opt/arfa/Modelfile.llama3.2-3b-8k
+    ollama create arfa-llama3.1:8b-8k -f /opt/arfa/Modelfile.llama3.1-8b-8k
+    ollama list | tee "${ENV_ROOT}/ollama-model-list.txt"
+
+    BASE3_ID=$(ollama list | awk '$1 == "llama3.2:3b" {print $2}')
+    BASE8_ID=$(ollama list | awk '$1 == "llama3.1:8b" {print $2}')
+    ARFA3_ID=$(ollama list | awk '$1 == "arfa-llama3.2:3b-8k" {print $2}')
+    ARFA8_ID=$(ollama list | awk '$1 == "arfa-llama3.1:8b-8k" {print $2}')
+    [[ "${BASE3_ID}" == "a80c4f17acd5" ]]
+    [[ "${BASE8_ID}" == "46e0c10c039e" ]]
+    MODELFILE3_SHA=$(sha256sum /opt/arfa/Modelfile.llama3.2-3b-8k | awk '{print $1}')
+    MODELFILE8_SHA=$(sha256sum /opt/arfa/Modelfile.llama3.1-8b-8k | awk '{print $1}')
+    [[ "${MODELFILE3_SHA}" == "184c9e65ebb36086a3ff9ffd7cf2da8cb314d349d69812aa0bf2e22bed317af8" ]]
+    [[ "${MODELFILE8_SHA}" == "cc7441bcdaafed8cde8c779900b1e02891993782576e7b36c28a9f0a09d11e17" ]]
+
+    cat > "${ENV_ROOT}/model-identity.txt" <<EOF
+    base_3b_id=${BASE3_ID}
+    base_8b_id=${BASE8_ID}
+    nrp_alias_3b_id=${ARFA3_ID}
+    nrp_alias_8b_id=${ARFA8_ID}
+    modelfile_3b_sha256=${MODELFILE3_SHA}
+    modelfile_8b_sha256=${MODELFILE8_SHA}
+    identity_policy=base-weight-id-plus-modelfile-sha256
+    EOF
+
+    ollama stop arfa-llama3.2:3b-8k || true
+    ollama stop arfa-llama3.1:8b-8k || true
+    snapshot unloaded
+
+    printf 'label\tmodel\telapsed_ms\n' > "${ENV_ROOT}/latencies-ms.tsv"
+    invoke cold-3b arfa-llama3.2:3b-8k
+    invoke warm-3b arfa-llama3.2:3b-8k
+    invoke cold-8b arfa-llama3.1:8b-8k
+    invoke warm-8b arfa-llama3.1:8b-8k
+    invoke alternate-3b-1 arfa-llama3.2:3b-8k
+    invoke alternate-8b-1 arfa-llama3.1:8b-8k
+    invoke alternate-3b-2 arfa-llama3.2:3b-8k
+    invoke alternate-8b-2 arfa-llama3.1:8b-8k
+
+    FINAL_PS=$(ollama ps)
+    printf '%s\n' "${FINAL_PS}" | tee "${ENV_ROOT}/ollama-ps-final.txt"
+    printf '%s\n' "${FINAL_PS}" | grep -q 'arfa-llama3.2:3b-8k'
+    printf '%s\n' "${FINAL_PS}" | grep -q 'arfa-llama3.1:8b-8k'
+    if grep -Eiq 'out of memory|insufficient memory|evict|oom' "${ENV_ROOT}/ollama-server.log"; then
+      echo "OOM or eviction marker detected" >&2
+      exit 1
+    fi
+
+    cat > "${ENV_ROOT}/status.json" <<EOF
+    {
+      "run_id": "${ARFA_RUN_ID}",
+      "passed": true,
+      "both_models_resident": true,
+      "oom_detected": false,
+      "eviction_detected": false,
+      "git_commit": "${ARFA_GIT_COMMIT}",
+      "worktree_dirty": ${ARFA_WORKTREE_DIRTY},
+      "phase3_config_sha256": "${ARFA_CONFIG_SHA256}",
+      "node_name": "${NODE_NAME}",
+      "pod_name": "${POD_NAME}",
+      "completed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    }
+    EOF
+
+    cat "${ENV_ROOT}/latencies-ms.tsv"
+    cat "${ENV_ROOT}/ollama-ps-final.txt"
+    cat "${ENV_ROOT}/status.json"

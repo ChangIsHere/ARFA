@@ -1,0 +1,4 @@
+"policy","task_count","expected_task_count","complete","success_count","success_rate","avg_wall_seconds","wall_seconds_per_success","avg_model_calls","avg_fast_calls","avg_slow_calls","fast_call_rate","avg_total_tokens"
+"always_fast","100","100","True","8","0.08","8.84846369582694","110.60579619783675","6.04","6.04","0.0","1.0","11663.73"
+"always_slow","100","100","True","16","0.16","11.163525857523782","69.77203660952364","4.77","0.0","4.77","0.0","7464.22"
+"residual","100","100","True","19","0.19","12.701704345043982","66.85107550023149","5.39","1.7","3.69","0.31539888682745826","9316.96"

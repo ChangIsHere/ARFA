@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import http.client
 import json
 import os
 import time
@@ -8,6 +9,10 @@ import urllib.request
 from typing import Any
 
 from src.phase2_baseline.model_client import ChatResult
+
+
+class JSONModelRequestError(RuntimeError):
+    """Raised after a structured model request exhausts its retries."""
 
 
 SHADOW_RESPONSE_SCHEMA: dict[str, Any] = {
@@ -55,6 +60,7 @@ class OllamaStructuredClient:
         max_tokens: int = 900,
         timeout_seconds: int = 180,
         request_attempts: int = 3,
+        keep_alive: int | str | None = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.model_name = model_name
@@ -63,6 +69,7 @@ class OllamaStructuredClient:
         self.max_tokens = max_tokens
         self.timeout_seconds = timeout_seconds
         self.request_attempts = request_attempts
+        self.keep_alive = keep_alive
 
     @classmethod
     def from_config(cls, config: dict[str, Any]) -> "OllamaStructuredClient":
@@ -75,16 +82,20 @@ class OllamaStructuredClient:
             max_tokens=int(config.get("max_tokens", 900)),
             timeout_seconds=int(config.get("request_timeout_seconds", 180)),
             request_attempts=int(config.get("request_attempts", 3)),
+            keep_alive=config.get("keep_alive"),
         )
 
     def _payload(self, messages: list[dict[str, str]]) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "model": self.model_name,
             "messages": messages,
             "stream": False,
             "format": SHADOW_RESPONSE_SCHEMA,
             "options": {"temperature": self.temperature, "num_predict": self.max_tokens},
         }
+        if self.keep_alive is not None:
+            payload["keep_alive"] = self.keep_alive
+        return payload
 
     def chat(self, messages: list[dict[str, str]]) -> ChatResult:
         request = urllib.request.Request(
@@ -95,17 +106,32 @@ class OllamaStructuredClient:
         )
         started = time.perf_counter()
         last_error: Exception | None = None
+        last_detail = ""
         for attempt in range(1, self.request_attempts + 1):
             try:
                 with urllib.request.urlopen(request, timeout=self.timeout_seconds) as response:
                     raw = json.loads(response.read().decode("utf-8"))
                 break
-            except (urllib.error.URLError, TimeoutError) as exc:
+            except urllib.error.HTTPError as exc:
+                last_error = exc
+                last_detail = exc.read().decode("utf-8", errors="replace").strip()
+                if attempt < self.request_attempts:
+                    time.sleep(2 ** (attempt - 1))
+            except (
+                urllib.error.URLError,
+                http.client.RemoteDisconnected,
+                ConnectionResetError,
+                BrokenPipeError,
+                TimeoutError,
+            ) as exc:
                 last_error = exc
                 if attempt < self.request_attempts:
                     time.sleep(2 ** (attempt - 1))
         else:
-            raise RuntimeError("Could not reach the JSON-mode local model endpoint after retries") from last_error
+            detail = f": {last_detail}" if last_detail else ""
+            raise JSONModelRequestError(
+                f"JSON-mode model request failed after {self.request_attempts} attempts{detail}"
+            ) from last_error
 
         content = str(raw["message"]["content"])
         prompt_tokens = raw.get("prompt_eval_count")

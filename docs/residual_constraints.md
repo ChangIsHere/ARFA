@@ -12,7 +12,8 @@ called the reasoning model afterward. Its fast decisions were suggestions only.
 
 A small residual can accompany a wrong plan or an unusable next command. The
 current command checker is a string heuristic and can miss missing stdin in a
-pipeline. Phase 3 still needs actual execution, recovery, and cost measurement.
+pipeline. All four Phase 3 development pairs measure actual execution and cost;
+the reserved final split is still unused.
 
 Full residual AUC was 0.743 against the reviewed labels, versus 0.749 for learned
 observation-only scoring. The selected semantic weight was zero. Task-outcome
@@ -35,19 +36,18 @@ with the corrected judge would help assess this issue.
 The new task-outcome comparisons use evaluator outcomes rather than subjective
 labels. The saved fusion weight still comes from the earlier label-based analysis.
 
-## Experiment Versions
+## Earlier Selection Rule
 
-The original strict selection found no fast operating point meeting all its
-requirements. After reviewing those results, the project replaced that criterion
-as a development prerequisite with a lighter engineering check. The original
-result remains in the frozen protocol and saved analysis; it was not changed to
-a pass. Online success and savings are questions for Phase 3.
+The first offline selection rule found no operating point meeting all its
+requirements. That rule remains in the frozen protocol and saved analysis. The
+paper relies on matched online policies rather than treating the offline rule as
+a deployment test.
 
-Original references: `config/phase1_5_shadow.yaml`, `docs/phase1_5_protocol.md`, and
-`results/phase1_5_shadow/analysis_ai_blind/analysis.json`. Current development uses
-`config/phase3_arfa.yaml`.
+Original references: `config/phase1_5_shadow.yaml` and
+`results/phase1_5_shadow/analysis_ai_blind/analysis.json`. Current development
+uses `config/phase3_arfa.yaml`.
 
-Phase 2 covers three locally quantized models on one benchmark, with one run per
+Phase 2 covers eight locally quantized models on one benchmark, with one run per
 task/model. Its intervals describe variation across tasks, not repeated runs.
 Reserved Phase 3 tasks were excluded from residual fitting but were already run
 in Phase 2; they are not entirely unseen tasks.

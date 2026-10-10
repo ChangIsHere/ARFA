@@ -1,0 +1,3 @@
+NAME                   ID              SIZE      PROCESSOR    CONTEXT    UNTIL
+arfa-llama3.1:8b-8k    0381d0aa54ef    5.9 GB    100% GPU     8192       Forever
+arfa-llama3.2:3b-8k    a2e8a97858cf    3.1 GB    100% GPU     8192       Forever

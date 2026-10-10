@@ -1,8 +1,12 @@
 import copy
+import http.client
 import hashlib
+import io
 import json
+import urllib.error
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import pytest
 
@@ -30,7 +34,7 @@ from src.phase1_5_shadow.analyze_annotations import (
 )
 from src.phase1_5_shadow.ai_annotate_packet import _blind_item, _make_batches
 from src.phase1_5_shadow.evaluate_exploratory_gate import evaluate_engineering_gate
-from src.phase1_5_shadow.json_model_client import OllamaStructuredClient
+from src.phase1_5_shadow.json_model_client import JSONModelRequestError, OllamaStructuredClient
 from src.phase1_5_shadow.residual import (
     continuation_is_self_contained,
     expectation_quality,
@@ -595,7 +599,7 @@ def test_shadow_parser_rejects_nested_fragment():
 
 
 def test_json_mode_client_requests_json_schema():
-    client = OllamaStructuredClient("http://localhost:11434/v1", "test-model")
+    client = OllamaStructuredClient("http://localhost:11434/v1", "test-model", keep_alive=-1)
     payload = client._payload([{"role": "user", "content": "test"}])
     assert payload["format"]["properties"]["expected_signals"]["properties"]["stdout"]["enum"] == [
         "empty",
@@ -603,6 +607,60 @@ def test_json_mode_client_requests_json_schema():
         "any",
     ]
     assert payload["options"]["num_predict"] == 900
+    assert payload["keep_alive"] == -1
+
+
+def test_json_mode_client_retries_remote_disconnect():
+    client = OllamaStructuredClient(
+        "http://localhost:11434/v1", "test-model", request_attempts=2
+    )
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def read(self):
+            return json.dumps(
+                {
+                    "message": {"content": "{}"},
+                    "prompt_eval_count": 1,
+                    "eval_count": 1,
+                }
+            ).encode("utf-8")
+
+    with patch(
+        "src.phase1_5_shadow.json_model_client.urllib.request.urlopen",
+        side_effect=[http.client.RemoteDisconnected(), Response()],
+    ) as urlopen, patch("src.phase1_5_shadow.json_model_client.time.sleep"):
+        result = client.chat([{"role": "user", "content": "test"}])
+
+    assert result.content == "{}"
+    assert urlopen.call_count == 2
+
+
+def test_json_mode_client_reports_http_error_body_after_retries():
+    client = OllamaStructuredClient(
+        "http://localhost:11434/v1", "test-model", request_attempts=2
+    )
+
+    def http_error():
+        return urllib.error.HTTPError(
+            "http://localhost:11434/api/chat",
+            500,
+            "Internal Server Error",
+            {},
+            io.BytesIO(b'{"error":"structured generation failed"}'),
+        )
+
+    with patch(
+        "src.phase1_5_shadow.json_model_client.urllib.request.urlopen",
+        side_effect=[http_error(), http_error()],
+    ), patch("src.phase1_5_shadow.json_model_client.time.sleep"):
+        with pytest.raises(JSONModelRequestError, match="structured generation failed"):
+            client.chat([{"role": "user", "content": "test"}])
 
 
 def test_collection_audit_does_not_claim_accuracy(tmp_path):

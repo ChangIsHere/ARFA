@@ -1,0 +1,49 @@
+{
+  "phase": "phase3_llama_24gb_development_core",
+  "run_id": "nrp-llama-24gb-development",
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_memory_mib": 24576,
+    "resident_memory_mib": 9227,
+    "driver": "615.71.09",
+    "cuda": "13.4",
+    "ollama": "0.34.1"
+  },
+  "models": {
+    "fast": "arfa-llama3.2:3b-8k",
+    "slow": "arfa-llama3.1:8b-8k",
+    "fast_base_id": "a80c4f17acd5",
+    "slow_base_id": "46e0c10c039e",
+    "context_length": 8192,
+    "keep_alive": -1
+  },
+  "task_count_per_policy": 100,
+  "total_task_policy_runs": 300,
+  "policies": [
+    "residual",
+    "always_slow",
+    "always_fast"
+  ],
+  "config_sha256": "e5662a5742fe55e643609cd98d229d91bb06269773fef771187a52dbd52fd360",
+  "evaluator_source_sha256": "e85d9022bde25ca45744d8800e956b574f996e8487c0e2f85a47280462779c15",
+  "analysis_source_sha256": "8fcd20f6aa940b5406f10b7f705174f21899053b798f164533c97e8b4819cf09",
+  "analysis_sha256": "6ab106c9b29050b3f56df3d88ec8f11b0aa8858de82fa104484e6e43673eb12d",
+  "published_metrics_sha256": {
+    "residual": "90cfa758403aa14eacdc4e3e62712b3858f73cdd7eec97651c8657ade4f3d946",
+    "always_slow": "588b2318eef4e29f1d1cbfd1313f3b7b3d7fe305e4229192816a83d587d07779",
+    "always_fast": "d58c57a8b170dc7620a5b270b5105341292401f94362d3c4a478b21dc6f9d1a2"
+  },
+  "raw_trace_sha256": {
+    "residual": "abdfe9005044ccb547b146a8db9b5982a3fc9e8922f0257bbba68c7145886b47",
+    "always_slow": "ec2d93ebd83f165a24305c1ec4a9258d3b04c204fe417c62717dbd1373407760",
+    "always_fast": "f39e765b3220c8c5950bc4771de9eb84a15343f684ed07d8fd5619e09b76829b"
+  },
+  "environment_error_counts": {
+    "residual": 0,
+    "always_slow": 0,
+    "always_fast": 2
+  },
+  "complete": true,
+  "reserved_final_split_opened": false,
+  "superseded_partial_run_isolated": true
+}

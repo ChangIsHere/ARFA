@@ -1,0 +1,76 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: arfa-gpu-smoke-a100-80gb
+  namespace: ucr-qzhang
+  labels:
+    app.kubernetes.io/name: arfa
+    app.kubernetes.io/component: gpu-smoke-test
+    arfa.run-id: nrp-infra-20261005-a100
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 900
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: arfa
+        app.kubernetes.io/component: gpu-smoke-test
+        arfa.run-id: nrp-infra-20261005-a100
+    spec:
+      priorityClassName: opportunistic
+      restartPolicy: Never
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                      - NVIDIA-A100-80GB-PCIe
+                      - NVIDIA-A100-SXM4-80GB
+      containers:
+        - name: nvidia-smi
+          image: nvidia/cuda:12.8.1-base-ubuntu22.04
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - -lc
+          args:
+            - |
+              set -euo pipefail
+              echo "run_id=nrp-infra-20261005-a100"
+              echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              echo "node_name=${NODE_NAME}"
+              echo "pod_name=${POD_NAME}"
+              echo "--- nvidia-smi query ---"
+              nvidia-smi --query-gpu=index,name,uuid,memory.total,memory.free,driver_version --format=csv,noheader
+              echo "--- nvidia-smi full ---"
+              nvidia-smi
+              echo "--- CPU ---"
+              lscpu
+              echo "--- RAM ---"
+              cat /proc/meminfo
+              echo "--- OS ---"
+              cat /etc/os-release
+              echo "completed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          resources:
+            requests:
+              cpu: "2"
+              memory: 4Gi
+              ephemeral-storage: 4Gi
+              nvidia.com/a100: "1"
+            limits:
+              cpu: "2"
+              memory: 4Gi
+              ephemeral-storage: 4Gi
+              nvidia.com/a100: "1"

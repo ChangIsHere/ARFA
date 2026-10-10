@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arfa-gemma-residency-config
+  namespace: ucr-qzhang
+  labels:
+    app.kubernetes.io/name: arfa
+    app.kubernetes.io/component: gemma-residency
+data:
+  Modelfile.gemma3-4b-8k: |
+    FROM gemma3:4b
+    PARAMETER num_ctx 8192
+  Modelfile.gemma3-12b-8k: |
+    FROM gemma3:12b
+    PARAMETER num_ctx 8192
+  serve_gemma.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    RUN_ROOT="/workspace/runs/${ARFA_RUN_ID}"
+    ENV_ROOT="${RUN_ROOT}/environment"
+    mkdir -p "${ENV_ROOT}" "${RUN_ROOT}/checkpoints" "${RUN_ROOT}/raw_traces" "${RUN_ROOT}/results"
+
+    cleanup() {
+      if [[ -n "${OLLAMA_PID:-}" ]]; then
+        kill "${OLLAMA_PID}" 2>/dev/null || true
+        wait "${OLLAMA_PID}" 2>/dev/null || true
+      fi
+    }
+    trap cleanup EXIT
+
+    ollama serve > "${ENV_ROOT}/ollama-server.log" 2>&1 &
+    OLLAMA_PID=$!
+    for _ in $(seq 1 120); do
+      if ollama list >/dev/null 2>&1; then break; fi
+      sleep 1
+    done
+    ollama list >/dev/null
+
+    ollama pull gemma3:4b
+    ollama pull gemma3:12b
+    ollama create arfa-gemma3:4b-8k -f /opt/arfa/Modelfile.gemma3-4b-8k
+    ollama create arfa-gemma3:12b-8k -f /opt/arfa/Modelfile.gemma3-12b-8k
+
+    BASE4_ID=$(ollama list | awk '$1 == "gemma3:4b" {print $2}')
+    BASE12_ID=$(ollama list | awk '$1 == "gemma3:12b" {print $2}')
+    ARFA4_ID=$(ollama list | awk '$1 == "arfa-gemma3:4b-8k" {print $2}')
+    ARFA12_ID=$(ollama list | awk '$1 == "arfa-gemma3:12b-8k" {print $2}')
+    [[ "${BASE4_ID}" == "a2af6cc3eb7f" ]]
+    [[ "${BASE12_ID}" == "f4031aab637d" ]]
+    MODELFILE4_SHA=$(sha256sum /opt/arfa/Modelfile.gemma3-4b-8k | awk '{print $1}')
+    MODELFILE12_SHA=$(sha256sum /opt/arfa/Modelfile.gemma3-12b-8k | awk '{print $1}')
+    [[ "${MODELFILE4_SHA}" == "9284d025dd29c8d6441d725f203a6750e8c52178659361cf84dd3cccd2d6eec6" ]]
+    [[ "${MODELFILE12_SHA}" == "20eff88e25ac889e44481b29a28b68c5da3f347e658935b06ff6c09c17ee1296" ]]
+
+    cat > "${ENV_ROOT}/model-identity.txt" <<EOF
+    base_4b_id=${BASE4_ID}
+    base_12b_id=${BASE12_ID}
+    nrp_alias_4b_id=${ARFA4_ID}
+    nrp_alias_12b_id=${ARFA12_ID}
+    modelfile_4b_sha256=${MODELFILE4_SHA}
+    modelfile_12b_sha256=${MODELFILE12_SHA}
+    EOF
+    ollama list > "${ENV_ROOT}/ollama-model-list.txt"
+    ollama show arfa-gemma3:4b-8k > "${ENV_ROOT}/model-show-4b.txt"
+    ollama show arfa-gemma3:12b-8k > "${ENV_ROOT}/model-show-12b.txt"
+    ollama --version > "${ENV_ROOT}/ollama-version.txt"
+    nvidia-smi -q > "${ENV_ROOT}/nvidia-smi-full.txt"
+
+    ollama run arfa-gemma3:4b-8k "Respond with exactly: OK" > /tmp/arfa-warm-4b.txt
+    ollama run arfa-gemma3:12b-8k "Respond with exactly: OK" > /tmp/arfa-warm-12b.txt
+    RESIDENT_MODELS=$(ollama ps)
+    printf '%s\n' "${RESIDENT_MODELS}" | tee "${ENV_ROOT}/ollama-ps-ready.txt"
+    grep -q 'arfa-gemma3:4b-8k' <<< "${RESIDENT_MODELS}"
+    grep -q 'arfa-gemma3:12b-8k' <<< "${RESIDENT_MODELS}"
+    nvidia-smi --query-gpu=index,name,uuid,memory.total,memory.used,memory.free,driver_version \
+      --format=csv,noheader > "${ENV_ROOT}/nvidia-smi-ready.csv"
+    touch /tmp/arfa-ready
+
+    wait "${OLLAMA_PID}"

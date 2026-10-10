@@ -17,7 +17,10 @@ Engineering readiness for a guarded exploratory Phase 3 pilot. This is not a dep
 - Complete blind annotation items: 751
 - Full residual held-out ROC-AUC: 0.743
 - Full residual gain over expectation-gate-only: 0.124
-- Phase 2 always-reason baseline: 600/600 runs
+- Phase 2 always-reason snapshot at that time: 600/600 runs
+
+This historical count predates the completed eight-model, 1,600-run Phase 2
+characterization and is not the current Phase 2 total.
 
 ## Review Provenance
 

@@ -1,0 +1,18 @@
+captured_at_utc=2026-10-08T08:06:31Z
+git_commit=cf97d0592e7a731c216ca4e729ec07d1e8d6d944
+git_worktree_dirty=true
+job=arfa-gemma-high-memory-inference-run
+pod=arfa-gemma-high-memory-inference-run-7jbxc
+node=rci-tide-gpu-03.sdsu.edu
+pod_uid=cc6595f7-d4d9-4fcf-9b4d-553ddad50ebc
+image=docker.io/ollama/ollama:0.34.1
+image_id=docker.io/ollama/ollama@sha256:0c0a83210471fb50226bcdc2d6611d20ab13ae87e024cc304c94a6a5765c5e65
+Python 3.10.11
+Name: PyYAML
+Version: 6.0.3
+sha256:
+bb66effe6212cce6e6a032a06d5678b88283aa465d581f3ef4f06b8c5267e029  config/phase3_arfa_nrp_gemma_high_memory.yaml
+1ab22097bfa4908abe1f114012c319cb9873e0c837dcfdaa108c85a8e0e80565  deployment/nrp/22-gemma-configmap.yaml
+197e9ffb10808e9b806d05e131170875446bfe5e3f8e1e70bf853954b387d2e3  deployment/nrp/50-gemma-high-memory-inference-service.yaml
+f78d78e642b8534f63519cefe3862b564da95b5a322db7286bb6ed309a0613f4  deployment/nrp/run_gemma_high_memory_matrix.sh
+e3bd49c67bf707e9b06a11864c38b56202f3145769a29d35312d3ef8cf2d9274  deployment/nrp/gpu_job_lib.sh

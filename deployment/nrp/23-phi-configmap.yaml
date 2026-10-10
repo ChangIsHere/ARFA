@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arfa-phi-residency-config
+  namespace: ucr-qzhang
+  labels:
+    app.kubernetes.io/name: arfa
+    app.kubernetes.io/component: phi-residency
+data:
+  Modelfile.phi4-mini-3.8b-8k: |
+    FROM phi4-mini:3.8b
+    PARAMETER num_ctx 8192
+  Modelfile.phi4-14b-8k: |
+    FROM phi4:14b
+    PARAMETER num_ctx 8192
+  serve_phi.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    RUN_ROOT="/workspace/runs/${ARFA_RUN_ID}"
+    ENV_ROOT="${RUN_ROOT}/environment"
+    mkdir -p "${ENV_ROOT}" "${RUN_ROOT}/checkpoints" "${RUN_ROOT}/raw_traces" "${RUN_ROOT}/results"
+
+    cleanup() {
+      if [[ -n "${OLLAMA_PID:-}" ]]; then
+        kill "${OLLAMA_PID}" 2>/dev/null || true
+        wait "${OLLAMA_PID}" 2>/dev/null || true
+      fi
+    }
+    trap cleanup EXIT
+
+    ollama serve > "${ENV_ROOT}/ollama-server.log" 2>&1 &
+    OLLAMA_PID=$!
+    for _ in $(seq 1 120); do
+      if ollama list >/dev/null 2>&1; then break; fi
+      sleep 1
+    done
+    ollama list >/dev/null
+
+    ollama pull phi4-mini:3.8b
+    ollama pull phi4:14b
+    ollama create arfa-phi4-mini:3.8b-8k -f /opt/arfa/Modelfile.phi4-mini-3.8b-8k
+    ollama create arfa-phi4:14b-8k -f /opt/arfa/Modelfile.phi4-14b-8k
+
+    BASE_MINI_ID=$(ollama list | awk '$1 == "phi4-mini:3.8b" {print $2}')
+    BASE14_ID=$(ollama list | awk '$1 == "phi4:14b" {print $2}')
+    ARFA_MINI_ID=$(ollama list | awk '$1 == "arfa-phi4-mini:3.8b-8k" {print $2}')
+    ARFA14_ID=$(ollama list | awk '$1 == "arfa-phi4:14b-8k" {print $2}')
+    [[ "${BASE_MINI_ID}" == "78fad5d182a7" ]]
+    [[ "${BASE14_ID}" == "ac896e5b8b34" ]]
+    [[ "${ARFA_MINI_ID}" == "48d9a121d662" ]]
+    [[ "${ARFA14_ID}" == "8877708d24c0" ]]
+    MODELFILE_MINI_SHA=$(sha256sum /opt/arfa/Modelfile.phi4-mini-3.8b-8k | awk '{print $1}')
+    MODELFILE14_SHA=$(sha256sum /opt/arfa/Modelfile.phi4-14b-8k | awk '{print $1}')
+    [[ "${MODELFILE_MINI_SHA}" == "ea7d0f0058f4b25e4df7933b8cbdbaa0ba5fca317e9e134b4ea0af1648a2a7ac" ]]
+    [[ "${MODELFILE14_SHA}" == "7fff3b28ece81e4b502ceffc109b2cf31f4c4a10d74b9420db7b05127d0e7298" ]]
+
+    cat > "${ENV_ROOT}/model-identity.txt" <<EOF
+    base_mini_id=${BASE_MINI_ID}
+    base_14b_id=${BASE14_ID}
+    nrp_alias_mini_id=${ARFA_MINI_ID}
+    nrp_alias_14b_id=${ARFA14_ID}
+    modelfile_mini_sha256=${MODELFILE_MINI_SHA}
+    modelfile_14b_sha256=${MODELFILE14_SHA}
+    EOF
+    ollama list > "${ENV_ROOT}/ollama-model-list.txt"
+    ollama show arfa-phi4-mini:3.8b-8k > "${ENV_ROOT}/model-show-mini.txt"
+    ollama show arfa-phi4:14b-8k > "${ENV_ROOT}/model-show-14b.txt"
+    ollama --version > "${ENV_ROOT}/ollama-version.txt"
+    nvidia-smi -q > "${ENV_ROOT}/nvidia-smi-full.txt"
+
+    ollama run arfa-phi4-mini:3.8b-8k "Respond with exactly: OK" > /tmp/arfa-warm-mini.txt
+    ollama run arfa-phi4:14b-8k "Respond with exactly: OK" > /tmp/arfa-warm-14b.txt
+    RESIDENT_MODELS=$(ollama ps)
+    printf '%s\n' "${RESIDENT_MODELS}" | tee "${ENV_ROOT}/ollama-ps-ready.txt"
+    grep -q 'arfa-phi4-mini:3.8b-8k' <<< "${RESIDENT_MODELS}"
+    grep -q 'arfa-phi4:14b-8k' <<< "${RESIDENT_MODELS}"
+    nvidia-smi --query-gpu=index,name,uuid,memory.total,memory.used,memory.free,driver_version \
+      --format=csv,noheader > "${ENV_ROOT}/nvidia-smi-ready.csv"
+    touch /tmp/arfa-ready
+
+    wait "${OLLAMA_PID}"

@@ -1,18 +1,11 @@
-# Results Workspace
+# Local Results
 
-Generated experiment outputs are written here and are ignored by git by default.
+Generated traces and checkpoints are excluded from Git. Compact evidence used
+for writing is tracked under `evidence/` and `docs/phase2_writing_bundle/`.
 
-Current residual diagnostics combine the existing Phase 1.5 shadow traces. Export
-their numeric evidence without rerunning agents:
-
-```bash
-bash scripts/phase1_export_diagnostics.sh
-```
-
-The export is tracked under `evidence/residual_diagnostics/`. Original traces stay
-under `phase1_5_shadow/full/`; existing labels and analysis stay at their source
-paths. `phase1_residual/` holds the supplementary external-trajectory study and
-earlier pilot outputs. None of these historical results is silently overwritten.
-
-`phase2_baseline/` remains unchanged; its tracked compact package is
-`docs/phase2_writing_bundle/`. See the root README for the current writing order.
+Retained Phase 3 roots are the completed Qwen, Llama, Gemma, and Phi development
+runs under `phase3_arfa/nrp/`. Failed calibration attempts and superseded local
+debug runs are not retained. The Gemma residual trace from the initial threshold
+is stored as `traces.jsonl.gz` because one terminal observation made the
+uncompressed JSONL unusually large; the selected threshold trace remains in its
+calibration directory. Compression is lossless.

@@ -1,0 +1,154 @@
+"task_id","experiment_split","pair_name","policy","trajectory_workers","success","model_calls","fast_model_calls","slow_model_calls","fast_model_tokens","slow_model_tokens","total_tokens","model_latency_seconds","command_latency_seconds","router_latency_seconds","total_task_wall_seconds","termination_reason","max_steps_reached","parse_error_count","nonzero_exit_count","repeated_action_count","final_answer"
+"intercode-nl2bash-fs1-000","development","gemma","residual","16","False","3","1","2","1375","2415","3790","165.0167104580014","0.1366424999996525","1.916699875437189e-05","166.55065637500047","model_done","False","0","0","0","f32a3a97638afeb2ee2a15cfe335ab72"
+"intercode-nl2bash-fs1-001","development","gemma","residual","16","True","5","2","3","3284","4713","7997","323.75512554099987","0.2813675420002255","2.7333999241818674e-05","325.5239533749991","model_done","False","0","1","0",""
+"intercode-nl2bash-fs1-009","development","gemma","residual","16","False","2","0","2","","1762","1762","151.35338712400153","0.05850362499950279","9.666999176261015e-06","152.77031508300024","model_done","False","0","1","0","No"
+"intercode-nl2bash-fs1-010","development","gemma","residual","16","False","4","2","2","2794","2445","5239","230.40930845700132","0.2136449999998149","3.479100087133702e-05","232.36721645800026","model_done","False","0","1","0","true"
+"intercode-nl2bash-fs1-014","development","gemma","residual","16","False","2","1","1","1474","800","2274","52.681972207999934","0.10160054100015259","1.716699989628978e-05","54.37685316600073","model_done","False","0","0","0","4.3"
+"intercode-nl2bash-fs1-015","development","gemma","residual","16","False","3","1","2","1333","2528","3861","201.34975816599763","0.1766082499998447","4.29579995397944e-05","203.05233641700033","model_done","False","0","0","0","Files with 'FooBar' in their path under '/testbed/dir1' have been copied to '/testbed/dir3/subdir1/subsubdir1/tmp'."
+"intercode-nl2bash-fs1-016","development","gemma","residual","16","False","5","1","4","1576","4904","6480","432.12395029300205","0.31777504200181284","6.437499905587174e-05","434.0691062090009","model_done","False","0","3","0",""
+"intercode-nl2bash-fs1-021","development","gemma","residual","16","False","2","1","1","1145","760","1905","124.40739974999997","0.07989124999949127","8.75000114319846e-06","126.25355808300083","model_done","False","0","0","0","10"
+"intercode-nl2bash-fs1-023","development","gemma","residual","16","False","2","1","1","1100","737","1837","81.37985933300115","0.03667479199975787","1.087500095309224e-05","83.10875779100024","model_done","False","0","0","0","1"
+"intercode-nl2bash-fs1-029","development","gemma","residual","16","True","8","1","7","2127","14573","16700","924.547064876002","0.5478575429988268","0.00013179100096749607","926.7345034590016","model_done","False","0","6","1","0"
+"intercode-nl2bash-fs1-031","development","gemma","residual","16","False","9","4","5","6198","7348","13546","694.627570126002","0.5823240410009021","9.929099906003103e-05","696.9602601670013","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs1-032","development","gemma","residual","16","False","3","1","2","1213","2297","3510","270.62047795800027","0.17468250000092667","3.2625001040287316e-05","272.5329380839994","model_done","False","0","0","0","The task could not be completed due to decompression errors. The following .gz files were found: /testbed/file1.gz /testbed/file2.gz"
+"intercode-nl2bash-fs1-033","development","gemma","residual","16","True","2","1","1","996","698","1694","65.70344775000012","0.07578000000103202","1.3082999430480413e-05","67.28537545899962","model_done","False","0","0","0","31"
+"intercode-nl2bash-fs1-034","development","gemma","residual","16","True","2","1","1","1092","730","1822","160.29792220799936","0.10856337500081281","3.883300087181851e-05","162.15029191699978","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-035","development","gemma","residual","16","True","2","1","1","1120","753","1873","116.70767650000016","0.0771482920008566","4.749999789055437e-06","118.51051079199897","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-038","development","gemma","residual","16","False","4","2","2","2765","2416","5181","264.7651399990009","0.26618470900029934","4.404299943416845e-05","266.6908255420003","model_done","False","0","1","0",""
+"intercode-nl2bash-fs1-040","development","gemma","residual","16","False","2","1","1","1084","717","1801","129.92272783299995","0.06884408299993083","9.375000445288606e-06","130.77996799999892","model_done","False","0","0","0","1"
+"intercode-nl2bash-fs1-045","development","gemma","residual","16","False","4","1","3","1604","3513","5117","388.8773826660017","0.2653093339995394","6.141700032458175e-05","390.07914554200033","model_done","False","0","1","0","/backup1.tar"
+"intercode-nl2bash-fs1-048","development","gemma","residual","16","False","2","1","1","1110","739","1849","132.61044283400042","0.05516683300083969","7.95800042396877e-06","133.37254233299973","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-050","development","gemma","residual","16","False","2","1","1","1096","713","1809","130.8017772080002","0.05878212500101654","7.917000402812846e-06","131.56010966599933","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-051","development","gemma","residual","16","False","3","1","2","1455","2452","3907","247.1262310839993","0.12083604200051923","1.6375000996049494e-05","248.08549704100005","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-052","development","gemma","residual","16","False","3","1","2","1435","1803","3238","237.20534675099952","0.1299239590007346","1.762500141921919e-05","238.0121533750007","model_done","False","0","1","0","The files containing 'Hello' are: /testbed/Hello.java, /testbed/dir1/AnotherHello.java, /testbed/Hello1.java"
+"intercode-nl2bash-fs1-055","development","gemma","residual","16","False","2","1","1","1077","709","1786","140.8569452920001","0.09646983299899148","1.5375000657513738e-05","161.73401924999962","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-057","development","gemma","residual","16","False","5","2","3","2422","3541","5963","384.711662583999","0.22224112600270018","3.6375999115989543e-05","385.76758020799934","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs1-058","development","gemma","residual","16","True","4","1","3","1565","3600","5165","414.5743056670017","0.23176404200057732","4.4874999730382115e-05","415.605336083001","model_done","False","0","2","0",""
+"intercode-nl2bash-fs2-000","development","gemma","residual","16","False","3","1","2","1175","2355","3530","265.5364950000021","0.17023616699952981","4.637500023818575e-05","266.38595991700095","model_done","False","0","0","0","/system/folder1/text3.txt:1:- e Hello!
+Another hello world file
+/system/folder1/text4.txt:1:Hello!
+/system/folder1/text4.txt:2:Another hello world file
+/system/folder1/text2.txt:1:Another hello world file"
+"intercode-nl2bash-fs2-005","development","gemma","residual","16","False","4","1","3","1503","4166","5669","425.4170472929982","0.24256833300023573","4.512400118983351e-05","426.48395116699976","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-007","development","gemma","residual","16","False","7","0","7","","10665","10665","962.4759266680012","0.55570116600029","0.0001477920031902613","963.7845011669997","repeated_action_stop","False","0","3","2",""
+"intercode-nl2bash-fs2-008","development","gemma","residual","16","True","2","0","2","","1706","1706","234.8911339999995","0.11475033299939241","2.366700027778279e-05","235.7687043749993","model_done","False","0","0","0","Task completed successfully."
+"intercode-nl2bash-fs2-009","development","gemma","residual","16","True","4","2","2","3153","2658","5811","302.69444291500076","0.22683524999956717","3.195799763489049e-05","303.8520105839998","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-011","development","gemma","residual","16","True","2","1","1","1024","713","1737","141.72381408399997","0.0934060830004455","3.8209000194910914e-05","142.51173233400004","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-012","development","gemma","residual","16","False","4","0","4","","5392","5392","528.144366833998","0.2339291240004968","4.2583000322338194e-05","529.0164291249985","repeated_action_stop","False","0","3","1",""
+"intercode-nl2bash-fs2-016","development","gemma","residual","16","True","2","1","1","992","691","1683","146.3241308329998","0.10354012500101817","3.949999882024713e-05","147.08801624999978","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-019","development","gemma","residual","16","False","2","1","1","1300","787","2087","153.26460116600174","0.09356750000006286","2.329199924133718e-05","154.05313725000087","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-020","development","gemma","residual","16","True","2","1","1","1069","726","1795","135.45670270799928","0.08396654200078046","4.149999949731864e-05","136.279744458001","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-021","development","gemma","residual","16","True","4","2","2","2218","2029","4247","251.48788358299862","0.26873424899895326","4.091700066055637e-05","252.46136400000069","model_done","False","0","0","0","Task completed."
+"intercode-nl2bash-fs2-022","development","gemma","residual","16","False","3","1","2","1298","2394","3692","272.81371362400023","0.17382333400200878","3.23330004903255e-05","273.82538479199866","model_done","False","0","0","0","output.csv"
+"intercode-nl2bash-fs2-025","development","gemma","residual","16","False","2","1","1","1249","805","2054","153.9287506660021","0.05735224999989441","1.1541998901520856e-05","154.72477504199924","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-026","development","gemma","residual","16","True","4","1","3","1541","3933","5474","394.73458629000197","0.2798881660019106","8.620900189271197e-05","395.762254416999","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-027","development","gemma","residual","16","False","3","1","2","1419","1868","3287","268.4338663749986","0.20425479100231314","5.8875999457086436e-05","269.532565083","model_done","False","0","0","0","Task completed."
+"intercode-nl2bash-fs2-029","development","gemma","residual","16","False","3","1","2","1345","1729","3074","286.2461623340005","0.12816866600223875","2.2042999262339436e-05","287.12238437499946","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-032","development","gemma","residual","16","True","3","1","2","1185","2193","3378","250.3902861669976","0.11512970900184882","1.970799894479569e-05","251.32872162500098","model_done","False","0","0","0","Files older than 31 days have been removed from /system."
+"intercode-nl2bash-fs2-033","development","gemma","residual","16","False","2","1","1","1041","708","1749","162.83864241600168","0.10027979199912807","1.9582999811973423e-05","163.63861183300105","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-034","development","gemma","residual","16","False","4","0","4","","4813","4813","498.3936053330017","0.21618141700128035","3.650000144261867e-05","499.36660058300004","model_done","False","0","3","1","/system directory does not exist."
+"intercode-nl2bash-fs2-038","development","gemma","residual","16","False","3","1","2","1216","2435","3651","268.1064507910014","0.1769047910001973","7.666700003028382e-05","269.10489575000065","model_done","False","0","0","0","144	/system
+48	/system/folder1
+44	/system/folder3
+20	/system/folder3/temp
+20	/system/folder2
+16	/system/folder3/temp/temp1
+16	/system/folder3/backup_dbg
+4	/system/text3.txt
+4	/system/text1.txt
+4	/system/temp"
+"intercode-nl2bash-fs2-040","development","gemma","residual","16","False","3","1","2","1065","2025","3090","247.89864566699907","0.1585449990016059","3.695799932756927e-05","248.86733416700008","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-043","development","gemma","residual","16","False","5","2","3","2895","4083","6978","425.5928275419992","0.3695326649994968","9.754100028658286e-05","426.65390170799947","model_done","False","0","2","0",""
+"intercode-nl2bash-fs2-044","development","gemma","residual","16","False","3","1","2","1593","1980","3573","247.51695979200122","0.1603245420010353","4.500099930737633e-05","248.4256642500004","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-045","development","gemma","residual","16","False","3","1","2","1136","2464","3600","244.99537995899846","0.128937291998227","1.5916999473120086e-05","246.01212037500045","model_done","False","0","0","0","All files in /system (excluding those with 'text' in their names) have been copied to /system/folder3/backup_dbg/backup."
+"intercode-nl2bash-fs2-047","development","gemma","residual","16","False","2","1","1","932","646","1578","131.7773742089994","0.061634541998500936","7.374999768217094e-06","132.54886370799977","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-048","development","gemma","residual","16","True","2","1","1","1204","705","1909","131.15191608299938","0.06398133400034567","7.917000402812846e-06","132.14131762500074","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-050","development","gemma","residual","16","True","2","0","2","","1700","1700","227.75300987599985","0.05899195799975132","1.6290998246404342e-05","228.57393475000026","model_done","False","0","0","0","Task completed successfully."
+"intercode-nl2bash-fs2-051","development","gemma","residual","16","False","4","2","2","3040","2789","5829","241.4325963329993","0.28617204099828086","5.833400246046949e-05","242.5261452499999","model_done","False","0","0","0","d41d8cd98f00b204e9800998ecf8427e"
+"intercode-nl2bash-fs3-000","development","gemma","residual","16","False","2","1","1","1052","712","1764","126.83289504200002","0.10920245899978909","1.7833001038525254e-05","127.77473270799965","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-001","development","gemma","residual","16","True","2","1","1","1017","669","1686","118.81635770799949","0.07030533400029526","1.8250000721309334e-05","119.5538387079996","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-004","development","gemma","residual","16","False","2","1","1","920","644","1564","96.88606350100054","0.07365137499982666","8.166000043274835e-06","97.8609487499998","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-009","development","gemma","residual","16","False","3","1","2","988","1934","2922","244.25148420799997","0.1443719159997272","3.34169999405276e-05","245.20412670800033","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs3-010","development","gemma","residual","16","True","2","1","1","1039","663","1702","117.95385779100252","0.09890149999955611","2.1500000002561137e-05","118.77975762499955","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-012","development","gemma","residual","16","False","3","1","2","1300","2227","3527","245.136513792002","0.20277099999839265","7.454200022039004e-05","246.06767137499992","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-013","development","gemma","residual","16","True","2","1","1","980","684","1664","128.23835950000102","0.10754199999973935","2.049999966402538e-05","129.1105474169999","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-014","development","gemma","residual","16","True","2","1","1","1045","716","1761","142.86105916700035","0.05362783300006413","2.329099879716523e-05","143.69111629200052","model_done","False","0","0","0","112K"
+"intercode-nl2bash-fs3-017","development","gemma","residual","16","True","2","1","1","908","632","1540","119.3284783329982","0.08196529199994984","1.0333000318496488e-05","120.10731750000014","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-018","development","gemma","residual","16","False","3","1","2","1031","1999","3030","226.15904791699904","0.19626462499945774","5.958299880148843e-05","227.1197845000006","model_done","False","0","1","0",""
+"intercode-nl2bash-fs3-019","development","gemma","residual","16","False","2","0","2","","1733","1733","213.7449296249997","0.10082291700018686","2.78329989669146e-05","214.62237929200091","model_done","False","0","0","0","All files in /workspace have been pruned."
+"intercode-nl2bash-fs3-021","development","gemma","residual","16","False","2","1","1","1216","695","1911","119.30005470799915","0.056907291000243276","1.966700074262917e-05","120.09833412499938","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-026","development","gemma","residual","16","False","3","0","3","","3284","3284","341.44293587500215","0.15765358400130935","3.4000999221461825e-05","342.40054724999936","model_done","False","0","1","0","The file 'foo' does not exist in /workspace."
+"intercode-nl2bash-fs3-028","development","gemma","residual","16","False","2","1","1","2012","736","2748","129.59355183300067","0.09186849999969127","3.279200063843746e-05","130.45185674999993","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-029","development","gemma","residual","16","False","2","1","1","1979","717","2696","127.46136774899969","0.05942424999921059","7.832999472157098e-06","128.30377541600137","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-031","development","gemma","residual","16","False","3","1","2","1288","2328","3616","254.77204345899736","0.16054345699922123","3.3165999411721714e-05","255.73266087499906","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs3-034","development","gemma","residual","16","False","2","1","1","1005","678","1683","116.45641041700037","0.1062934170004155","3.7042000258225016e-05","117.2482963329985","model_done","False","0","0","0","dir1, dir2"
+"intercode-nl2bash-fs3-037","development","gemma","residual","16","False","4","2","2","2462","2183","4645","244.26959370800068","0.23320262499873934","5.449899981613271e-05","245.26379783300035","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs3-038","development","gemma","residual","16","False","5","2","3","2888","3796","6684","398.11866875000305","0.2883950409996032","4.783400072483346e-05","399.0567229579992","model_done","False","0","2","0",""
+"intercode-nl2bash-fs3-039","development","gemma","residual","16","False","2","1","1","1002","689","1691","131.18177570899934","0.06790862500020012","8.541999704902992e-06","132.00342766699941","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs3-040","development","gemma","residual","16","False","5","2","3","2651","3624","6275","360.35412220800026","0.34007287500025996","8.829099897411652e-05","361.451920083","model_done","False","0","0","1","2"
+"intercode-nl2bash-fs3-045","development","gemma","residual","16","False","2","1","1","1084","706","1790","128.0001355839995","0.07763333299953956","9.790999683900736e-06","128.94529379100095","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-049","development","gemma","residual","16","False","2","1","1","3392","766","4158","131.83023475000118","0.17748916700111295","1.591700129210949e-05","132.7003843750008","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-050","development","gemma","residual","16","False","2","1","1","1056","698","1754","133.70814308300032","0.07076874999984284","8.666000212542713e-06","134.4535216660006","model_done","False","0","0","0","1%"
+"intercode-nl2bash-fs3-053","development","gemma","residual","16","False","3","1","2","1790","2266","4056","263.33596941700125","0.18774129200028256","4.624999928637408e-05","264.2459984590005","model_done","False","0","0","0","The symbolic link 'root' has been created in /workspace/dir1 pointing to '/'."
+"intercode-nl2bash-fs3-054","development","gemma","residual","16","False","2","1","1","2316","679","2995","138.02150312599952","0.09641141700012668","3.112499871349428e-05","138.8691587079993","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-055","development","gemma","residual","16","True","2","1","1","1037","694","1731","124.02468366700123","0.0867050000015297","5.8749992604134604e-06","124.98588650000056","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-056","development","gemma","residual","16","False","5","1","4","1671","5273","6944","452.4049084169983","0.36839775100270344","8.88760005182121e-05","453.5754549590001","model_done","False","0","1","0","The archive has been extracted, renamed, and split into 10MiB chunks."
+"intercode-nl2bash-fs3-057","development","gemma","residual","16","True","3","1","2","1398","1875","3273","255.12655820799955","0.12446579099741939","1.795800017134752e-05","255.9992376249993","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-058","development","gemma","residual","16","True","2","1","1","982","688","1670","122.96700370799954","0.076602291999734","8.41599830891937e-06","123.98263679200136","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-059","development","gemma","residual","16","False","2","1","1","988","685","1673","117.79023533400141","0.06483570799900917","9.958999726222828e-06","118.77822945900152","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-002","development","gemma","residual","16","False","2","0","2","","1810","1810","237.36065133299962","0.06799308300105622","9.790999683900736e-06","238.1992635000006","model_done","False","0","1","0","The 'c++' command was not found in the system's PATH."
+"intercode-nl2bash-fs4-003","development","gemma","residual","16","True","4","1","3","1288","2982","4270","321.9778592920011","0.21589745899836998","6.35010001133196e-05","322.8945484579999","model_done","False","0","2","0","www.google.com"
+"intercode-nl2bash-fs4-004","development","gemma","residual","16","True","2","1","1","1043","682","1725","131.68261549900126","0.0914884579997306","3.1208999644150026e-05","132.58266350000122","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-006","development","gemma","residual","16","True","4","2","2","2207","1945","4152","240.38096999900154","0.24908308400154056","6.97089999448508e-05","241.41647750000084","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-011","development","gemma","residual","16","False","11","3","8","4825","11826","16651","494.02105437499813","0.8335284580025473","0.00017212400234711822","495.74178454200046","repeated_action_stop","False","0","6","3",""
+"intercode-nl2bash-fs4-013","development","gemma","residual","16","True","2","1","1","959","675","1634","139.42884958399918","0.08511508299852721","1.762500141921919e-05","140.35584358400047","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-015","development","gemma","residual","16","False","2","1","1","944","660","1604","134.0788004999995","0.09478379100073653","6.0420006775530055e-06","134.94160216700038","model_done","False","0","0","0","98765432"
+"intercode-nl2bash-fs4-017","development","gemma","residual","16","False","3","1","2","1074","2039","3113","232.16254754199872","0.12138999999842781","2.2459002138930373e-05","232.9717949170008","model_done","False","0","0","0","HOSTNAME
+HOME"
+"intercode-nl2bash-fs4-019","development","gemma","residual","16","False","3","0","3","","3826","3826","312.64176154099914","0.22044633400037128","6.275099985941779e-05","313.6274884159993","model_done","False","0","2","0","The task cannot be completed because the hostname is unreachable."
+"intercode-nl2bash-fs4-020","development","gemma","residual","16","False","2","1","1","937","653","1590","131.41540220800016","0.0927939579996746","9.792000128072686e-06","132.29266349999853","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-021","development","gemma","residual","16","False","6","3","3","4420","4078","8498","319.5161880830001","0.3877134579979611","9.054199836100452e-05","320.7169693329997","model_done","False","0","0","1","The number of business days in October 2026 is 23."
+"intercode-nl2bash-fs4-022","development","gemma","residual","16","False","2","1","1","976","674","1650","127.19664220900086","0.09556075000000419","1.2292000974412076e-05","127.9939858329999","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs4-023","development","gemma","residual","16","False","5","0","5","","6998","6998","310.41267095799776","0.3638095419992169","6.783400021959096e-05","311.54431033400033","repeated_action_stop","False","0","4","1",""
+"intercode-nl2bash-fs4-024","development","gemma","residual","16","False","3","1","2","1065","2053","3118","176.0055922089996","0.18086741600200185","5.029199928685557e-05","176.99164229099915","model_done","False","0","0","0","root
+daemon
+bin
+sys
+adm
+tty
+disk
+lp
+mail
+news
+uucp
+man
+proxy
+kmem
+dialout
+fax
+voice
+cdrom
+floppy
+tape
+sudo
+audio
+dip
+www-data
+backup
+operator
+list
+irc
+src
+gnats
+shadow
+utmp
+video
+sasl
+plugdev
+staff
+games
+users
+nogroup
+crontab"
+"intercode-nl2bash-fs4-025","development","gemma","residual","16","False","2","1","1","1106","734","1840","132.88676104200022","0.05946541699995578","9.625000529922545e-06","133.64305991700166","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-026","development","gemma","residual","16","True","4","1","3","1446","3279","4725","223.63473508300194","0.22400458400079515","3.6541998269967735e-05","224.71503054099958","model_done","False","0","2","0","55"

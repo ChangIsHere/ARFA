@@ -1,0 +1,28 @@
+{
+  "phase": "phase3_qwen_h100_development_core",
+  "run_id": "nrp-qwen-h100-development",
+  "hardware": "NVIDIA H100 80GB HBM3",
+  "task_count_per_policy": 100,
+  "total_task_policy_runs": 300,
+  "policies": [
+    "residual",
+    "always_slow",
+    "always_fast"
+  ],
+  "config_sha256": "da2dd6e11328e66b2e0f7462c94c0dc2ab8676d35951138b92f4200fd985d595",
+  "analysis_source_sha256": "8fcd20f6aa940b5406f10b7f705174f21899053b798f164533c97e8b4819cf09",
+  "analysis_sha256": "2eb46dd9d5bbd253f515ff09637e3f5b2e31c5f1fe65d22f83af3ed288028cee",
+  "published_metrics_sha256": {
+    "residual": "c33db7a88069b445183abc02dfcb2aec3edd931d561c4bbb75c392c0b52af083",
+    "always_slow": "50470c5628f0966e867d28f1ba785bc92d048fa5174ecdd5be4f1d4c7ae82e37",
+    "always_fast": "f32255c8d788c8d1506424a3c0862b0d5afa953bc7b5e02143ddc2a138dfd8bf"
+  },
+  "raw_trace_sha256": {
+    "residual": "10886b5c41996f7cabdbcce921108eea34bd8a47f5ed42d3d61751844a28e79f",
+    "always_slow": "2ea7de168fffadc7a97178f964339ba1d1c9d87a7d7d5c4e7611442a9b2417b1",
+    "always_fast": "7da7e35bbb6455d02932792cd8f58afe6a786ab074a7628d3cc9b29e3d2d71a7"
+  },
+  "complete": true,
+  "reserved_final_split_opened": false,
+  "previous_mac_results_deleted": false
+}

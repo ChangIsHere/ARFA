@@ -1,9 +1,9 @@
-# Residual Diagnostics: Combined Phase 1 / 1.5
+# Phase 1.5 Residual Diagnostics
 
 ## Purpose
 
-The original external-trajectory Phase 1 is now supplementary. The main diagnostic
-study uses the Phase 1.5 shadow collection: the agent commits its expectation
+The original external-trajectory prototype was an implementation check. The paper
+diagnostic uses the Phase 1.5 shadow collection: the agent commits its expectation
 before the command executes but continues to reason after each observation.
 This measures the signal without changing the agent's policy.
 
@@ -19,7 +19,6 @@ support proceeding to Phase 3 without asserting reliable agent control.
 
 ## Data And Score Locations
 
-- Original external Phase 1 scores: `results/phase1_residual/final/residual_scores.csv`.
 - Original online-committed shadow scores:
   `results/phase1_5_shadow/full/<model>/<split>/traces.jsonl`, in each executed step's
   `structured_residual`, `residual_checks`, `expectation_quality`, and `shadow_decision`.
@@ -142,9 +141,8 @@ model-specific calibration, instead of assuming one threshold transfers.
 They also identify what remains to establish: incremental online value beyond
 observation-only and commitment-only controls.
 
-The useful narrative is diagnostic signal and limitations, then baseline cost,
-then a controlled online experiment. The current results do not establish
-irreplacability, safe skipping, savings, or causal model selection. See
+The paper uses these diagnostics to motivate the online comparison. These results
+alone do not establish safe skipping, savings, or causal model selection. See
 [constraints](residual_constraints.md) and [Phase 3](04_phase3_arfa_dual_track.md).
 
 ## Association With Reviewed Labels

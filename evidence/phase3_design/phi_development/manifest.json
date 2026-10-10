@@ -1,0 +1,39 @@
+{
+  "phase": "phase3_phi_development_diagnostic",
+  "run_id": "nrp-phi-high-memory-parallel4-workers16-development",
+  "selection": {
+    "split": "development",
+    "reported_residual_threshold": 0.15,
+    "selection_source": "evidence/phase3_design/phi_high_memory_parallel4_calibration/threshold_calibration.json",
+    "passed_selection_rule": false,
+    "held_out": false
+  },
+  "hardware": {
+    "gpu": "NVIDIA L40",
+    "gpu_memory_mib": 46068,
+    "driver": "615.71.09",
+    "ollama": "0.34.1",
+    "trajectory_workers": 16,
+    "ollama_parallel_sequences": 4
+  },
+  "models": {
+    "fast": "arfa-phi4-mini:3.8b-8k",
+    "slow": "arfa-phi4:14b-8k",
+    "context_length": 8192,
+    "keep_alive": -1
+  },
+  "task_count_per_policy": 100,
+  "complete": true,
+  "reserved_final_split_opened": false,
+  "analysis_sha256": "65aa7359db2a0a643eedf12b4326131702e61c0c2bbaddbe17994ca839fa0eb3",
+  "published_metrics_sha256": {
+    "residual": "d94dc5876936fed3c9344a347480754a0aab742d957a20f57647335123b26494",
+    "always_slow": "83cda058087ee3fce203aaefc97348d600aa7392501e81ddc2a76806079eea7f",
+    "always_fast": "80bf851a49dc65bce2171cfb758640e267eec8a13e6695bd34485ecc0a3c3ad5"
+  },
+  "raw_trace_sha256": {
+    "residual_threshold_0_15": "7f406c6b5acb91f88b46768efb176abb524e939a44f33c25edfe00e8ed5bdbc0",
+    "always_slow": "0452aa9f712fc068c962266369f01b4c85100172b8069e8cf22ec043671f5842",
+    "always_fast": "0667be09dd1eb356cba526b95898e59242fab2b64e7ff17212fbb37a2b4b95d6"
+  }
+}

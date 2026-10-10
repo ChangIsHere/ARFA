@@ -4,6 +4,7 @@ import math
 import re
 import shlex
 import subprocess
+import tempfile
 import uuid
 from pathlib import Path
 from typing import Any
@@ -82,8 +83,24 @@ class InterCodeDockerEnvironment:
             gold_output_parts.append(stdout + stderr)
         gold_output = "".join(gold_output_parts)
 
-        agent_diff = self._git_status(self.agent_container)
-        eval_diff = self._git_status(self.eval_container)
+        git_restored = False
+        try:
+            agent_diff = self._git_status(self.agent_container)
+        except RuntimeError as initial_error:
+            try:
+                self._restore_git_from_reference()
+                agent_diff = self._git_status(self.agent_container)
+                git_restored = True
+            except RuntimeError as recovery_error:
+                return self._evaluation_error(
+                    gold_output,
+                    gold_exit_codes,
+                    f"{initial_error}; recovery failed: {recovery_error}",
+                )
+        try:
+            eval_diff = self._git_status(self.eval_container)
+        except RuntimeError as error:
+            return self._evaluation_error(gold_output, gold_exit_codes, str(error))
         diff_miss = sorted(set(eval_diff) - set(agent_diff))
         diff_extra = sorted(set(agent_diff) - set(eval_diff))
         p1_score = round(0.33 * (1 - math.erf(len(diff_miss) + len(diff_extra))), 2)
@@ -117,6 +134,47 @@ class InterCodeDockerEnvironment:
             "agent_observation": self.last_raw_output[: self.max_observation_chars],
             "gold_observation": gold_output[: self.max_observation_chars],
             "gold_exit_codes": gold_exit_codes,
+            "evaluator_git_restored": git_restored,
+        }
+
+    def _restore_git_from_reference(self) -> None:
+        """Restore evaluator tooling if an agent action removed the Git binary."""
+        with tempfile.TemporaryDirectory(prefix="arfa-evaluator-") as directory:
+            local_git = Path(directory) / "git"
+            commands = (
+                ["docker", "cp", f"{self.eval_container}:/usr/bin/git", str(local_git)],
+                ["docker", "cp", str(local_git), f"{self.agent_container}:/usr/bin/git"],
+                ["docker", "exec", self.agent_container, "chmod", "0755", "/usr/bin/git"],
+            )
+            for command in commands:
+                completed = subprocess.run(
+                    command,
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    timeout=30,
+                )
+                if completed.returncode != 0:
+                    raise RuntimeError(
+                        f"Evaluator tool recovery failed ({completed.returncode}): "
+                        f"{completed.stderr.strip()}"
+                    )
+
+    def _evaluation_error(
+        self,
+        gold_output: str,
+        gold_exit_codes: list[int],
+        error: str,
+    ) -> dict[str, Any]:
+        return {
+            "success": False,
+            "reward": 0.0,
+            "kind": "intercode_official_reward_reimplementation_environment_error",
+            "error": error,
+            "agent_observation": self.last_raw_output[: self.max_observation_chars],
+            "gold_observation": gold_output[: self.max_observation_chars],
+            "gold_exit_codes": gold_exit_codes,
+            "evaluator_git_restored": False,
         }
 
     def _start_container(self, name: str, memory: str, network_mode: str) -> None:
@@ -145,6 +203,9 @@ class InterCodeDockerEnvironment:
             raise RuntimeError(f"Failed to start {self.image}: {completed.stderr.strip()}")
 
     def _exec_action(self, container: str, action: str, agent: bool) -> tuple[int, str, str]:
+        if "\x00" in action:
+            return 126, "", "Invalid command: NUL byte is not allowed."
+
         workdir = self.workdir if agent else self.eval_workdir
         command = (
             "ulimit -f 20480; "
@@ -182,13 +243,16 @@ class InterCodeDockerEnvironment:
     @staticmethod
     def _git_status(container: str) -> list[tuple[str, str]]:
         completed = subprocess.run(
-            ["docker", "exec", "--workdir", "/", container, "git", "status", "--short"],
+            ["docker", "exec", "--workdir", "/", container, "/usr/bin/git", "status", "--short"],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             timeout=30,
-            check=True,
         )
+        if completed.returncode != 0:
+            raise RuntimeError(
+                f"Git status failed in {container} ({completed.returncode}): {completed.stderr.strip()}"
+            )
         rows: list[tuple[str, str]] = []
         for line in completed.stdout.splitlines():
             if len(line) < 4:

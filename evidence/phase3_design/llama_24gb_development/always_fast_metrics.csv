@@ -1,0 +1,130 @@
+"task_id","experiment_split","pair_name","policy","success","model_calls","fast_model_calls","slow_model_calls","fast_model_tokens","slow_model_tokens","total_tokens","model_latency_seconds","command_latency_seconds","router_latency_seconds","total_task_wall_seconds","termination_reason","max_steps_reached","parse_error_count","nonzero_exit_count","repeated_action_count","final_answer"
+"intercode-nl2bash-fs1-000","development","llama","always_fast","False","6","6","0","7585","","7585","6.051777082961053","0.45256837585475296","8.103996515274048e-05","7.094951750012115","model_done","False","0","2","1","task not possible"
+"intercode-nl2bash-fs1-001","development","llama","always_fast","False","4","4","0","4322","","4322","4.398712415015325","0.20871933293528855","2.8792070224881172e-05","5.232091499958187","model_done","False","0","0","0","554dabec0426782fd50488f8e7d30a8a"
+"intercode-nl2bash-fs1-009","development","llama","always_fast","False","10","10","0","19473","","19473","9.193247750983573","0.6213504587067291","0.0001209599431604147","10.412188375019468","repeated_action_stop","False","0","5","4",""
+"intercode-nl2bash-fs1-010","development","llama","always_fast","False","10","10","0","22660","","22660","11.41463383298833","0.6811475839931518","0.00019237410742789507","12.76443974999711","model_done","False","0","5","0","The contents of /testbed/dir3/subdir1/subsubdir1/textfile3.txt is a subset of /testbed/dir2/subdir1/textfile2.txt"
+"intercode-nl2bash-fs1-014","development","llama","always_fast","False","12","12","0","48618","","48618","16.580789416912012","4.32495899789501","0.0001902088988572359","21.58587037504185","max_steps","True","0","7","1",""
+"intercode-nl2bash-fs1-015","development","llama","always_fast","False","2","2","0","1611","","1611","3.034172000014223","0.09556620893999934","3.0791969038546085e-05","3.805471083964221","model_done","False","0","0","0","All files copied successfully"
+"intercode-nl2bash-fs1-016","development","llama","always_fast","False","5","5","0","7264","","7264","4.701495875953697","0.3946169991977513","9.895907714962959e-05","5.801138332928531","model_done","False","0","0","0","Testbed exited successfully."
+"intercode-nl2bash-fs1-021","development","llama","always_fast","False","2","2","0","1452","","1452","2.0019470418337733","0.13302887498866767","1.1041993275284767e-05","2.8431468330090865","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs1-023","development","llama","always_fast","False","7","7","0","11310","","11310","7.7914128308184445","0.571557248942554","8.91669187694788e-05","8.997367459000088","model_done","False","0","1","1","1"
+"intercode-nl2bash-fs1-029","development","llama","always_fast","False","10","10","0","27199","","27199","10.365859207347967","20.776814291952178","0.00023675011470913887","31.851138375001028","model_done","False","0","5","2","0"
+"intercode-nl2bash-fs1-031","development","llama","always_fast","False","3","3","0","2591","","2591","3.1977086670231074","0.2088822500081733","5.6832912378013134e-05","4.067134292097762","model_done","False","0","0","0","30"
+"intercode-nl2bash-fs1-032","development","llama","always_fast","False","11","11","0","22374","","22374","11.872741209692322","0.8187569580040872","0.00019200006499886513","13.344298125011846","repeated_action_stop","False","0","8","2",""
+"intercode-nl2bash-fs1-033","development","llama","always_fast","False","5","5","0","6969","","6969","4.638138332986273","0.42346995789557695","0.00011295790318399668","5.7594147499185055","model_done","False","0","1","0","Total files: 23629"
+"intercode-nl2bash-fs1-034","development","llama","always_fast","False","8","8","0","11957","","11957","8.074423333862796","60.71762812277302","0.00017612706869840622","69.50329550006427","model_done","False","0","4","1","1 /testbed/hello.php 2 /testbed/dir1/info.php"
+"intercode-nl2bash-fs1-035","development","llama","always_fast","False","4","4","0","4248","","4248","4.202492999029346","0.2978087079245597","7.287401240319014e-05","5.186345082940534","model_done","False","0","0","0","The PHP files in /testbed are: 2 total, 1 /testbed/hello.php, 1 /testbed/dir1/info.php"
+"intercode-nl2bash-fs1-038","development","llama","always_fast","False","5","5","0","9742","","9742","6.392074252129532","0.5299635818228126","8.891592733561993e-05","7.583573832991533","model_done","False","0","0","0","Task is impossible, /etc/networks file not found in any parent directory"
+"intercode-nl2bash-fs1-040","development","llama","always_fast","False","5","5","0","5425","","5425","4.639744166168384","0.25542854180093855","3.8041966035962105e-05","5.605098999920301","model_done","False","0","1","0","1"
+"intercode-nl2bash-fs1-045","development","llama","always_fast","False","12","12","0","29652","","29652","14.729034417308867","0.9322059170808643","0.00017841614317148924","16.27048270800151","max_steps","True","0","12","3",""
+"intercode-nl2bash-fs1-048","development","llama","always_fast","False","6","6","0","7656","","7656","6.549302667961456","0.4945028320653364","0.0001225419109687209","7.651207042043097","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs1-050","development","llama","always_fast","False","4","4","0","4152","","4152","4.604676541988738","0.20653629314620048","2.9709073714911938e-05","5.396312874974683","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs1-051","development","llama","always_fast","False","2","2","0","1450","","1450","2.322507666889578","0.06157070794142783","9.00006853044033e-06","2.985448000021279","model_done","False","0","0","0","The largest file size is the size of the largest file in /testbed."
+"intercode-nl2bash-fs1-052","development","llama","always_fast","False","6","6","0","8101","","8101","6.31237037491519","0.4142165839439258","6.299908272922039e-05","7.332026417017914","model_done","False","0","3","1","Found .java files with 'Hello': ./testbed/Hello.java
+./testbed/dir1/AnotherHello.java
+./testbed/Hello1.java"
+"intercode-nl2bash-fs1-055","development","llama","always_fast","False","11","11","0","20279","","20279","10.453345667105168","0.8600181668298319","0.00014083401765674353","31.934346916968934","model_done","False","0","0","0","/testbed"
+"intercode-nl2bash-fs1-057","development","llama","always_fast","False","4","4","0","4527","","4527","4.90305912506301","0.2723147920332849","7.391697727143764e-05","5.832475999952294","model_done","False","0","2","0","/ -> /testbed/dir3/subdir1/subsubdir1/FooBar"
+"intercode-nl2bash-fs1-058","development","llama","always_fast","False","7","7","0","12910","","12910","8.16045687487349","0.4444723349297419","8.970778435468674e-05","9.21498699998483","model_done","False","0","4","1","The directory /testbed/dir1 has sticky bit and permissions 755."
+"intercode-nl2bash-fs2-000","development","llama","always_fast","False","4","4","0","4997","","4997","5.968077291036025","0.2607918749563396","5.4459087550640106e-05","6.799572875024751","repeated_action_stop","False","0","3","1",""
+"intercode-nl2bash-fs2-005","development","llama","always_fast","False","5","5","0","5454","","5454","4.7912884599063545","0.2585269591072574","4.237494431436062e-05","5.706045749946497","model_done","False","0","1","1","y"
+"intercode-nl2bash-fs2-007","development","llama","always_fast","False","2","2","0","1447","","1447","1.8490629999432713","0.06897925003431737","1.0791933164000511e-05","2.5064506250200793","model_done","False","0","0","0","Task completed successfully."
+"intercode-nl2bash-fs2-008","development","llama","always_fast","False","11","11","0","27351","","27351","14.206765582086518","0.7300100829452276","0.00014891591854393482","15.573063708026893","repeated_action_stop","False","0","10","3",""
+"intercode-nl2bash-fs2-009","development","llama","always_fast","True","3","3","0","3054","","3054","3.9036595829529688","0.20837345893960446","3.733299672603607e-05","4.959784833015874","model_done","False","0","0","0","Task completed successfully"
+"intercode-nl2bash-fs2-011","development","llama","always_fast","False","3","3","0","2624","","2624","2.977287373971194","0.1716874169651419","5.4040923714637756e-05","3.731197915971279","model_done","False","0","0","0","special text4.txt
+empty.txt
+temp/text1.txt
+backup_dbg/text1_dbg.txt
+sql1.sql"
+"intercode-nl2bash-fs2-012","development","llama","always_fast","False","9","9","0","15156","","15156","8.74678374978248","0.6714710410451517","0.00014295883011072874","10.099599584005773","repeated_action_stop","False","0","3","2",""
+"intercode-nl2bash-fs2-016","development","llama","always_fast","False","12","12","0","26547","","26547","12.354270708165132","0.7316982939373702","0.00011549901682883501","13.686337333056144","model_done","False","0","5","0","Task completed."
+"intercode-nl2bash-fs2-019","development","llama","always_fast","False","12","12","0","38449","","38449","14.699367747991346","2.5517291259020567","0.0001646227901801467","17.92305554205086","max_steps","True","0","12","3",""
+"intercode-nl2bash-fs2-020","development","llama","always_fast","True","3","3","0","2621","","2621","3.5918539999984205","0.1843029580777511","2.683396451175213e-05","4.452117625041865","model_done","False","0","0","0","All .sh files in '/system/folder1' tree whose names begin with 'new' were removed."
+"intercode-nl2bash-fs2-021","development","llama","always_fast","False","2","2","0","1372","","1372","1.9988855420378968","0.09544841607566923","3.062502946704626e-05","2.6911631249822676","model_done","False","0","0","0","Task completed successfully"
+"intercode-nl2bash-fs2-022","development","llama","always_fast","False","10","10","0","19229","","19229","11.628597249859013","0.8158927519107237","0.0002352080773562193","13.028040083940141","repeated_action_stop","False","0","9","1",""
+"intercode-nl2bash-fs2-025","development","llama","always_fast","False","4","4","0","4690","","4690","5.40496495901607","0.2755090419668704","4.504295065999031e-05","6.302981958026066","model_done","False","0","1","1","All files removed"
+"intercode-nl2bash-fs2-026","development","llama","always_fast","True","3","3","0","3303","","3303","4.131641249987297","0.14142991590779275","1.725007314234972e-05","4.902525042067282","model_done","False","0","0","0","Directory /system/folder3/temp is empty after removal of unwanted files and directories"
+"intercode-nl2bash-fs2-027","development","llama","always_fast","False","4","4","0","9433","","9433","4.267335832933895","0.3764624181203544","4.412583075463772e-05","5.278004082967527","model_done","False","0","3","0",""
+"intercode-nl2bash-fs2-029","development","llama","always_fast","False","6","6","0","9067","","9067","5.7412005418445915","0.37529812497086823","6.433413363993168e-05","6.793396500055678","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs2-032","development","llama","always_fast","True","2","2","0","1407","","1407","2.1807260831119493","0.07184216694440693","1.6666948795318604e-05","2.9187829580623657","model_done","False","0","0","0","No junk files removed"
+"intercode-nl2bash-fs2-033","development","llama","always_fast","False","4","4","0","4078","","4078","4.200012167100795","0.2891801659716293","4.8832967877388e-05","5.181616083020344","repeated_action_stop","False","0","3","1",""
+"intercode-nl2bash-fs2-034","development","llama","always_fast","False","2","2","0","1303","","1303","1.8446757089113817","0.1119032499846071","4.016701132059097e-05","2.642337042023428","model_done","False","0","0","0","Task completed successfully"
+"intercode-nl2bash-fs2-038","development","llama","always_fast","False","2","2","0","1525","","1525","2.0356092079309747","0.08680541696958244","8.874922059476376e-06","2.7071039580041543","model_done","False","0","0","0","10"
+"intercode-nl2bash-fs2-040","development","llama","always_fast","False","6","6","0","7246","","7246","5.466650833026506","0.46187704207841307","0.00012670911382883787","6.585546415997669","model_done","False","0","4","0","/system/folder1 -> /"
+"intercode-nl2bash-fs2-043","development","llama","always_fast","False","3","3","0","2885","","2885","3.5794338328996673","0.12738258193712682","2.1332991309463978e-05","4.442064292030409","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs2-044","development","llama","always_fast","False","7","7","0","10891","","10891","6.617286709020846","0.4889225420774892","0.0001163750421255827","7.847362207947299","model_done","False","0","2","0","system.tar.gz integrity verified"
+"intercode-nl2bash-fs2-045","development","llama","always_fast","False","8","8","0","15510","","15510","10.289116291096434","0.5591977089643478","9.116693399846554e-05","11.465511250076815","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs2-047","development","llama","always_fast","False","2","2","0","1313","","1313","1.8663128330372274","0.09282604197505862","3.516697324812412e-05","2.621188374934718","model_done","False","0","0","0","Hello world!"
+"intercode-nl2bash-fs2-048","development","llama","always_fast","False","6","6","0","8388","","8388","5.983115958981216","0.5034749999176711","0.0001484589884057641","7.139044584007934","model_done","False","0","3","1","Task completed successfully"
+"intercode-nl2bash-fs2-050","development","llama","always_fast","True","7","7","0","9069","","9069","7.091212584171444","0.34104358486365527","6.79150689393282e-05","8.10859249997884","model_done","False","1","3","1","No files of size 10 bytes found"
+"intercode-nl2bash-fs2-051","development","llama","always_fast","False","4","4","0","4158","","4158","4.174731000093743","0.19031020812690258","3.591610584408045e-05","4.982404749956913","model_done","False","0","0","0","d41d8cd98f00b204e9800998ecf8427e "
+"intercode-nl2bash-fs3-000","development","llama","always_fast","False","7","7","0","10185","","10185","8.226386252907105","0.5999214998446405","0.00016499997582286596","9.447839416912757","model_done","False","0","3","1","Files modified 30 days ago:
+  /workspace/results.txt
+  /workspace/files.txt
+  /workspace/new.sh
+  /workspace/archive.tar.gz
+  /workspace/.hidden.txt
+  /workspace/dir1/long.txt
+  /workspace/dir1/hello.txt
+  /workspace/dir1/file.txt
+  /workspace/dir1/file.c
+  /workspace/dir1/.hidden1.txt
+  /workspace/dir1/new1.sh
+  /workspace/dir1/hello.c
+  /workspace/dir1/sum.c
+  /workspace/dir1/script1.sh
+  /workspace/dir1/all.txt
+  /workspace/dir1/terminate.txt
+  /workspace/dir1/readonly.txt
+  /workspace/dir1/a.txt
+  /workspace/dir2/hello.txt
+  /workspace/dir2/mysql/sql1.sql
+  /workspace/dir2/foo.txt
+  /workspace/dir2/csvfile1.csv"
+"intercode-nl2bash-fs3-001","development","llama","always_fast","False","9","9","0","15022","","15022","8.406082374975085","0.5603752080351114","9.604019578546286e-05","9.670594333903864","repeated_action_stop","False","0","4","2",""
+"intercode-nl2bash-fs3-004","development","llama","always_fast","False","3","3","0","2443","","2443","2.7434912901371717","0.13162308395840228","2.316699828952551e-05","3.63620379101485","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-009","development","llama","always_fast","False","12","12","0","31505","","31505","12.358534375205636","1.022613708046265","0.00022795889526605606","13.965640125097707","max_steps","True","0","9","0",""
+"intercode-nl2bash-fs3-010","development","llama","always_fast","False","12","12","0","36047","","36047","11.504334168159403","0.9863964192336425","0.0001942500239238143","13.122027082950808","max_steps","True","0","3","0",""
+"intercode-nl2bash-fs3-012","development","llama","always_fast","False","12","12","0","36007","","36007","15.79819979192689","3.946555582107976","0.00019091693684458733","20.408170916023664","max_steps","True","0","1","2",""
+"intercode-nl2bash-fs3-013","development","llama","always_fast","True","5","5","0","5677","","5677","5.518822541111149","0.3953311259392649","8.208397775888443e-05","6.601494999951683","model_done","False","0","3","0","hello.txt
+hello.c"
+"intercode-nl2bash-fs3-014","development","llama","always_fast","False","7","7","0","14124","","14124","8.183442331966944","0.43136404221877456","0.0001249570632353425","9.214325125096366","model_done","False","1","1","0","Total disk usage of files in /workspace: 88K"
+"intercode-nl2bash-fs3-017","development","llama","always_fast","True","2","2","0","1359","","1359","1.8880367929814383","0.06546479207463562","1.1625001206994057e-05","2.566886499989778","model_done","False","0","0","0","The first line"
+"intercode-nl2bash-fs3-018","development","llama","always_fast","False","4","4","0","3850","","3850","3.870075083919801","0.30339720903430134","8.90000956133008e-05","4.845681375009008","model_done","False","0","2","0","Last line is "
+"intercode-nl2bash-fs3-019","development","llama","always_fast","False","2","2","0","1316","","1316","2.1194307500263676","0.10151416703592986","2.1875021047890186e-05","2.7824803750263527","model_done","False","0","0","0","Task complete"
+"intercode-nl2bash-fs3-021","development","llama","always_fast","False","12","12","0","32464","","32464","17.415341041982174","0.9731989171123132","0.000256081810221076","19.007228583912365","max_steps","True","0","10","0",""
+"intercode-nl2bash-fs3-026","development","llama","always_fast","False","5","5","0","5637","","5637","5.010748957982287","0.37387129198759794","0.00012491701636463404","6.05016333295498","model_done","False","0","0","1","File foo not found in workspace"
+"intercode-nl2bash-fs3-028","development","llama","always_fast","False","3","3","0","2694","","2694","3.1175318331224844","0.18157104204874486","2.483383286744356e-05","3.976471708039753","model_done","False","0","0","0","9a29ffb2fb88efa539d5fd11e91ce996"
+"intercode-nl2bash-fs3-029","development","llama","always_fast","False","4","4","0","4075","","4075","4.102793417056091","0.29188320878893137","4.5666005462408066e-05","5.09888654097449","model_done","False","0","0","0","The sorted list of md5 sums of all files in the directory tree."
+"intercode-nl2bash-fs3-031","development","llama","always_fast","False","4","4","0","3948","","3948","3.8541917079128325","0.30875420896336436","4.525098484009504e-05","4.845048125018366","model_done","False","0","1","1","20"
+"intercode-nl2bash-fs3-034","development","llama","always_fast","False","5","5","0","5779","","5779","5.1992711258353665","0.28857466706540436","6.079208105802536e-05","6.128961083013564","model_done","False","0","0","2","test and results.txt"
+"intercode-nl2bash-fs3-037","development","llama","always_fast","False","12","12","0","35479","","35479","14.35052458429709","1.0808770001167431","0.0002702090423554182","16.080925791990012","model_done","False","0","7","1","4096 bytes"
+"intercode-nl2bash-fs3-038","development","llama","always_fast","False","6","6","0","9169","","9169","7.164272500900552","0.564990708953701","0.00016862491611391306","8.44197299994994","model_done","False","0","5","0","Error: unable to setup user, likely due to missing /dev/null"
+"intercode-nl2bash-fs3-039","development","llama","always_fast","False","3","3","0","2678","","2678","3.3509494171012193","0.14792787609621882","2.9374961741268635e-05","4.180084999999963","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs3-040","development","llama","always_fast","False","3","3","0","2925","","2925","3.2235685001360252","0.1376474581193179","1.8540886230766773e-05","4.020363874966279","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs3-045","development","llama","always_fast","False","5","5","0","5431","","5431","4.449968000059016","0.26167066604830325","3.216706681996584e-05","5.2995585419703275","repeated_action_stop","False","1","3","1",""
+"intercode-nl2bash-fs3-049","development","llama","always_fast","False","3","3","0","2838","","2838","2.844843291095458","0.12528141599614173","2.112588845193386e-05","3.6591477090260014","model_done","False","0","0","0","nonempty file paths in descending order of size"
+"intercode-nl2bash-fs3-050","development","llama","always_fast","False","4","4","0","3628","","3628","3.638801083085127","0.27815024997107685","6.970809772610664e-05","4.581012208946049","model_done","False","0","0","0","100%"
+"intercode-nl2bash-fs3-053","development","llama","always_fast","False","6","6","0","7037","","7037","5.563187126186676","0.49467812513466924","0.00017770810518413782","6.725768208038062","model_done","False","0","4","0","/workspace/dir1 -> /"
+"intercode-nl2bash-fs3-054","development","llama","always_fast","False","2","2","0","1988","","1988","1.9806328759295866","0.06512583291623741","1.0499963536858559e-05","2.6392662919824943","model_done","False","0","0","0","The directory /workspace contains the following files and directories:"
+"intercode-nl2bash-fs3-055","development","llama","always_fast","False","4","4","0","4421","","4421","4.5485600819811225","0.23594837402924895","6.604206282645464e-05","5.4589905419852585","model_done","False","0","0","0","Found 'hello' in /workspace/dir1/hello.c and /workspace/dir2/hello.txt"
+"intercode-nl2bash-fs3-056","development","llama","always_fast","False","12","12","0","28319","","28319","12.517944667255506","0.8074100416852161","0.00015729316510260105","13.93456166703254","repeated_action_stop","False","0","9","4",""
+"intercode-nl2bash-fs3-057","development","llama","always_fast","False","12","12","0","36360","","36360","11.854275540914387","0.9865025411127135","0.0002782070077955723","13.440555916982703","max_steps","True","0","7","1",""
+"intercode-nl2bash-fs3-058","development","llama","always_fast","False","4","4","0","3564","","3564","4.319371082121506","0.29369162605144083","8.745898958295584e-05","5.396734542096965","model_done","False","0","0","1","file.txt in /backup"
+"intercode-nl2bash-fs3-059","development","llama","always_fast","False","2","2","0","1388","","1388","2.0209545000689104","0.10689270799048245","3.595789894461632e-05","2.9028780000517145","model_done","False","0","0","0","Symbolic link created successfully"
+"intercode-nl2bash-fs4-002","development","llama","always_fast","False","9","9","0","40224","","40224","10.024183001136407","0.7342002494260669","0.000171542982570827","11.375312790973112","model_done","False","0","1","2","The full path of the 'c++' command is /usr/bin/output."
+"intercode-nl2bash-fs4-003","development","llama","always_fast","False","3","3","0","2397","","2397","3.0308381249196827","0.1384313760790974","1.9291997887194157e-05","3.8116269579622895","model_done","False","0","1","0","Task is complete"
+"intercode-nl2bash-fs4-004","development","llama","always_fast","False","5","5","0","6098","","6098","5.4391849568346515","0.38323249912355095","0.00010295805986970663","6.47039541695267","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs4-006","development","llama","always_fast","True","3","3","0","2503","","2503","3.320781457819976","0.15233454201370478","2.7415924705564976e-05","4.1121837079990655","model_done","False","0","0","1",""
+"intercode-nl2bash-fs4-011","development","llama","always_fast","False","12","12","0","21906","","21906","11.555664499872364","0.9987969589419663","0.0002261247718706727","13.170601249905303","max_steps","True","0","11","1",""
+"intercode-nl2bash-fs4-013","development","llama","always_fast","False","12","12","0","26707","","26707","12.933605419006199","0.9340079560643062","0.0002206680364906788","14.474308625096455","max_steps","True","0","12","1",""
+"intercode-nl2bash-fs4-015","development","llama","always_fast","False","8","8","0","25655","","25655","10.035301916883327","0.6124740837840363","0.00017616397235542536","11.262524000019766","model_done","False","0","3","0","98765"
+"intercode-nl2bash-fs4-017","development","llama","always_fast","False","4","4","0","4254","","4254","5.259822334046476","0.24182720994576812","9.874999523162842e-05","6.173843540949747","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs4-019","development","llama","always_fast","False","4","4","0","4257","","4257","4.7921318331500515","0.35694900003727525","7.337494753301144e-05","5.734629457932897","model_done","False","0","0","0","192.168.11.1"
+"intercode-nl2bash-fs4-020","development","llama","always_fast","False","3","3","0","2249","","2249","2.6604859998915344","0.1966670830734074","4.587613511830568e-05","3.485679999925196","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs4-021","development","llama","always_fast","False","10","10","0","18305","","18305","9.705910250078887","0.7220281249610707","0.0001657500397413969","11.010882750037126","model_done","False","0","6","1","number of business days in current month"
+"intercode-nl2bash-fs4-022","development","llama","always_fast","False","4","4","0","3508","","3508","3.7231949989218265","0.192672248929739","3.324996214359999e-05","4.565164790954441","model_done","False","0","0","1","1 user logged in"
+"intercode-nl2bash-fs4-023","development","llama","always_fast","False","12","12","0","69568","","69568","24.30155474995263","0.919747247826308","0.00020541611593216658","25.907408875063993","max_steps","True","0","1","0",""
+"intercode-nl2bash-fs4-024","development","llama","always_fast","False","6","6","0","7699","","7699","6.644250500015914","0.5205467918422073","0.0001464150846004486","7.858274291967973","model_done","False","0","2","1","task failed"
+"intercode-nl2bash-fs4-025","development","llama","always_fast","False","4","4","0","3878","","3878","4.254524042829871","0.28635583294089884","6.874999962747097e-05","5.264246084028855","model_done","False","0","0","0","0.38 0.51 0.53"
+"intercode-nl2bash-fs4-026","development","llama","always_fast","False","12","12","0","23714","","23714","11.248823751346208","1.0325625417754054","0.00025783409364521503","12.910219957935624","max_steps","True","0","9","3",""

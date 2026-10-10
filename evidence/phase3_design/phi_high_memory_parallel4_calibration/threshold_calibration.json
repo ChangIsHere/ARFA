@@ -1,0 +1,323 @@
+{
+  "phase": "phase3_arfa",
+  "purpose": "development_only_residual_threshold_calibration",
+  "pair": "phi",
+  "split": "development",
+  "expected_tasks": 100,
+  "trajectory_workers": 16,
+  "selection_rule": {
+    "constraints": [
+      "candidate success count >= matched always-slow success count",
+      "candidate mean wall time < matched always-slow mean wall time",
+      "candidate mean slow-model calls < matched always-slow mean slow-model calls"
+    ],
+    "ranking": "minimum wall seconds per success, then token reduction, then slow-call reduction",
+    "final_split_used": false
+  },
+  "always_slow": {
+    "policy": "always_slow",
+    "task_count": 100,
+    "expected_task_count": 100,
+    "complete": true,
+    "success_count": 30,
+    "success_rate": 0.3,
+    "avg_wall_seconds": 147.40255895128976,
+    "wall_seconds_per_success": 491.34186317096584,
+    "avg_model_calls": 2.99,
+    "avg_fast_calls": 0.0,
+    "avg_slow_calls": 2.99,
+    "fast_call_rate": 0.0,
+    "avg_total_tokens": 3468.67
+  },
+  "candidates": [
+    {
+      "threshold": 0.15,
+      "metrics_path": "results/phase3_arfa/nrp/nrp-phi-high-memory-parallel4-workers16-development/calibration/threshold_0_15/development/phi/residual/metrics.csv",
+      "complete": true,
+      "eligible": false,
+      "reason": "wall_not_reduced",
+      "summary": {
+        "policy": "residual",
+        "task_count": 100,
+        "expected_task_count": 100,
+        "complete": true,
+        "success_count": 33,
+        "success_rate": 0.33,
+        "avg_wall_seconds": 161.89892336961023,
+        "wall_seconds_per_success": 490.60279808972797,
+        "avg_model_calls": 3.11,
+        "avg_fast_calls": 0.97,
+        "avg_slow_calls": 2.14,
+        "fast_call_rate": 0.31189710610932475,
+        "avg_total_tokens": 3554.25
+      },
+      "comparison_vs_always_slow": {
+        "paired_tasks": 100,
+        "point_estimates": {
+          "success_rate_difference": 0.03,
+          "wall_time_reduction": -0.09834540540853776,
+          "slow_call_reduction": 0.28428093645484953,
+          "token_reduction": -0.0246722807300781,
+          "wall_seconds_per_success_ratio": 0.9984958230986707
+        },
+        "bootstrap_ci95": {
+          "success_rate_difference": [
+            -0.03,
+            0.09
+          ],
+          "wall_time_reduction": [
+            -0.23334294868781594,
+            0.03078894524391731
+          ],
+          "slow_call_reduction": [
+            0.18874015994002247,
+            0.3741945378982783
+          ],
+          "token_reduction": [
+            -0.23351499424425784,
+            0.157306037344592
+          ],
+          "wall_seconds_per_success_ratio": [
+            0.7710162755723732,
+            1.2603481379242059
+          ]
+        },
+        "candidate_only_successes": 7,
+        "comparator_only_successes": 4,
+        "exact_mcnemar_pvalue": 0.548828125
+      }
+    },
+    {
+      "threshold": 0.2,
+      "metrics_path": "results/phase3_arfa/nrp/nrp-phi-high-memory-parallel4-workers16-development/calibration/threshold_0_20/development/phi/residual/metrics.csv",
+      "complete": true,
+      "eligible": false,
+      "reason": "wall_not_reduced",
+      "summary": {
+        "policy": "residual",
+        "task_count": 100,
+        "expected_task_count": 100,
+        "complete": true,
+        "success_count": 30,
+        "success_rate": 0.3,
+        "avg_wall_seconds": 151.51027312665002,
+        "wall_seconds_per_success": 505.0342437555001,
+        "avg_model_calls": 3.3,
+        "avg_fast_calls": 1.32,
+        "avg_slow_calls": 1.98,
+        "fast_call_rate": 0.4,
+        "avg_total_tokens": 3783.82
+      },
+      "comparison_vs_always_slow": {
+        "paired_tasks": 100,
+        "point_estimates": {
+          "success_rate_difference": 0.0,
+          "wall_time_reduction": -0.027867319296116744,
+          "slow_call_reduction": 0.33779264214046834,
+          "token_reduction": -0.09085614947515919,
+          "wall_seconds_per_success_ratio": 1.0278673192961167
+        },
+        "bootstrap_ci95": {
+          "success_rate_difference": [
+            -0.07,
+            0.07
+          ],
+          "wall_time_reduction": [
+            -0.1469126426865166,
+            0.08689119089394523
+          ],
+          "slow_call_reduction": [
+            0.2635379061371841,
+            0.41055971281221565
+          ],
+          "token_reduction": [
+            -0.2641851286180626,
+            0.062374380627532894
+          ],
+          "wall_seconds_per_success_ratio": [
+            0.779194162097673,
+            1.350541203588559
+          ]
+        },
+        "candidate_only_successes": 7,
+        "comparator_only_successes": 7,
+        "exact_mcnemar_pvalue": 1.0
+      }
+    },
+    {
+      "threshold": 0.25,
+      "metrics_path": "results/phase3_arfa/nrp/nrp-phi-high-memory-parallel4-workers16-development/calibration/threshold_0_25/development/phi/residual/metrics.csv",
+      "complete": true,
+      "eligible": false,
+      "reason": "success_below_slow,wall_not_reduced",
+      "summary": {
+        "policy": "residual",
+        "task_count": 100,
+        "expected_task_count": 100,
+        "complete": true,
+        "success_count": 26,
+        "success_rate": 0.26,
+        "avg_wall_seconds": 160.42393175328976,
+        "wall_seconds_per_success": 617.0151221280375,
+        "avg_model_calls": 3.18,
+        "avg_fast_calls": 1.21,
+        "avg_slow_calls": 1.97,
+        "fast_call_rate": 0.3805031446540881,
+        "avg_total_tokens": 3588.81
+      },
+      "comparison_vs_always_slow": {
+        "paired_tasks": 100,
+        "point_estimates": {
+          "success_rate_difference": -0.04,
+          "wall_time_reduction": -0.08833885174478562,
+          "slow_call_reduction": 0.3411371237458195,
+          "token_reduction": -0.034635753761528054,
+          "wall_seconds_per_success_ratio": 1.2557755981670604
+        },
+        "bootstrap_ci95": {
+          "success_rate_difference": [
+            -0.11,
+            0.03
+          ],
+          "wall_time_reduction": [
+            -0.24959596378572224,
+            0.0594558951655549
+          ],
+          "slow_call_reduction": [
+            0.24124237657642733,
+            0.43068073519400957
+          ],
+          "token_reduction": [
+            -0.2761083672366514,
+            0.15948372391133253
+          ],
+          "wall_seconds_per_success_ratio": [
+            0.9182404823670746,
+            1.7406666738347802
+          ]
+        },
+        "candidate_only_successes": 5,
+        "comparator_only_successes": 9,
+        "exact_mcnemar_pvalue": 0.4239501953125
+      }
+    },
+    {
+      "threshold": 0.3,
+      "metrics_path": "results/phase3_arfa/nrp/nrp-phi-high-memory-parallel4-workers16-development/calibration/threshold_0_30/development/phi/residual/metrics.csv",
+      "complete": true,
+      "eligible": false,
+      "reason": "wall_not_reduced",
+      "summary": {
+        "policy": "residual",
+        "task_count": 100,
+        "expected_task_count": 100,
+        "complete": true,
+        "success_count": 31,
+        "success_rate": 0.31,
+        "avg_wall_seconds": 153.8499789216599,
+        "wall_seconds_per_success": 496.29025458599966,
+        "avg_model_calls": 3.18,
+        "avg_fast_calls": 1.24,
+        "avg_slow_calls": 1.94,
+        "fast_call_rate": 0.389937106918239,
+        "avg_total_tokens": 3649.23
+      },
+      "comparison_vs_always_slow": {
+        "paired_tasks": 100,
+        "point_estimates": {
+          "success_rate_difference": 0.01,
+          "wall_time_reduction": -0.043740217376420976,
+          "slow_call_reduction": 0.351170568561873,
+          "token_reduction": -0.052054533870330655,
+          "wall_seconds_per_success_ratio": 1.010071178106214
+        },
+        "bootstrap_ci95": {
+          "success_rate_difference": [
+            -0.05,
+            0.07
+          ],
+          "wall_time_reduction": [
+            -0.21245716635032338,
+            0.09530687953486654
+          ],
+          "slow_call_reduction": [
+            0.26314829043411453,
+            0.4285714285714286
+          ],
+          "token_reduction": [
+            -0.26433981883733565,
+            0.11289169023503169
+          ],
+          "wall_seconds_per_success_ratio": [
+            0.7850074740000395,
+            1.2780374982165454
+          ]
+        },
+        "candidate_only_successes": 5,
+        "comparator_only_successes": 4,
+        "exact_mcnemar_pvalue": 1.0
+      }
+    },
+    {
+      "threshold": 0.35,
+      "metrics_path": "results/phase3_arfa/nrp/nrp-phi-high-memory-parallel4-workers16-development/development/phi/residual/metrics.csv",
+      "complete": true,
+      "eligible": false,
+      "reason": "wall_not_reduced",
+      "summary": {
+        "policy": "residual",
+        "task_count": 100,
+        "expected_task_count": 100,
+        "complete": true,
+        "success_count": 32,
+        "success_rate": 0.32,
+        "avg_wall_seconds": 154.77457235585985,
+        "wall_seconds_per_success": 483.67053861206205,
+        "avg_model_calls": 3.37,
+        "avg_fast_calls": 1.4,
+        "avg_slow_calls": 1.97,
+        "fast_call_rate": 0.41543026706231456,
+        "avg_total_tokens": 3820.58
+      },
+      "comparison_vs_always_slow": {
+        "paired_tasks": 100,
+        "point_estimates": {
+          "success_rate_difference": 0.02,
+          "wall_time_reduction": -0.0500127912094539,
+          "slow_call_reduction": 0.3411371237458195,
+          "token_reduction": -0.10145387136856487,
+          "wall_seconds_per_success_ratio": 0.9843869917588632
+        },
+        "bootstrap_ci95": {
+          "success_rate_difference": [
+            -0.05,
+            0.09
+          ],
+          "wall_time_reduction": [
+            -0.18783625790500824,
+            0.07763540132991269
+          ],
+          "slow_call_reduction": [
+            0.24350248135894517,
+            0.42808275136538637
+          ],
+          "token_reduction": [
+            -0.34145474267618986,
+            0.10331244844981333
+          ],
+          "wall_seconds_per_success_ratio": [
+            0.7511994244304537,
+            1.27917833823188
+          ]
+        },
+        "candidate_only_successes": 7,
+        "comparator_only_successes": 5,
+        "exact_mcnemar_pvalue": 0.7744140625
+      }
+    }
+  ],
+  "selected_threshold": null,
+  "selection_succeeded": false,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 1507
+}

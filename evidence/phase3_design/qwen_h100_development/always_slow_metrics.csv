@@ -1,0 +1,236 @@
+"task_id","experiment_split","pair_name","policy","success","model_calls","fast_model_calls","slow_model_calls","fast_model_tokens","slow_model_tokens","total_tokens","model_latency_seconds","command_latency_seconds","router_latency_seconds","total_task_wall_seconds","termination_reason","max_steps_reached","parse_error_count","nonzero_exit_count","repeated_action_count","final_answer"
+"intercode-nl2bash-fs1-000","development","qwen","always_slow","False","2","0","2","","1736","1736","4.998714957968332","0.06219429208431393","2.0166044123470783e-05","5.732138833031058","model_done","False","0","0","0","f32a3a97638afeb2ee2a15cfe335ab72"
+"intercode-nl2bash-fs1-001","development","qwen","always_slow","False","8","0","8","","18968","18968","20.588900792063214","0.6596256669145077","0.00017695792485028505","21.892505042022094","repeated_action_stop","False","0","0","2",""
+"intercode-nl2bash-fs1-009","development","qwen","always_slow","False","2","0","2","","1547","1547","4.02018637501169","0.06273024994879961","1.5542027540504932e-05","4.831167957978323","model_done","False","0","0","0","The current shell is not running within a 'screen' process."
+"intercode-nl2bash-fs1-010","development","qwen","always_slow","False","4","0","4","","5051","5051","8.69859449903015","0.28147858299780637","0.00014004192780703306","9.728784292005002","model_done","False","0","1","0","The contents of textfile3.txt are not a subset of textfile2.txt."
+"intercode-nl2bash-fs1-014","development","qwen","always_slow","False","4","0","4","","5986","5986","10.046612292062491","0.2821536660194397","8.525012526661158e-05","10.9355246250052","model_done","False","0","0","1","0"
+"intercode-nl2bash-fs1-015","development","qwen","always_slow","False","6","0","6","","10214","10214","13.734454290941358","0.33629008289426565","6.29589194431901e-05","14.698055166983977","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs1-016","development","qwen","always_slow","False","3","0","3","","2694","2694","5.469437291962095","0.1036207500146702","4.5042019337415695e-05","6.345078416052274","model_done","False","1","0","0","Command1 && true; Command2 && true"
+"intercode-nl2bash-fs1-021","development","qwen","always_slow","True","2","0","2","","1613","1613","3.983666667016223","0.09669341705739498","0.00011145800817757845","4.794183542020619","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-023","development","qwen","always_slow","False","2","0","2","","1615","1615","3.7791665421100333","0.1086492909817025","4.7874986194074154e-05","4.591023167013191","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-029","development","qwen","always_slow","True","2","0","2","","1648","1648","4.191620709025301","0.10102312499657273","4.51250234618783e-05","4.995037832995877","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs1-031","development","qwen","always_slow","False","2","0","2","","1581","1581","4.156748667010106","0.08575516706332564","4.62500611320138e-05","4.930959791992791","model_done","False","0","0","0","9"
+"intercode-nl2bash-fs1-032","development","qwen","always_slow","False","3","0","3","","3226","3226","6.927009917097166","0.2008089569862932","5.866598803550005e-05","7.791420875000767","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs1-033","development","qwen","always_slow","True","2","0","2","","1562","1562","3.9339225001167506","0.1025511670159176","3.9291102439165115e-05","4.633689209003933","model_done","False","0","0","0","The total number of files in the /testbed directory and its subdirectories is 31."
+"intercode-nl2bash-fs1-034","development","qwen","always_slow","False","2","0","2","","1755","1755","4.616033082944341","0.07381683401763439","1.025001984089613e-05","5.34510916704312","model_done","False","0","0","0","The line counts for each .php file in /testbed, sorted by file name, are:
+/testbed/dir1/info.php: 1
+/testbed/hello.php: 1"
+"intercode-nl2bash-fs1-035","development","qwen","always_slow","True","2","0","2","","1721","1721","4.5580642510904","0.09878687502350658","3.062502946704626e-05","5.440410500043072","model_done","False","0","0","0","The line counts for each *.php file in /testbed, sorted by the number of lines in descending order, are:
+1 /testbed/hello.php
+1 /testbed/dir1/info.php
+2 total"
+"intercode-nl2bash-fs1-038","development","qwen","always_slow","False","3","0","3","","3457","3457","6.269657541881315","0.15676104195881635","2.2458028979599476e-05","7.155287874978967","model_done","False","0","1","0","The file '/testbed/etc/networks' does not exist. The task cannot be completed."
+"intercode-nl2bash-fs1-040","development","qwen","always_slow","True","2","0","2","","1631","1631","3.3754968750290573","0.10850154201034456","4.370801616460085e-05","4.14340366597753","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-045","development","qwen","always_slow","False","3","0","3","","3010","3010","5.805460500065237","0.2751048330683261","0.00014304101932793856","7.058359666960314","model_done","False","0","0","0","Archive '/backup1.tar' created successfully."
+"intercode-nl2bash-fs1-048","development","qwen","always_slow","False","2","0","2","","2032","2032","6.118888375000097","0.1025572910439223","3.858399577438831e-05","6.924690666026436","model_done","False","0","0","0","The 5 largest files in the /testbed directory and its sub-directories are:
+-rwxr-xr-x 1 root root  48 Sep 13 23:01 /testbed/dir3/subdir1/pythonscript3.py
+-rwxr-xr-x 1 root root  48 Sep 13 23:01 /testbed/dir2/subdir2/pythonscript2.py
+-rwxr-xr-x 1 root root  48 Sep 13 23:01 /testbed/dir1/subdir1/subsubdir1/pythonscript1.py
+-rwxr-xr-x 1 root root  48 Sep 13 23:01 /testbed/dir1/subdir1/pythonscript4.py
+-rwxr-xr-x 1 root root  32 Sep 13 23:01 /testbed/dir3/subdir1/subsubdir1/shellscript3.sh"
+"intercode-nl2bash-fs1-050","development","qwen","always_slow","False","2","0","2","","2016","2016","6.123036457924172","0.09632324997801334","4.641700070351362e-05","6.9268592920852825","model_done","False","0","0","0","The 5 smallest files in the /testbed directory and its subdirectories are:
+-rw-r--r-- 1 root root   0 May 31  2023 /testbed/recent.txt
+-rw-r--r-- 1 root root  12 Sep 13 23:01 /testbed/dir3/textfile6.txt
+-rw-r--r-- 1 root root  14 Sep 13 23:01 /testbed/dir1/textfile1.txt
+-rw-r--r-- 1 root root  17 May 31  2022 /testbed/dir3/subdir1/subsubdir1/tmp/tmp.txt
+-rw-r--r-- 1 root root  17 Sep 13 23:01 /testbed/dir3/subdir1/subsubdir1/file.txt"
+"intercode-nl2bash-fs1-051","development","qwen","always_slow","False","2","0","2","","1946","1946","4.827758542029187","0.09545558399986476","4.708394408226013e-05","5.5873545409413055","model_done","False","0","0","0","The 10 largest files in the /testbed directory are:
+4.0K	/testbed/textfile7.txt
+4.0K	/testbed/hello.php
+4.0K	/testbed/hello.c
+4.0K	/testbed/dir3/textfile6.txt
+4.0K	/testbed/dir3/subdir2/csvfile1.csv
+4.0K	/testbed/dir3/subdir1/subsubdir1/tmp/tmp.txt
+4.0K	/testbed/dir3/subdir1/subsubdir1/textfile3.txt
+4.0K	/testbed/dir3/subdir1/subsubdir1/shellscript3.sh
+4.0K	/testbed/dir3/subdir1/subsubdir1/file.txt
+4.0K	/testbed/dir3/subdir1/subsubdir1/FooBar/file.txt"
+"intercode-nl2bash-fs1-052","development","qwen","always_slow","False","2","0","2","","1651","1651","4.050872042076662","0.11002008290961385","3.787502646446228e-05","4.774022875004448","model_done","False","0","0","0","/testbed/Hello.java
+/testbed/dir1/AnotherHello.java
+/testbed/Hello1.java"
+"intercode-nl2bash-fs1-055","development","qwen","always_slow","False","3","0","3","","3097","3097","6.214208208024502","0.21442654205020517","6.445811595767736e-05","27.135395625024103","model_done","False","0","0","0","The directories containing files with the text 'Hello' are: /testbed, /testbed/dir1"
+"intercode-nl2bash-fs1-057","development","qwen","always_slow","False","5","0","5","","8015","8015","13.041809499962255","0.3379335420904681","0.00010987510904669762","14.074082375038415","repeated_action_stop","False","0","4","1",""
+"intercode-nl2bash-fs1-058","development","qwen","always_slow","True","3","0","3","","3029","3029","6.8847338339546695","0.1555347500834614","4.6166940592229366e-05","7.766373540973291","model_done","False","0","1","0","The files with the sticky bit set and permissions 553 in the /testbed/dir1 directory are listed above."
+"intercode-nl2bash-fs2-000","development","qwen","always_slow","True","2","0","2","","1886","1886","5.292639874853194","0.07948308298364282","1.304189208894968e-05","6.065718666068278","model_done","False","0","0","0","The text 'Hello' was found in the following files with line numbers:
+/system/folder1/text3.txt:1:- e Hello!
+/system/folder1/text4.txt:1:Hello!
+/system/folder1/text4.txt:2:Another hello world file
+/system/folder1/text2.txt:1:Another hello world file"
+"intercode-nl2bash-fs2-005","development","qwen","always_slow","False","2","0","2","","1648","1648","3.5341547509888187","0.09774020791519433","4.158297087997198e-05","4.343052416923456","model_done","False","0","0","0","All '*.txt' files in the '/system' folder have been removed."
+"intercode-nl2bash-fs2-007","development","qwen","always_slow","False","2","0","2","","1843","1843","4.55843754101079","0.1099461669800803","2.9959017410874367e-05","5.3453300829278305","model_done","False","0","1","0","All empty folders under /system/folder3/temp have been removed successfully."
+"intercode-nl2bash-fs2-008","development","qwen","always_slow","True","2","0","2","","1673","1673","4.192860626033507","0.08292141603305936","1.708301715552807e-05","4.976821750053205","model_done","False","0","0","0","All non-text files have been removed from /system/folder1."
+"intercode-nl2bash-fs2-009","development","qwen","always_slow","True","3","0","3","","3671","3671","7.27419362613","0.1961794999660924","8.487387094646692e-05","8.33728912496008","model_done","False","0","0","0","All files and directories under /system/folder1 have been renamed to replace 'special' with 'regular'."
+"intercode-nl2bash-fs2-011","development","qwen","always_slow","True","2","0","2","","1667","1667","4.191332292044535","0.10178362508304417","3.866699989885092e-05","4.865212459000759","model_done","False","0","0","0","special text4.txt
+empty.txt
+text1.txt
+text1_dbg.txt
+sql1.sql"
+"intercode-nl2bash-fs2-012","development","qwen","always_slow","False","2","0","2","","1687","1687","4.182866333052516","0.06208104104734957","1.025001984089613e-05","4.908033959101886","model_done","False","0","0","0","The keyword 'special' was found in the following files:
+The third file with special name
+The file with special name
+The second file with special name"
+"intercode-nl2bash-fs2-016","development","qwen","always_slow","True","2","0","2","","1600","1600","3.9618139999220148","0.11376145901158452","2.683396451175213e-05","4.764230040949769","model_done","False","0","0","0","All *.txt files in the '/system' directory have been removed."
+"intercode-nl2bash-fs2-019","development","qwen","always_slow","True","3","0","3","","3253","3253","6.834086541901343","0.20258437504526228","0.00011908391024917364","7.734009583014995","model_done","False","0","0","0","All *.txt files except 'keep.txt' under /system/folder1 that were modified more than 5 minutes ago have been removed."
+"intercode-nl2bash-fs2-020","development","qwen","always_slow","True","2","0","2","","1674","1674","4.47488425008487","0.07298058399464935","1.5625031664967537e-05","5.169946459005587","model_done","False","0","0","0","All .sh files in '/system/folder1' that start with 'new' have been removed."
+"intercode-nl2bash-fs2-021","development","qwen","always_slow","True","2","0","2","","1631","1631","4.006499748909846","0.06411195802502334","1.2959004379808903e-05","4.692803583107889","model_done","False","0","0","0","All 'a.out', '*.o', and 'core' files have been removed from the '/system' directory."
+"intercode-nl2bash-fs2-022","development","qwen","always_slow","False","2","0","2","","1539","1539","3.6018769170623273","0.10348241589963436","4.1375053115189075e-05","4.372750167036429","model_done","False","0","0","0","The last 5 fields from each line in the CSV file have been successfully extracted."
+"intercode-nl2bash-fs2-025","development","qwen","always_slow","False","2","0","2","","1732","1732","4.516193625051528","0.10078545904252678","4.2499974370002747e-05","5.303716166061349","model_done","False","0","0","0","All 'a.out' and '*.o' files in the /system directory tree that were modified more than 7 days ago have been removed."
+"intercode-nl2bash-fs2-026","development","qwen","always_slow","True","2","0","2","","1838","1838","3.8290539170848206","0.08438895805738866","3.9041973650455475e-05","4.64395416690968","model_done","False","0","0","0","All specified files and directories have been removed from '/system/folder3/temp'."
+"intercode-nl2bash-fs2-027","development","qwen","always_slow","False","3","0","3","","2770","2770","5.43501474999357","0.2038950000423938","9.529211092740297e-05","6.33193929202389","model_done","False","0","0","0","All empty directories have been removed from the /system directory tree."
+"intercode-nl2bash-fs2-029","development","qwen","always_slow","False","2","0","2","","1647","1647","4.760300749912858","0.11287629196885973","4.4958083890378475e-05","5.493301415932365","model_done","False","0","1","0","The files text2, text3, and text4 do not exist in the directory /system/folder1, so no action was taken."
+"intercode-nl2bash-fs2-032","development","qwen","always_slow","True","2","0","2","","1610","1610","4.154454416944645","0.10797862499020994","5.137501284480095e-05","4.970659749931656","model_done","False","0","0","0","Junk files modified more than 31 days ago have been removed from '/system'."
+"intercode-nl2bash-fs2-033","development","qwen","always_slow","False","2","0","2","","1627","1627","3.717694581951946","0.09598979202564806","1.454097218811512e-05","4.396622041007504","model_done","False","0","0","0","Newline characters have been removed from '/system/folder3/temp/temp1/text1.txt'."
+"intercode-nl2bash-fs2-034","development","qwen","always_slow","False","2","0","2","","1550","1550","3.770218583056703","0.11053404200356454","3.833393566310406e-05","4.582432124996558","model_done","False","0","0","0","All regular files in the /system directory tree have been removed."
+"intercode-nl2bash-fs2-038","development","qwen","always_slow","True","2","0","2","","1941","1941","4.960710791870952","0.10708354099188","3.4624943509697914e-05","5.765301540959626","model_done","False","0","0","0","4 /system
+2 /system/folder3/temp/temp1
+2 /system/folder3
+1 /system/folder3/temp
+1 /system/folder3/backup_dbg
+0 /system/temp
+0 /system/folder3/temp/temp1/temp_1
+0 /system/folder3/temp/temp1/temp
+0 /system/folder3/backup_dbg/backup
+0 /system/folder2"
+"intercode-nl2bash-fs2-040","development","qwen","always_slow","False","3","0","3","","2726","2726","4.807562917936593","0.19956566707696766","2.7999980375170708e-05","5.711328292032704","model_done","False","0","0","0","Symbolic link created successfully."
+"intercode-nl2bash-fs2-043","development","qwen","always_slow","False","8","0","8","","18107","18107","19.86765933292918","0.6263752509839833","0.0002561669098213315","21.21470466593746","model_done","False","0","2","1","All .txt files in the /system tree have been concatenated into /system/folder3/temp/empty.txt."
+"intercode-nl2bash-fs2-044","development","qwen","always_slow","False","4","0","4","","4577","4577","8.890096208895557","0.2943425838602707","0.00018233316950500011","9.99294520902913","model_done","False","0","1","0","All files in the /system folder have been compressed to /backup/system_backup.tar.gz."
+"intercode-nl2bash-fs2-045","development","qwen","always_slow","False","8","0","8","","24886","24886","20.62262949999422","2.699798582936637","0.00015845790039747953","24.292438792064786","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs2-047","development","qwen","always_slow","False","2","0","2","","1487","1487","4.204972250037827","0.10283158300444484","3.704102709889412e-05","5.083131792023778","model_done","False","0","0","0","Hello world!"
+"intercode-nl2bash-fs2-048","development","qwen","always_slow","True","2","0","2","","1738","1738","4.290532667073421","0.10983249999117106","4.0624989196658134e-05","5.184876915998757","model_done","False","0","0","0","The compressed archive 'compress_folder1.tar.gz' has been successfully created with verbose output."
+"intercode-nl2bash-fs2-050","development","qwen","always_slow","True","2","0","2","","1797","1797","5.521899374900386","0.10151495807804167","4.1416031308472157e-05","6.261810792027973","model_done","False","0","0","0","The `find` command successfully listed all files in the /system directory and its subdirectories that are exactly 10 bytes in size."
+"intercode-nl2bash-fs2-051","development","qwen","always_slow","False","3","0","3","","6517","6517","11.527287207893096","0.14337279193568975","5.6331860832870007e-05","12.354319666977972","model_done","False","0","0","0","c5a8c67065831c71b3ebd3e0a155990c"
+"intercode-nl2bash-fs3-000","development","qwen","always_slow","False","3","0","3","","2893","2893","5.733261459041387","0.16926991601940244","6.0790800489485264e-05","6.580056083039381","model_done","False","0","0","0","No files found in /workspace directory modified exactly 30 days ago."
+"intercode-nl2bash-fs3-001","development","qwen","always_slow","True","2","0","2","","1558","1558","3.4071292080916464","0.11292470793705434","4.424992948770523e-05","4.245988292037509","model_done","False","0","0","0","/workspace/dir1/file.c"
+"intercode-nl2bash-fs3-004","development","qwen","always_slow","True","2","0","2","","1585","1585","3.713843417004682","0.10154904099181294","4.108308348804712e-05","4.492706791963428","model_done","False","0","0","0","/workspace/dir1/
+/workspace/dir2/
+/workspace/test/"
+"intercode-nl2bash-fs3-009","development","qwen","always_slow","False","5","0","5","","7006","7006","11.873696042224765","0.3980444590561092","0.0001871669664978981","12.897780542029068","model_done","False","0","2","1","No files in the /workspace directory have all permissions."
+"intercode-nl2bash-fs3-010","development","qwen","always_slow","False","2","0","2","","1658","1658","4.5629820838803425","0.06717279192525893","1.333397813141346e-05","5.348791792057455","model_done","False","0","0","0","The details of the shell script in the /workspace directory are:
+-rwxr-xr-x 1 root root 31 Sep 13 23:02 /workspace/new.sh"
+"intercode-nl2bash-fs3-012","development","qwen","always_slow","True","3","0","3","","3282","3282","6.322955251089297","0.16892141697462648","2.7000089175999165e-05","9.762798707932234","model_done","False","0","0","0","Files in /workspace accessed more than one day ago have been moved to the root directory /."
+"intercode-nl2bash-fs3-013","development","qwen","always_slow","True","2","0","2","","1667","1667","4.312203124980442","0.0713287090184167","1.4457968063652515e-05","5.162075583008118","model_done","False","0","0","0","/workspace/dir1/hello.txt
+/workspace/dir1/hello.c"
+"intercode-nl2bash-fs3-014","development","qwen","always_slow","False","2","0","2","","1664","1664","4.140001374995336","0.09663683408871293","4.141696263104677e-05","4.98608908301685","model_done","False","0","0","0","Disk usage of files and folders in /workspace:
+4.0K	/workspace/archive.tar.gz
+48K	/workspace/dir1
+24K	/workspace/dir2
+4.0K	/workspace/files.txt
+4.0K	/workspace/new.sh
+0	/workspace/old2.txt
+0	/workspace/recent1.txt
+4.0K	/workspace/results.txt
+16K	/workspace/test"
+"intercode-nl2bash-fs3-017","development","qwen","always_slow","True","2","0","2","","1491","1491","3.672816584003158","0.10142183303833008","5.037500523030758e-05","4.420939833042212","model_done","False","0","0","0","The first line"
+"intercode-nl2bash-fs3-018","development","qwen","always_slow","False","5","0","5","","6499","6499","11.125911333132535","0.29827712604310364","8.049898315221071e-05","12.049984790966846","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs3-019","development","qwen","always_slow","False","5","0","5","","5808","5808","8.089358540950343","0.3062633331865072","0.00012175203301012516","9.068013707990758","model_done","False","0","0","1","All files in the /workspace directory have been pruned."
+"intercode-nl2bash-fs3-021","development","qwen","always_slow","False","2","0","2","","1942","1942","5.416162417968735","0.07008983299601823","1.6666017472743988e-05","6.112800542032346","model_done","False","0","0","0","The files in the /workspace folder, sorted by depth, are:
+/workspace/.hidden.txt
+/workspace/archive.tar.gz
+/workspace/files.txt
+/workspace/new.sh
+/workspace/old2.txt
+/workspace/recent1.txt
+/workspace/results.txt
+/workspace/dir1/.hidden1.txt
+/workspace/dir1/a.txt
+/workspace/dir1/all.txt
+/workspace/dir1/file.c
+/workspace/dir1/file.txt
+/workspace/dir1/hello.c
+/workspace/dir1/hello.txt
+/workspace/dir1/long.txt
+/workspace/dir1/new1.sh
+/workspace/dir1/readonly.txt
+/workspace/dir1/script1.sh
+/workspace/dir1/sum.c
+/workspace/dir1/terminate.txt
+/workspace/dir2/csvfile1.csv
+/workspace/dir2/foo.txt
+/workspace/dir2/hello.txt
+/workspace/dir2/mysql/sql1.sql"
+"intercode-nl2bash-fs3-026","development","qwen","always_slow","False","2","0","2","","1674","1674","4.022666042088531","0.0713297079782933","1.2999982573091984e-05","4.756338167004287","model_done","False","0","0","0","The file 'foo' was found in /workspace and its long listing was displayed in sorted order of modification date."
+"intercode-nl2bash-fs3-028","development","qwen","always_slow","False","2","0","2","","2527","2527","4.158445916953497","0.09594379097688943","4.4625019654631615e-05","5.114729791996069","model_done","False","0","0","0","The md5 sums for all files in the /workspace directory with the filenames printed first have been calculated."
+"intercode-nl2bash-fs3-029","development","qwen","always_slow","False","2","0","2","","2476","2476","3.6138447499834","0.10347316600382328","2.3959088139235973e-05","4.398122459067963","model_done","False","0","0","0","The md5 sums of all files in the '/workspace' directory tree have been calculated."
+"intercode-nl2bash-fs3-031","development","qwen","always_slow","True","2","0","2","","1788","1788","4.509944792021997","0.09984891698695719","4.3874955736100674e-05","5.281744290958159","model_done","False","0","0","0","There are 3 unique 3 to 6 character file extensions in the /workspace directory tree."
+"intercode-nl2bash-fs3-034","development","qwen","always_slow","True","2","0","2","","1558","1558","3.689182498957962","0.10154758300632238","1.3040960766375065e-05","4.495547958998941","model_done","False","0","0","0","The two largest directories under /workspace are:
+112K	/workspace
+48K	/workspace/dir1"
+"intercode-nl2bash-fs3-037","development","qwen","always_slow","False","3","0","3","","3014","3014","5.964935709023848","0.2010029989760369","6.683310493826866e-05","6.842587999999523","model_done","False","0","0","0","25"
+"intercode-nl2bash-fs3-038","development","qwen","always_slow","False","4","0","4","","4928","4928","9.273253374034539","0.3003155830083415","9.520805906504393e-05","10.233920958940871","model_done","False","0","1","0","All hidden files in the /workspace directory have been unhidden."
+"intercode-nl2bash-fs3-039","development","qwen","always_slow","False","2","0","2","","1610","1610","3.619875792064704","0.09938525001052767","3.958400338888168e-05","4.417868625023402","model_done","False","0","0","0","3"
+"intercode-nl2bash-fs3-040","development","qwen","always_slow","True","2","0","2","","1698","1698","3.763812917051837","0.10152875003404915","5.091703496873379e-05","4.518621583003551","model_done","False","0","0","0","3"
+"intercode-nl2bash-fs3-045","development","qwen","always_slow","False","3","0","3","","2963","2963","5.500125748920254","0.17486575001385063","6.183295045047998e-05","6.355877917027101","model_done","False","0","0","0","The contents of '/workspace/dir1/long.txt' have been displayed as double precision floating point numbers."
+"intercode-nl2bash-fs3-049","development","qwen","always_slow","False","2","0","2","","1970","1970","5.059607125003822","0.07082441600505263","2.1541956812143326e-05","5.713866667007096","model_done","False","0","0","0","The sizes and filepaths of all files/directories in the /workspace directory sorted in descending order of size have been displayed."
+"intercode-nl2bash-fs3-050","development","qwen","always_slow","True","2","0","2","","1530","1530","3.9112103750230744","0.0684758749557659","1.2833974324166775e-05","4.663105875020847","model_done","False","0","0","0","1%"
+"intercode-nl2bash-fs3-053","development","qwen","always_slow","False","3","0","3","","2784","2784","5.8324949169764295","0.20653412502724677","0.00013541709631681442","7.052433541044593","model_done","False","0","0","0","Symbolic link 'root_link' created in /workspace/dir1 pointing to the root folder."
+"intercode-nl2bash-fs3-054","development","qwen","always_slow","True","2","0","2","","1972","1972","4.245011666906066","0.09722704102750868","4.291697405278683e-05","4.949359083082527","model_done","False","0","0","0","The permissions, user, group, and full path for each file in the /workspace directory tree have been displayed."
+"intercode-nl2bash-fs3-055","development","qwen","always_slow","True","2","0","2","","1776","1776","5.658838249975815","0.0735810830956325","5.1875016652047634e-05","6.337438541930169","model_done","False","0","0","0","The search for 'hello' case insensitively in all files under /workspace directory tree has been completed. The matched lines with their filenames are as follows:
+/workspace/dir1/hello.txt:hello!
+/workspace/dir1/hello.c:printf(""Hello, World!"");
+/workspace/dir2/hello.txt:hello!
+/workspace/dir2/foo.txt:Another hello world file"
+"intercode-nl2bash-fs3-056","development","qwen","always_slow","False","3","0","3","","3342","3342","7.109887958969921","0.1385886260541156","3.937608562409878e-05","7.829931375104934","model_done","False","0","1","0","The archive has been split into smaller files with the prefix 'output_prefix' and each file is at most 10 MiB in size."
+"intercode-nl2bash-fs3-057","development","qwen","always_slow","True","3","0","3","","2794","2794","6.0537582078250125","0.2107457920210436","9.216589387506247e-05","7.0739370000083","model_done","False","0","0","0","All .gz archives in the /workspace directory tree have been successfully unpacked."
+"intercode-nl2bash-fs3-058","development","qwen","always_slow","False","2","0","2","","1515","1515","4.288043208071031","0.06359604094177485","1.237494871020317e-05","5.056783166015521","model_done","False","0","0","0","The archive /workspace/archive.tar.gz has been successfully extracted to /backup."
+"intercode-nl2bash-fs3-059","development","qwen","always_slow","False","2","0","2","","1561","1561","3.7733727080048993","0.10254262504167855","4.333304241299629e-05","4.702878084033728","model_done","False","0","0","0","Symbolic link '/workspace/test' created successfully pointing to '/workspace/dir1/terminate.txt'."
+"intercode-nl2bash-fs4-002","development","qwen","always_slow","False","10","0","10","","30636","30636","24.342594874906354","0.9469574571121484","0.00035545905120670795","25.990260124905035","repeated_action_stop","False","0","3","3",""
+"intercode-nl2bash-fs4-003","development","qwen","always_slow","True","2","0","2","","1456","1456","3.885294873965904","0.09703962504863739","4.558300133794546e-05","4.7121557500213385","model_done","False","0","0","0","www.google.com"
+"intercode-nl2bash-fs4-004","development","qwen","always_slow","True","2","0","2","","1636","1636","4.359473083051853","0.09501625003758818","3.63329891115427e-05","5.096114875050262","model_done","False","0","0","0","HOSTNAME=70f3ab1ed7bc
+PWD=/
+HOME=/root
+SHLVL=0
+TESTBED=/
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+_=/usr/bin/env"
+"intercode-nl2bash-fs4-006","development","qwen","always_slow","True","6","0","6","","8435","8435","10.295666417106986","0.5116047929041088","0.00022883305791765451","11.463684874936007","model_done","False","0","1","1","The directories 'dir', 'subdir', and 'subsubdir' have been successfully created."
+"intercode-nl2bash-fs4-011","development","qwen","always_slow","False","3","0","3","","2888","2888","6.3754694579401985","0.20125716703478247","9.583297651261091e-05","7.305766916950233","model_done","False","0","2","0","No smbfs mounts found."
+"intercode-nl2bash-fs4-013","development","qwen","always_slow","True","2","0","2","","1492","1492","3.4957336670486256","0.06727945897728205","1.058308407664299e-05","4.286539208027534","model_done","False","0","0","0",";876"
+"intercode-nl2bash-fs4-015","development","qwen","always_slow","True","2","0","2","","1558","1558","3.7189390010898933","0.07443954201880842","1.0207993909716606e-05","4.392235665931366","model_done","False","0","0","0","987654"
+"intercode-nl2bash-fs4-017","development","qwen","always_slow","False","2","0","2","","1551","1551","3.620455249911174","0.09778304200153798","5.037500523030758e-05","4.397865499951877","model_done","False","0","0","0","HOSTNAME, HOME"
+"intercode-nl2bash-fs4-019","development","qwen","always_slow","True","2","0","2","","1738","1738","4.779168332926929","0.18798587494529784","4.3665990233421326e-05","5.633934458019212","model_done","False","0","1","0","The hostname 'hostname' is not resolvable. Please verify the hostname and try again."
+"intercode-nl2bash-fs4-020","development","qwen","always_slow","False","2","0","2","","1426","1426","3.011835876153782","0.10929358389694244","1.4833989553153515e-05","3.751686834031716","model_done","False","0","0","0","==================================================================================================="
+"intercode-nl2bash-fs4-021","development","qwen","always_slow","False","8","0","8","","16461","16461","18.467920333729126","0.6428210841258988","0.00022033299319446087","19.708467917051166","model_done","False","0","2","0","22"
+"intercode-nl2bash-fs4-022","development","qwen","always_slow","True","2","0","2","","1494","1494","4.009614084032364","0.06874320900533348","1.8249964341521263e-05","4.732422458007932","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs4-023","development","qwen","always_slow","True","2","0","2","","2027","2027","4.594960291055031","0.09926045802421868","5.079200491309166e-05","5.397252666996792","model_done","False","0","0","0","The calendars for November 2020, December 2020, and January 2021 have been displayed."
+"intercode-nl2bash-fs4-024","development","qwen","always_slow","True","2","0","2","","1679","1679","4.067000249051489","0.10351066698785871","4.1207997128367424e-05","4.836367542040534","model_done","False","0","0","0","adm
+audio
+backup
+bin
+cdrom
+crontab
+daemon
+dialout
+dip
+disk
+fax
+floppy
+games
+gnats
+irc
+kmem
+list
+lp
+mail
+man
+news
+nogroup
+operator
+plugdev
+proxy
+root
+sasl
+shadow
+src
+staff
+sudo
+sys
+tape
+tty
+users
+utmp
+uucp
+video
+voice
+www-data"
+"intercode-nl2bash-fs4-025","development","qwen","always_slow","False","2","0","2","","1618","1618","3.633357750135474","0.11169000004883856","4.366703797131777e-05","4.416105582960881","model_done","False","0","0","0","1.01"
+"intercode-nl2bash-fs4-026","development","qwen","always_slow","True","2","0","2","","1535","1535","3.8839234160259366","0.09419312502723187","2.8333975933492184e-05","4.669348582974635","model_done","False","0","0","0","55"

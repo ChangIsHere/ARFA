@@ -1,0 +1,70 @@
+{
+  "phase": "phase3_arfa",
+  "protocol_version": "phase3-dual-model-v1",
+  "stage": "phase3_development",
+  "pair_name": "qwen",
+  "policy": "residual",
+  "experiment_split": "development",
+  "paper_primary_evaluation": false,
+  "expected_task_count": 100,
+  "task_count": 100,
+  "success_count": 41,
+  "success_rate": 0.41,
+  "fast_model": "arfa-qwen2.5-coder:7b-8k",
+  "slow_model": "arfa-qwen2.5-coder:14b-8k",
+  "residual_method": "structured_expectation_observation",
+  "residual_threshold": 0.35,
+  "total_model_calls": 283,
+  "fast_model_calls": 118,
+  "slow_model_calls": 165,
+  "fast_call_rate": 0.4169611307420495,
+  "total_tokens": 344378,
+  "fast_model_tokens": 161780,
+  "slow_model_tokens": 182598,
+  "total_model_latency_seconds": 575.9798920835601,
+  "total_command_latency_seconds": 19.95106554205995,
+  "total_router_latency_seconds": 0.004889332572929561,
+  "total_task_wall_seconds": 685.96686437889,
+  "avg_task_wall_seconds": 6.8596686437889005,
+  "wall_seconds_per_success": 16.73089913119244,
+  "parse_error_count": 3,
+  "max_steps_reached_count": 0,
+  "provenance": {
+    "python": "3.10.11",
+    "platform": "macOS-15.2-arm64-arm-64bit",
+    "git_commit": "cf97d0592e7a731c216ca4e729ec07d1e8d6d944",
+    "git_worktree_dirty": true,
+    "config_path": "config/phase3_arfa_nrp_qwen.yaml",
+    "config_sha256": "da2dd6e11328e66b2e0f7462c94c0dc2ab8676d35951138b92f4200fd985d595",
+    "task_manifest_sha256": "c6936840f27441f3310efdf958ef45d2adf9ac47d87c1ffa8cb04c2207dc3557",
+    "split_manifest_sha256": "056fdb6f64638ed3afb04e7cc41624e8c5b4d5f33a2728e3639d17eaee5bbe52",
+    "selected_task_ids_sha256": "2f31599dfb50c84461efcbe14074afe80e2d0484758d8f507954762118997d5d",
+    "source_sha256": {
+      "src/phase3_arfa/arfa_agent.py": "f3266fc162d0e2b9b73023d723a6a45445095f764b2ab78ab1ebf1c051900d27",
+      "src/phase3_arfa/router.py": "f90fd7cc1161eb9a8c53dfd938dfa4be8ea5f772e9d51efe3d2168c453c547dd",
+      "src/phase3_arfa/prompts.py": "cabe9fe1c3acf3a19f8d9b942eac602dd9a3b9cb0e465d9b2377c75ed610768c",
+      "src/phase1_5_shadow/residual.py": "443f7fa67a062a191e29e0370a724fae7c6813cc45c987f975ee518ff9174532",
+      "src/phase1_5_shadow/json_model_client.py": "a7c093517c7b7e97c001c6e63296aa398eeb7bbb32e8f721c5a2ebf1f41c9954",
+      "src/phase2_baseline/intercode_docker_environment.py": "9ede7cafad642d545ad93072a7eebd20bfb92bb629c6d6949eba761ac37fb926"
+    },
+    "pair_name": "qwen",
+    "policy": "residual",
+    "split": "development",
+    "residual_threshold": 0.35,
+    "fast_model": {
+      "model_name": "arfa-qwen2.5-coder:7b-8k",
+      "modelfile_sha256": "4d7e3b9f649ef1086b9699f6a6ce16d5b596f7d9e99c0b8a6ab24727975bc913"
+    },
+    "slow_model": {
+      "model_name": "arfa-qwen2.5-coder:14b-8k",
+      "modelfile_sha256": "7558151a8f795b58e554d484a9a1cc4d313773e9120d036ad02dc23e540e42bb"
+    },
+    "docker_image_digests": {
+      "arfa/intercode-nl2bash:fs1": "sha256:5eae875f6c319815f7ad741362185e7a0cb1df69790b273f1afb558d69ec03ff",
+      "arfa/intercode-nl2bash:fs2": "sha256:d6529b701dee8b4ca01e3ec81209c04181db5b443853ca912ed3c1c5ce0859f7",
+      "arfa/intercode-nl2bash:fs3": "sha256:77a9262d1e83fbfee8f06c322101a72e6c9295790de84958851260da227baced",
+      "arfa/intercode-nl2bash:fs4": "sha256:a779755daeb6c6b418c2adadbb7897349babcb556801e561db90d719a42a5dc4"
+    },
+    "fingerprint": "27f0c576783c7bd4cd628d494b9150a4779f19596ab09cb181f5cc83894ea067"
+  }
+}

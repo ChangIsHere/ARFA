@@ -1,0 +1,18 @@
+captured_at_utc=2026-10-08T12:40:27Z
+git_commit=cf97d0592e7a731c216ca4e729ec07d1e8d6d944
+git_worktree_dirty=true
+job=arfa-phi-inference-run
+pod=arfa-phi-inference-run-68xch
+node=rci-tide-gpu-03.sdsu.edu
+pod_uid=b111960d-e48e-4e8e-bd4f-750bfe88f794
+image=docker.io/ollama/ollama:0.34.1
+image_id=docker.io/ollama/ollama@sha256:0c0a83210471fb50226bcdc2d6611d20ab13ae87e024cc304c94a6a5765c5e65
+Python 3.10.11
+Name: PyYAML
+Version: 6.0.3
+sha256:
+63ebdebb4d9baf79ab19b7bf9791dc63f4361127eeee0e56ef8654818c3ab1e3  config/phase3_arfa_nrp_phi.yaml
+d3fd67c0973ecf0a1f869f24fd539f087b5e14f4adb7c5b8f074f0fe150b56b7  deployment/nrp/23-phi-configmap.yaml
+e5e1d5ff21b8d185450555ab185420c4edd4da8e35dda47b0f7bfc14046de96c  deployment/nrp/44-phi-inference-service.yaml
+fdadef64e56d0e5e05ae86ffd541f1e0dcde328680e8506c3983afc543cbaaa0  deployment/nrp/run_phi_high_memory_matrix.sh
+e3bd49c67bf707e9b06a11864c38b56202f3145769a29d35312d3ef8cf2d9274  deployment/nrp/gpu_job_lib.sh

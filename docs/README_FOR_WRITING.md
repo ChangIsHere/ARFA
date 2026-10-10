@@ -1,104 +1,128 @@
-# Writing Guide
+# ARFA Manuscript Handoff
 
-## Main Idea
+This is the entry point for a workshop or arXiv draft based on the repository's
+current evidence. The data support a paper about residual-guided model selection
+and model-pair dependence. They do not yet support a broad claim that ARFA is
+universally faster, safer, or more energy efficient.
 
-Residual compares an agent's expected command result with the actual output. It
-can serve as a reference for fast/slow reasoning decisions. The current studies
-examine that signal; Phase 3 will test its effect on task success and cost.
+## Research Question
 
-## What To Use
+Terminal agents normally invoke a reasoning model again after every action.
+ARFA instead records an expected outcome before execution and compares it with
+the terminal observation. The resulting residual is used to choose the fast or
+slow model for the next turn.
 
-1. **Phase 1/1.5:** start with [residual formulas and results](residual_diagnostics.md).
-   There are 300 shadow runs and 790 executed steps. Expectations were written
-   before execution, but no reasoning calls were skipped.
-2. **Label comparison:** full residual AUC is 0.743, raw residual AUC is 0.739,
-   and learned observation-only AUC is 0.749 on 313 binary test items from 40 tasks.
-   These use human-reviewed, AI-assisted labels and remain provisional; see the
-   [study notes](residual_constraints.md). The numeric snapshot is in
-   `evidence/residual_diagnostics/annotation_association.json`.
-3. **Phase 2:** use the [baseline package](phase2_writing_bundle/README_FOR_WRITING.md)
-   for its 1,600-run results (eight models, 200 shared tasks), tables, and figures. Its task set and prompt differ
-   from the shadow study.
-4. **Phase 3:** use the [implementation plan](04_phase3_arfa_dual_track.md) for the
-   proposed experiment. Results have not been collected yet.
+The paper asks:
 
-## How The Studies Fit Together
+1. Does expectation-observation mismatch contain information related to agent
+   outcomes and reviewed reasoning-necessity labels?
+2. How capable and expensive are candidate fast and slow models by themselves?
+3. In a matched online agent, can residual routing retain task success while
+   reducing use of the slow model?
+4. Why do end-to-end savings differ across model pairs?
 
-Phase 1 used existing external trajectories to explore residual scoring. It is
-preserved as supplementary history in `archive/phase1_writing_bundle/`.
-Phase 1.5 collected live shadow trajectories: the agent wrote an expectation
-before executing each action, then the system recorded the observed output and
-residual. The agent continued to call its model at every step, so this study
-measures associations rather than the benefit of online routing.
+## Evidence Inventory
 
-Phase 2 measures eight single-model ReAct agents on the same 200 terminal tasks.
-The loop is instruction, model response, shell action, observation, and another
-model response, until completion or the 12-step limit. The evaluator compares
-the resulting state and output with the released gold command. All 1,600
-attempts are recorded, including unsuccessful attempts. The shared budget is
-8K context, temperature zero, and 700 output tokens per call.
+### Offline residual study
 
-Phase 3 will use residual as one input to selecting a fast or slow model. The
-four available baseline pairs are Qwen 7B/14B, Llama 3B/8B, Gemma 4B/12B, and
-Phi Mini 3.8B/Phi 14B. The existing Phase 3 design is Qwen-first; the other pairs
-are available for extensions, not already collected routing experiments. If
-Phase 3 changes prompts, execution rules, or budgets, it needs matched single-
-model baselines under those settings. The historical Phase 2 results alone
-cannot isolate the effect of residual routing.
+Use [residual_diagnostics.md](residual_diagnostics.md) and
+[`evidence/residual_diagnostics/`](../evidence/residual_diagnostics/).
 
-## Latest Phase 2 Update
+- 300 shadow trajectories on 100 shared InterCode NL2Bash tasks.
+- Three model conditions and 790 executed terminal steps.
+- Expectations were committed before command execution; routing remained in
+  shadow mode.
+- Full residual AUC against the stored reviewed reasoning labels was 0.743
+  (task-bootstrap 95% CI 0.681-0.811), but learned observation-only AUC was
+  0.749. This supports association, not superiority or safe deployment.
+- The 751 labels were AI-assisted and, according to the project owner, divided
+  among six human reviewers. Separate reviewer files are unavailable, so these
+  label-based results should be described as provisional reviewed annotations,
+  not as a six-annotator agreement study.
+- Test-split task-failure AUC for structured residual was 0.613, 0.611, and
+  0.597 across Qwen 14B, Qwen 7B, and Llama 8B.
 
-The baseline matrix grew from three models and 600 attempts to eight models and
-1,600 attempts. Qwen 14B has the highest observed success rate, 40%; Gemma 4B
-averages 22.98 seconds per task at 26% success. Pair differences and their
-uncertainty are in the baseline package. These results establish comparison
-points for routing; they do not establish that ARFA saves time or energy.
+### Phase 2 model characterization
 
-DeepSeek-R1 and DeepSeek-Coder were considered before the Phi pair. R1 exhausted
-the response budget, and the Coder 6.7B run was stopped after 20 attempted tasks
-with protocol failures and long runtimes. The replacement followed observed
-results and must remain described as such. The
-[Phase 2 protocol](03_phase2_baseline_agent.md) records this selection history.
+Use the [Phase 2 writing bundle](phase2_writing_bundle/README_FOR_WRITING.md).
 
-The current bundle adds five model summaries, all eight model configurations,
-updated figures and tables, and `metrics/task_outcomes.jsonl` with one compact
-record per attempt. It removes an excluded DeepSeek summary from the formal
-bundle. Formatting recovery, hard JSON failure, and request errors are reported
-separately. Two request-error records lack complete cost accounting; see the
-bundle's scope notes before interpreting token or call totals.
+- Eight models x the same 200 tasks = 1,600 attempts.
+- Success ranged from 12.5% to 40.0%.
+- The study identifies four candidate scale pairs and their standalone cost.
+- Phase 2 is historical characterization, not the causal routing baseline.
 
-## What Is Published
+### Phase 3 online development study
 
-GitHub includes the implementation, prompts, configs, model definitions, the
-200-task manifest, per-task compact outcomes, aggregate statistics, diagnostic
-examples, source hashes, and PNG/PDF figures plus Markdown/LaTeX tables. These
-support drafting and reanalysis of task-level outcomes.
+Use [`evidence/phase3_design/`](../evidence/phase3_design/) and especially
+[`development_summary.csv`](../evidence/phase3_design/development_summary.csv).
+Each pair ran the same 100 development tasks under residual, always-slow, and
+always-fast policies.
 
-Full conversations, downloaded external repositories, annotation working files,
-model weights, caches, and terminal logs stay local. A trace hash identifies a
-local source file; it does not make that file publicly downloadable. Rebuilding
-all trace-level diagnostics requires those traces or a new model run. Historical
-reports and frozen protocols are retained for provenance and should not be
-mistaken for the current result set.
+| Pair | Residual | Slow-only | Fast-only | Slow-call change | Wall-time change | Token change |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Qwen 7B/14B | 41% | 41% | 31% | -40.86% | -4.87% | -1.41% |
+| Llama 3B/8B | 19% | 16% | 8% | -22.64% | +13.78% | +24.82% |
+| Gemma 4B/12B | 29% | 26% | 21% | -48.06% | -30.65% | -30.61% |
+| Phi Mini/14B | 33% | 30% | 23% | -28.43% | +9.83% | +2.47% |
 
-Use `main` for code and evidence and `paper` for manuscript drafts. Record the
-`main` commit used by a draft. The manuscript branch is not automatically
-updated when evidence changes.
+Qwen's wall-time and token intervals cross zero. Gemma's threshold `0.30` was
+selected on the development tasks. No Phi threshold passed the saved selection
+rule; `0.15` is shown only because it had the highest development success.
+Absolute timing should not be pooled across hardware.
 
-## Draft Wording
+## Supported Paper Claim
 
-> We study execution residuals as a reference for fast/slow reasoning decisions.
-> In the shadow study, residual distributions differed across models and showed
-> modest associations with task failure. The full score reached AUC 0.743
-> (95% CI 0.681-0.811) against the existing human-reviewed, AI-assisted labels.
-> This label comparison is preliminary and did not show an advantage over the
-> learned observation-only baseline. We next test whether using residual in an
-> online agent improves the balance between task success and reasoning cost.
+> Execution residual can be used as a lightweight reference signal for choosing
+> between fast and slow reasoning models in terminal agents. Across four
+> development pairs it consistently reduced slow-model calls, while end-to-end
+> savings depended on the fast model's latency, output length, and action quality.
 
-The [study notes](residual_constraints.md) collect annotation details, previous
-selection criteria, and the scope of these results. Keep those details with the
-experiment description rather than repeating them throughout the draft.
+The strongest positive examples are Qwen and Gemma. Llama and Phi are useful
+counterexamples: reducing slow calls is not sufficient to reduce total cost.
+This pair-dependent result connects residual routing to model selection rather
+than treating the router and model pair as independent choices.
 
-Current numeric exports are in `evidence/residual_diagnostics/`. Earlier Phase 1
-figures are supplementary and stored in `docs/archive/phase1_writing_bundle/`.
-Full raw data remains local. Record the code commit used for each paper version.
+## Claims To Avoid
+
+- Do not call the current Phase 3 results held out; the reserved final split is
+  still unused.
+- Do not claim that residual beats observation-only routing; that matched online
+  control has not been run.
+- Do not claim measured energy savings. GPU power samples exist for infrastructure
+  monitoring, but the current paper results report calls, tokens, and wall time.
+- Do not describe Phase 2 as the primary routing baseline. Phase 3's matched
+  always-slow and always-fast policies are the relevant controls.
+- Do not claim that every pair improved. Llama and Phi increased total cost
+  relative to always-slow.
+
+## Suggested Paper Structure
+
+1. **Introduction:** reasoning after every terminal action is expensive; an
+   external expectation-observation mismatch may help decide which model to use.
+2. **Related Work:** coding agents, ReAct and reflection, adaptive computation,
+   model routing, and inference efficiency.
+3. **Method:** pre-execution commitment, structured residual, safety fallback,
+   and fast/slow routing.
+4. **Offline Diagnostics:** 300 shadow trajectories and residual associations.
+5. **Experimental Setup:** InterCode NL2Bash, eight standalone models, four
+   online pairs, matched policies, success criterion, tokens, calls, and latency.
+6. **Results:** Phase 2 characterization followed by the four Phase 3 pair
+   comparisons.
+7. **Analysis:** why Qwen/Gemma benefit and Llama/Phi do not; model-pair choice
+   is part of the routing design.
+8. **Limitations:** one benchmark, one run per task/policy, development-set
+   threshold selection, no matched observation-only router, and no direct energy
+   result.
+
+## Source Map
+
+- Residual formula: `src/phase1_5_shadow/residual.py`
+- Online controller: `src/phase3_arfa/arfa_agent.py` and `router.py`
+- Phase 3 paired analysis: `src/phase3_arfa/analyze_results.py`
+- Frozen task manifest: `data/phase2/intercode_nl2bash_official_200.jsonl`
+- Phase 2 tables/figures: `docs/phase2_writing_bundle/`
+- Phase 3 compact evidence: `evidence/phase3_design/`
+- Raw local traces: ignored `results/` paths referenced by evidence manifests
+
+For the experiments needed beyond the workshop version, see
+[phase3_publication_experiment_plan.md](phase3_publication_experiment_plan.md).

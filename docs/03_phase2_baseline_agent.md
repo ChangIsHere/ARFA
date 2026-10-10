@@ -1,16 +1,24 @@
-# Phase 2 Baseline Agent
+# Phase 2 Single-Model Characterization
 
-Phase 2 builds the standard terminal-based ReAct baseline. It does not contain ARFA fast/slow routing and does not use the residual gate for control.
+Phase 2 runs standard terminal-based ReAct agents one model at a time. It does
+not contain ARFA fast/slow routing and does not use residual for control. The
+historical filename and result directories retain the word `baseline`, but this
+study is used primarily to characterize models and choose fast/slow pairs.
 
 ## Purpose
 
-The baseline answers the question:
+Phase 2 answers these questions:
 
 ```text
-How many model calls, tokens, and seconds does a normal always-reason ReAct agent need on the same terminal tasks?
+How capable and expensive is each model when used alone?
+Which fast/slow pairs have enough capability and cost separation to test routing?
 ```
 
-This creates the comparison point for Phase 3 ARFA-Min.
+These results provide historical standalone references for Phase 3. They are not
+the primary controls for residual-routing claims because Phase 3 adds a structured
+expectation prompt, routing logic, and a different runtime environment. Phase 3
+therefore reruns `always_slow` and `always_fast` beside `residual` on identical
+tasks and hardware.
 
 ## Current Implementation
 
@@ -85,13 +93,18 @@ arfa-phi4:14b-8k
 The planned pairs are Qwen2.5-Coder 7B/14B, Llama 3.2 3B with Llama 3.1 8B,
 Gemma 3 4B/12B, and Phi-4 Mini 3.8B/Phi-4 14B. The Llama pair crosses model
 releases; the other three pairs stay within named model families.
-This is a model-comparison extension, not yet a Phase 3 routing result.
+This is a model-characterization study, not a Phase 3 routing result.
 
 Paper-usable Phase 2 results must come from a real model endpoint, not from `--dry-run`.
 
 ## Paper Protocol
 
-The Phase 2 paper run is a standard always-reason ReAct baseline. It has no residual score, routing threshold, fast path, small-model handoff, or ARFA control decision. Each model uses temperature 0, at most 12 reasoning calls per task, the same structured prompt, and a fresh pair of containers per task. The recorded network mode is `bridge`. One container runs the agent and the other runs the official gold command.
+The Phase 2 paper run is a standard always-reason ReAct characterization run. It
+has no residual score, routing threshold, fast path, small-model handoff, or ARFA
+control decision. Each model uses temperature 0, at most 12 reasoning calls per
+task, the same structured prompt, and a fresh pair of containers per task. The
+recorded network mode is `bridge`. One container runs the agent and the other runs
+the official gold command.
 
 The reward reimplements the three released InterCode Bash components: filesystem diff, changed-file content, and final observation TF-IDF similarity. A task succeeds at reward >= 0.99. Runs are checkpointed after every task and can be resumed without rerunning completed task IDs. The main analysis retains all 200 tasks and also reports a strict gold-health sensitivity subset based on the environment validation output.
 
@@ -132,22 +145,21 @@ Success rates range from 12.5% to 40.0%; failed tasks remain part of the results
 All recorded protocol checks pass. Gold validation identifies 195 healthy tasks,
 reported separately alongside the full 200-task analysis.
 
+The matrix establishes standalone model performance and supports the four pair
+choices. It does not establish that ARFA is better than using either model alone.
+That comparison belongs to Phase 3, where `residual`, `always_slow`, and
+`always_fast` share the Phase 3 prompt, execution loop, tasks, and hardware.
+
 The [writing package](phase2_writing_bundle/README_FOR_WRITING.md) contains all
 eight results, four figures, paired confidence intervals, failure diagnostics,
 and source hashes. One run per model/task is available. The reported McNemar
 p-values are unadjusted; latency and tokens do not constitute measured energy.
 
-Preflight is stored separately under `results/phase2_baseline/preflight/` and
-must not be counted as paper results. Llama 3.2 3B and Gemma 3 4B/12B completed
-one task each. Gemma replies required recoverable JSON extraction. DeepSeek-R1
-was rejected during preflight because explicit reasoning exhausted the fixed
-700-token response budget. DeepSeek-Coder 6.7B was then excluded after its first
-20 formal-prefix tasks all failed and most repeatedly emitted non-JSON responses,
-leading to its replacement for runtime and protocol reasons after evaluation
-had begun. This is a post-observation model-selection decision, not a
-preregistered exclusion. Those traces remain under
-`results/phase2_baseline/preflight/`; the formal fourth pair uses Phi-4 models.
-The extra model tags and sizes are listed by
+Preflight attempts are not counted as paper results. DeepSeek-R1 exceeded the
+fixed response budget, and DeepSeek-Coder 6.7B failed its initial protocol check;
+the fourth formal pair therefore uses Phi-4 models. This replacement followed
+preflight observations rather than a preregistered exclusion. Model tags and
+sizes are listed by
 [Ollama](https://ollama.com/library/llama3.2),
 [Gemma 3](https://ollama.com/library/gemma3), and
 [Phi-4 Mini](https://ollama.com/library/phi4-mini), and

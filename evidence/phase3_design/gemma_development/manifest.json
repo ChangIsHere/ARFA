@@ -1,0 +1,38 @@
+{
+  "phase": "phase3_gemma_development_selected",
+  "run_id": "nrp-gemma-high-memory-parallel4-workers16-development",
+  "selection": {
+    "split": "development",
+    "selected_residual_threshold": 0.30,
+    "selection_source": "evidence/phase3_design/gemma_high_memory_parallel4_calibration/threshold_calibration.json",
+    "held_out": false
+  },
+  "hardware": {
+    "gpu": "NVIDIA L40",
+    "gpu_memory_mib": 46068,
+    "driver": "615.71.09",
+    "ollama": "0.34.1",
+    "trajectory_workers": 16,
+    "ollama_parallel_sequences": 4
+  },
+  "models": {
+    "fast": "arfa-gemma3:4b-8k",
+    "slow": "arfa-gemma3:12b-8k",
+    "context_length": 8192,
+    "keep_alive": -1
+  },
+  "task_count_per_policy": 100,
+  "complete": true,
+  "reserved_final_split_opened": false,
+  "analysis_sha256": "f5040b485542f0fb89624b4ec4dbe7cf904e442a9eb29f46540133572de83667",
+  "published_metrics_sha256": {
+    "residual": "33d3e5d0772c9d24e9b6aea74a0e6a2cd5005d14fb09115d90860e07ace179bb",
+    "always_slow": "5a32e0152315d5f8b58073824e6d81ccf30ee98bdf37daaffa1849ef8282e688",
+    "always_fast": "eae0372aacc335207d1d9494015588fa422fca27366ac769a4c19f1301dd7949"
+  },
+  "raw_trace_sha256": {
+    "residual_threshold_0_30": "a96e34279e1d995ea8ee29f6b6616f5820653db191f1491e3e995d8dd9828ec5",
+    "always_slow": "eeea13a9485efdfb7855f8e79a09a6d6962a2925846c5ee9bb5b6cee122df809",
+    "always_fast": "302556eae3c69e67e1e058d9c80a9b2b457d8635dd47fa960fb4a05a98fae2df"
+  }
+}

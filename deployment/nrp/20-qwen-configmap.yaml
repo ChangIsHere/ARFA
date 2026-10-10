@@ -1,0 +1,211 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arfa-qwen-residency-config
+  namespace: ucr-qzhang
+  labels:
+    app.kubernetes.io/name: arfa
+    app.kubernetes.io/component: qwen-residency
+data:
+  Modelfile.qwen2.5-coder-7b-8k: |
+    FROM qwen2.5-coder:7b
+    PARAMETER num_ctx 8192
+  Modelfile.qwen2.5-coder-14b-8k: |
+    FROM qwen2.5-coder:14b
+    PARAMETER num_ctx 8192
+  serve_qwen.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    RUN_ROOT="/workspace/runs/${ARFA_RUN_ID}"
+    ENV_ROOT="${RUN_ROOT}/environment"
+    mkdir -p "${ENV_ROOT}" "${RUN_ROOT}/checkpoints" "${RUN_ROOT}/raw_traces" "${RUN_ROOT}/results"
+
+    cleanup() {
+      if [[ -n "${OLLAMA_PID:-}" ]]; then
+        kill "${OLLAMA_PID}" 2>/dev/null || true
+        wait "${OLLAMA_PID}" 2>/dev/null || true
+      fi
+    }
+    trap cleanup EXIT
+
+    ollama serve > "${ENV_ROOT}/ollama-server.log" 2>&1 &
+    OLLAMA_PID=$!
+    for _ in $(seq 1 120); do
+      if ollama list >/dev/null 2>&1; then
+        break
+      fi
+      sleep 1
+    done
+    ollama list >/dev/null
+
+    ollama pull qwen2.5-coder:7b
+    ollama pull qwen2.5-coder:14b
+    ollama create arfa-qwen2.5-coder:7b-8k -f /opt/arfa/Modelfile.qwen2.5-coder-7b-8k
+    ollama create arfa-qwen2.5-coder:14b-8k -f /opt/arfa/Modelfile.qwen2.5-coder-14b-8k
+
+    [[ "$(ollama list | awk '$1 == "qwen2.5-coder:7b" {print $2}')" == "dae161e27b0e" ]]
+    [[ "$(ollama list | awk '$1 == "qwen2.5-coder:14b" {print $2}')" == "9ec8897f747e" ]]
+    [[ "$(sha256sum /opt/arfa/Modelfile.qwen2.5-coder-7b-8k | awk '{print $1}')" == "303748e22b015ed9050d0099b780b134878d0af6477ca71409e9c24eee52d43c" ]]
+    [[ "$(sha256sum /opt/arfa/Modelfile.qwen2.5-coder-14b-8k | awk '{print $1}')" == "24734a7b3d69061072e9d50e4d26b62a52afb9e847f9c121099eabc5a992f1b6" ]]
+
+    ollama run arfa-qwen2.5-coder:7b-8k "Respond with exactly: OK" > /tmp/arfa-warm-7b.txt
+    ollama run arfa-qwen2.5-coder:14b-8k "Respond with exactly: OK" > /tmp/arfa-warm-14b.txt
+    RESIDENT_MODELS=$(ollama ps)
+    printf '%s\n' "${RESIDENT_MODELS}" | tee "${ENV_ROOT}/ollama-ps-ready.txt"
+    grep -q 'arfa-qwen2.5-coder:7b-8k' <<< "${RESIDENT_MODELS}"
+    grep -q 'arfa-qwen2.5-coder:14b-8k' <<< "${RESIDENT_MODELS}"
+    touch /tmp/arfa-ready
+
+    wait "${OLLAMA_PID}"
+  residency_probe.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    RUN_ROOT="/workspace/runs/${ARFA_RUN_ID}"
+    ENV_ROOT="${RUN_ROOT}/environment"
+    mkdir -p "${ENV_ROOT}" "${RUN_ROOT}/checkpoints" "${RUN_ROOT}/raw_traces" "${RUN_ROOT}/results"
+    exec > >(tee -a "${ENV_ROOT}/residency-probe.log") 2>&1
+
+    cleanup() {
+      if [[ -n "${OLLAMA_PID:-}" ]]; then
+        kill "${OLLAMA_PID}" 2>/dev/null || true
+        wait "${OLLAMA_PID}" 2>/dev/null || true
+      fi
+    }
+    trap cleanup EXIT
+
+    now_ms() {
+      date +%s%3N
+    }
+
+    snapshot() {
+      local label="$1"
+      echo "--- snapshot: ${label} ---"
+      ollama ps | tee "${ENV_ROOT}/ollama-ps-${label}.txt"
+      nvidia-smi --query-gpu=index,name,uuid,memory.total,memory.used,memory.free,driver_version --format=csv,noheader \
+        | tee "${ENV_ROOT}/nvidia-smi-${label}.csv"
+      nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader \
+        | tee "${ENV_ROOT}/nvidia-processes-${label}.csv" || true
+    }
+
+    invoke() {
+      local label="$1"
+      local model="$2"
+      local started
+      local finished
+      started=$(now_ms)
+      ollama run "${model}" "Respond with exactly: OK" > "${ENV_ROOT}/response-${label}.txt"
+      finished=$(now_ms)
+      printf '%s\t%s\t%s\n' "${label}" "${model}" "$((finished - started))" \
+        | tee -a "${ENV_ROOT}/latencies-ms.tsv"
+      snapshot "${label}"
+    }
+
+    echo "run_id=${ARFA_RUN_ID}"
+    echo "git_commit=${ARFA_GIT_COMMIT}"
+    echo "worktree_dirty=${ARFA_WORKTREE_DIRTY}"
+    echo "phase3_config_sha256=${ARFA_CONFIG_SHA256}"
+    echo "node_name=${NODE_NAME}"
+    echo "pod_name=${POD_NAME}"
+    echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "python=not-installed-not-used"
+    echo "pytorch=not-installed-not-used"
+
+    cat /proc/cpuinfo > "${ENV_ROOT}/cpuinfo.txt"
+    cat /proc/meminfo > "${ENV_ROOT}/meminfo.txt"
+    nvidia-smi -q > "${ENV_ROOT}/nvidia-smi-full.txt"
+
+    ollama serve > "${ENV_ROOT}/ollama-server.log" 2>&1 &
+    OLLAMA_PID=$!
+    for _ in $(seq 1 120); do
+      if ollama list >/dev/null 2>&1; then
+        break
+      fi
+      sleep 1
+    done
+    ollama list >/dev/null
+    ollama --version | tee "${ENV_ROOT}/ollama-version.txt"
+
+    ollama pull qwen2.5-coder:7b
+    ollama pull qwen2.5-coder:14b
+    ollama create arfa-qwen2.5-coder:7b-8k -f /opt/arfa/Modelfile.qwen2.5-coder-7b-8k
+    ollama create arfa-qwen2.5-coder:14b-8k -f /opt/arfa/Modelfile.qwen2.5-coder-14b-8k
+    ollama list | tee "${ENV_ROOT}/ollama-model-list.txt"
+
+    BASE7_ID=$(ollama list | awk '$1 == "qwen2.5-coder:7b" {print $2}')
+    BASE14_ID=$(ollama list | awk '$1 == "qwen2.5-coder:14b" {print $2}')
+    ARFA7_ID=$(ollama list | awk '$1 == "arfa-qwen2.5-coder:7b-8k" {print $2}')
+    ARFA14_ID=$(ollama list | awk '$1 == "arfa-qwen2.5-coder:14b-8k" {print $2}')
+    [[ "${BASE7_ID}" == "dae161e27b0e" ]]
+    [[ "${BASE14_ID}" == "9ec8897f747e" ]]
+    MODELFILE7_SHA=$(sha256sum /opt/arfa/Modelfile.qwen2.5-coder-7b-8k | awk '{print $1}')
+    MODELFILE14_SHA=$(sha256sum /opt/arfa/Modelfile.qwen2.5-coder-14b-8k | awk '{print $1}')
+    [[ "${MODELFILE7_SHA}" == "303748e22b015ed9050d0099b780b134878d0af6477ca71409e9c24eee52d43c" ]]
+    [[ "${MODELFILE14_SHA}" == "24734a7b3d69061072e9d50e4d26b62a52afb9e847f9c121099eabc5a992f1b6" ]]
+
+    cat > "${ENV_ROOT}/model-identity.txt" <<EOF
+    base_7b_id=${BASE7_ID}
+    base_14b_id=${BASE14_ID}
+    nrp_alias_7b_id=${ARFA7_ID}
+    nrp_alias_14b_id=${ARFA14_ID}
+    local_alias_7b_id=1a56c1ad09d4
+    local_alias_14b_id=b0b742e90d49
+    modelfile_7b_sha256=${MODELFILE7_SHA}
+    modelfile_14b_sha256=${MODELFILE14_SHA}
+    identity_policy=base-weight-id-plus-modelfile-sha256
+    EOF
+    cat "${ENV_ROOT}/model-identity.txt"
+    ollama show arfa-qwen2.5-coder:7b-8k --modelfile > "${ENV_ROOT}/resolved-modelfile-7b.txt"
+    ollama show arfa-qwen2.5-coder:14b-8k --modelfile > "${ENV_ROOT}/resolved-modelfile-14b.txt"
+    ollama show arfa-qwen2.5-coder:7b-8k > "${ENV_ROOT}/model-show-7b.txt"
+    ollama show arfa-qwen2.5-coder:14b-8k > "${ENV_ROOT}/model-show-14b.txt"
+
+    ollama stop arfa-qwen2.5-coder:7b-8k || true
+    ollama stop arfa-qwen2.5-coder:14b-8k || true
+    snapshot unloaded
+
+    printf 'label\tmodel\telapsed_ms\n' > "${ENV_ROOT}/latencies-ms.tsv"
+    invoke cold-7b arfa-qwen2.5-coder:7b-8k
+    invoke warm-7b arfa-qwen2.5-coder:7b-8k
+    invoke cold-14b arfa-qwen2.5-coder:14b-8k
+    invoke warm-14b arfa-qwen2.5-coder:14b-8k
+    invoke alternate-7b-1 arfa-qwen2.5-coder:7b-8k
+    invoke alternate-14b-1 arfa-qwen2.5-coder:14b-8k
+    invoke alternate-7b-2 arfa-qwen2.5-coder:7b-8k
+    invoke alternate-14b-2 arfa-qwen2.5-coder:14b-8k
+
+    FINAL_PS=$(ollama ps)
+    printf '%s\n' "${FINAL_PS}" | tee "${ENV_ROOT}/ollama-ps-final.txt"
+    printf '%s\n' "${FINAL_PS}" | grep -q 'arfa-qwen2.5-coder:7b-8k'
+    printf '%s\n' "${FINAL_PS}" | grep -q 'arfa-qwen2.5-coder:14b-8k'
+
+    if grep -Eiq 'out of memory|insufficient memory|evict|oom' "${ENV_ROOT}/ollama-server.log"; then
+      echo "OOM or eviction marker detected in Ollama logs" >&2
+      exit 1
+    fi
+
+    cat > "${ENV_ROOT}/status.json" <<EOF
+    {
+      "run_id": "${ARFA_RUN_ID}",
+      "passed": true,
+      "both_models_resident": true,
+      "oom_detected": false,
+      "eviction_detected": false,
+      "git_commit": "${ARFA_GIT_COMMIT}",
+      "worktree_dirty": ${ARFA_WORKTREE_DIRTY},
+      "phase3_config_sha256": "${ARFA_CONFIG_SHA256}",
+      "node_name": "${NODE_NAME}",
+      "pod_name": "${POD_NAME}",
+      "completed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    }
+    EOF
+
+    echo "--- latency results ---"
+    cat "${ENV_ROOT}/latencies-ms.tsv"
+    echo "--- final residency ---"
+    cat "${ENV_ROOT}/ollama-ps-final.txt"
+    echo "--- final GPU state ---"
+    cat "${ENV_ROOT}/nvidia-smi-alternate-14b-2.csv"
+    echo "--- status ---"
+    cat "${ENV_ROOT}/status.json"

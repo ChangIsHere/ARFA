@@ -1,0 +1,65 @@
+{
+  "phase": "phase3_runtime_preflight",
+  "protocol_version": "phase3-dual-model-v1",
+  "config_sha256": "da2dd6e11328e66b2e0f7462c94c0dc2ab8676d35951138b92f4200fd985d595",
+  "ready_for_development": true,
+  "ready_for_final": false,
+  "checks": {
+    "controller_ready": true,
+    "engineering_gate_passed": true,
+    "task_manifest_has_200_unique_tasks": true,
+    "development_has_100_tasks": true,
+    "final_has_100_tasks": true,
+    "development_final_disjoint": true,
+    "docker_running": true,
+    "all_images_available": true,
+    "all_models_available": true,
+    "all_phase2_baselines_matched": true
+  },
+  "docker_version": "28.3.3",
+  "images": {
+    "arfa/intercode-nl2bash:fs1": {
+      "available": true,
+      "image_id": "sha256:5eae875f6c319815f7ad741362185e7a0cb1df69790b273f1afb558d69ec03ff"
+    },
+    "arfa/intercode-nl2bash:fs2": {
+      "available": true,
+      "image_id": "sha256:d6529b701dee8b4ca01e3ec81209c04181db5b443853ca912ed3c1c5ce0859f7"
+    },
+    "arfa/intercode-nl2bash:fs3": {
+      "available": true,
+      "image_id": "sha256:77a9262d1e83fbfee8f06c322101a72e6c9295790de84958851260da227baced"
+    },
+    "arfa/intercode-nl2bash:fs4": {
+      "available": true,
+      "image_id": "sha256:a779755daeb6c6b418c2adadbb7897349babcb556801e561db90d719a42a5dc4"
+    }
+  },
+  "models": {
+    "arfa-qwen2.5-coder:7b-8k": {
+      "available": true,
+      "detail": "ok"
+    },
+    "arfa-qwen2.5-coder:14b-8k": {
+      "available": true,
+      "detail": "ok"
+    }
+  },
+  "phase2_baselines": {
+    "qwen.fast": {
+      "model_name": "arfa-qwen2.5-coder:7b-8k",
+      "task_count": 200,
+      "success_count": 52,
+      "issues": [],
+      "ready": true
+    },
+    "qwen.slow": {
+      "model_name": "arfa-qwen2.5-coder:14b-8k",
+      "task_count": 200,
+      "success_count": 80,
+      "issues": [],
+      "ready": true
+    }
+  },
+  "task_manifest_sha256": "c6936840f27441f3310efdf958ef45d2adf9ac47d87c1ffa8cb04c2207dc3557"
+}

@@ -1,95 +1,70 @@
 # ARFA
 
-**Residual-Guided Reasoning Control for Terminal-Based Coding Agents**
+**Residual-Guided Model Selection for Terminal-Based Coding Agents**
 
-An agent runs a command, observes the result, and decides what to do next. ARFA
-compares that result with what the agent expected. We call the difference an
-execution residual and use it as a reference for deciding when to reason again.
+ARFA asks a narrow question: after a terminal action, can the difference between
+the expected and observed result help choose the model for the next reasoning
+turn? The agent records an expectation before execution, computes a structured
+execution residual afterward, and routes the next call to a fast or slow model.
 
-## Progress
+## Evidence Snapshot
 
-- **Phase 1/1.5:** collected 300 shadow runs from three models on 100 shared tasks.
-  The 790 executed steps have recorded expectations, outputs, and residual values.
-  The agent still reasoned after every observation during collection.
-- **Phase 2:** completed 1,600 always-reason baseline runs: eight models on the
-  same 200 InterCode tasks. All eight task-ID and recorded-protocol audits pass.
-  Four fast/slow model pairs now have individual baselines.
-- **Phase 3:** next is to implement and test fast/slow execution. The current code
-  is a scaffold, not a running controller.
+- **Offline diagnostics:** 300 shadow trajectories, 100 shared InterCode
+  NL2Bash tasks, three models, and 790 executed steps.
+- **Standalone characterization:** eight models each ran the same 200 tasks,
+  for 1,600 Phase 2 attempts.
+- **Online development study:** four fast/slow pairs each ran 100 shared tasks
+  under residual, always-slow, and always-fast policies, for 1,200 matched
+  policy-task attempts.
 
-## Results
+| Pair | Residual | Slow-only | Fast-only | Residual versus slow-only |
+| --- | ---: | ---: | ---: | --- |
+| Qwen 7B/14B | 41% | 41% | 31% | 40.9% fewer slow calls; wall-time CI crosses zero |
+| Llama 3B/8B | 19% | 16% | 8% | 22.6% fewer slow calls; 13.8% more wall time |
+| Gemma 4B/12B | 29% | 26% | 21% | 48.1% fewer slow calls; 30.6% less wall time and tokens |
+| Phi Mini/14B | 33% | 30% | 23% | 28.4% fewer slow calls; 9.8% more wall time |
 
-In the shadow study, mean structured residual was 0.088 for Qwen 14B, 0.123 for
-Qwen 7B, and 0.211 for Llama 8B. Task success was 42%, 22%, and 21%, respectively.
-These patterns support studying residual as a decision signal; they do not yet
-show which model to call for an individual task.
+These are development results. Gemma's threshold was selected on the same
+development tasks. No Phi threshold passed the saved selection rule, so its
+best-success result is diagnostic. The reserved Phase 3 final split remains
+unused.
 
-Against the existing human-reviewed, AI-assisted labels, the full residual score
-had test AUC 0.743 (95% CI 0.681-0.811). Learned observation-only scoring reached
-0.749. Label-based results remain provisional because of an earlier judge-prompt
-issue; [study notes](docs/residual_constraints.md) explain the source and scope.
+The main finding is therefore conditional: residual routing can reduce slow
+model use, but end-to-end savings depend on the model pair. Qwen preserved
+slow-only success while reducing slow calls. Gemma produced the clearest
+development tradeoff. Llama and Phi show that a smaller model can add latency,
+tokens, or retries even when routing invokes the larger model less often.
 
-### Phase 2 Baselines
+## Writing And Evidence
 
-All models completed 200 attempts. Task success means evaluator reward >= 0.99;
-failed attempts remain in the denominator. Times include the task execution.
+Start with [the manuscript handoff](docs/README_FOR_WRITING.md). It lists the
+supported claims, exact result sources, paper outline, and statements that
+should remain qualified.
 
-| Model | Successful tasks | Success rate | Seconds/task | Calls/task |
-| --- | ---: | ---: | ---: | ---: |
-| Qwen2.5-Coder 7B | 52/200 | 26.0% | 47.29 | 5.28 |
-| Qwen2.5-Coder 14B | 80/200 | 40.0% | 85.70 | 3.29 |
-| Llama 3.2 3B | 36/200 | 18.0% | 24.37 | 6.12 |
-| Llama 3.1 8B | 51/200 | 25.5% | 58.69 | 3.98 |
-| Gemma 3 4B | 52/200 | 26.0% | 22.98 | 3.02 |
-| Gemma 3 12B | 63/200 | 31.5% | 86.61 | 4.11 |
-| Phi-4 Mini 3.8B | 25/200 | 12.5% | 26.46 | 3.72 |
-| Phi-4 14B | 51/200 | 25.5% | 94.80 | 3.14 |
+- [Residual definitions and offline diagnostics](docs/residual_diagnostics.md)
+- [Eight-model Phase 2 bundle](docs/phase2_writing_bundle/README_FOR_WRITING.md)
+- [Four-pair Phase 3 evidence](evidence/phase3_design/README.md)
+- [Online experiment design](docs/04_phase3_arfa_dual_track.md)
+- [Next experiments for a full paper](docs/phase3_publication_experiment_plan.md)
 
-![Phase 2 task success with 95% confidence intervals](docs/phase2_writing_bundle/figures/fig1_phase2_success.png)
+## Repository Map
 
-The [writing bundle](docs/phase2_writing_bundle/README_FOR_WRITING.md) includes
-paired comparisons, uncertainty intervals, a 195-task gold-healthy analysis,
-failure diagnostics, and downloadable PNG/PDF figures and Markdown/LaTeX tables.
-Latency and token usage are measured; energy consumption has not been measured.
-Phase 3 will measure whether consulting residual reduces reasoning cost while
-preserving task success.
+- `src/`: agents, scoring, runners, and analysis.
+- `config/`: experiment configurations.
+- `deployment/nrp/`: bounded NRP GPU jobs used by the completed runs.
+- `data/phase2/`: frozen 200-task InterCode manifest.
+- `evidence/`: compact results, confidence intervals, and provenance.
+- `docs/`: writing handoff, protocols, tables, and figures.
+- `results/`: ignored raw traces and checkpoints kept locally.
 
-## Read And Reproduce
-
-- [Writing guide](docs/README_FOR_WRITING.md)
-- [Residual formulas and results](docs/residual_diagnostics.md)
-- [Per-step scores](evidence/residual_diagnostics/step_scores.csv) and
-  [task scores](evidence/residual_diagnostics/task_scores.csv)
-- [Model summaries](evidence/residual_diagnostics/summary.json) and
-  [label comparisons](evidence/residual_diagnostics/annotation_association.json)
-- [Phase 2 results](docs/phase2_writing_bundle/README_FOR_WRITING.md)
-- [Phase 2 expansion protocol and status](docs/03_phase2_baseline_agent.md)
-- [Phase 3 plan](docs/04_phase3_arfa_dual_track.md)
-- [Phase 3 pre-run study protocol](docs/phase3_study_protocol.md)
-
-With the existing Python environment and cached MiniLM model:
+## Verification
 
 ```bash
-bash scripts/phase1_export_diagnostics.sh
 .venv/bin/python -m pytest -q
-bash scripts/phase3_run_arfa.sh
+bash -n scripts/*.sh deployment/nrp/*.sh
+git diff --check
 ```
 
-The first command exports scores from saved traces. The last reports development
-readiness; it does not launch an agent.
-
-## Repository
-
-Code is in `src/`, settings in `config/`, and command entry points in `scripts/`.
-Current numeric evidence is in `evidence/residual_diagnostics/`; older reports are
-in `docs/archive/`. The tracked Phase 2 writing package covers the complete
-eight-model matrix. Model-selection history is documented in the
-[Phase 2 protocol](docs/03_phase2_baseline_agent.md).
-
-Tasks come from [InterCode](https://github.com/princeton-nlp/intercode). Downloaded
-external data stays in `data/phase1/external_intercode/`; our local shadow runs stay
-in `results/phase1_5_shadow/full/`. Full traces, raw labels, and model caches are
-not uploaded. Existing source paths and frozen files are kept for reproduction.
-
-`main` holds code and results; `paper` is intended for manuscript drafts. Use a
-code commit and the artifact manifests to identify the results behind each draft.
+Tasks come from [InterCode](https://github.com/princeton-nlp/intercode). Model
+weights, caches, raw traces, credentials, kubeconfig, and tokens are not
+committed.

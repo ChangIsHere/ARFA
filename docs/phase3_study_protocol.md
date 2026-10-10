@@ -1,13 +1,19 @@
 # Phase 3 Qwen Study: Decision Rules Before Formal Runs
 
+> Status note: this document preserves the pre-run Qwen decision rules. The
+> controller and matched H100 development core have since been implemented and
+> completed. Current results live in
+> `evidence/phase3_design/qwen_h100_development/`; the rules below remain the
+> design record rather than a description of current implementation status.
+
 **Design version:** `phase3-qwen-pair-v1.1`, in
-[`config/phase3_study.yaml`](../config/phase3_study.yaml). This document fixes
-the proposed decision rules before collecting Phase 3 formal outcomes. Phase 3
-still needs an implemented controller, a matched baseline, and a runnable
-measurement setup. A later design change should get a new version and be reported
-as a change, not presented as part of this version.
-Version 1.1 adds cost per successful task to version 1; neither version has
-Phase 3 outcomes.
+[`config/phase3_study.yaml`](../config/phase3_study.yaml). This document fixed
+the Qwen decision rules before its online outcomes were collected. The
+controller and three matched Qwen policies are now complete on the development
+split. Version 1.1 added cost per successful task before those outcomes. Later
+Gemma and Phi threshold sweeps are development analyses and are identified as
+such in their evidence manifests; they are not retroactively part of this Qwen
+design record.
 
 ## Why Five Percentage Points?
 

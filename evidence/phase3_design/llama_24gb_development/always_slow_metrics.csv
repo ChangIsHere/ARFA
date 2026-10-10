@@ -1,0 +1,176 @@
+"task_id","experiment_split","pair_name","policy","success","model_calls","fast_model_calls","slow_model_calls","fast_model_tokens","slow_model_tokens","total_tokens","model_latency_seconds","command_latency_seconds","router_latency_seconds","total_task_wall_seconds","termination_reason","max_steps_reached","parse_error_count","nonzero_exit_count","repeated_action_count","final_answer"
+"intercode-nl2bash-fs1-000","development","llama","always_slow","False","5","0","5","","6344","6344","8.867235335055739","0.37679433496668935","8.833291940391064e-05","9.859861667035148","model_done","False","0","1","0","The list of duplicate md5 sum hashes for .java files in /testbed is successfully calculated"
+"intercode-nl2bash-fs1-001","development","llama","always_slow","False","3","0","3","","2922","2922","5.3926958738593385","0.12916545697953552","1.6417005099356174e-05","6.158433875069022","model_done","False","0","0","0","c9b48292048e937331fa825621eb0068"
+"intercode-nl2bash-fs1-009","development","llama","always_slow","False","5","0","5","","5633","5633","7.745453665149398","0.284553166013211","4.3125124648213387e-05","8.646545374998823","model_done","False","0","0","2","Yes"
+"intercode-nl2bash-fs1-010","development","llama","always_slow","False","6","0","6","","9579","9579","11.040441958117299","0.3520884570898488","4.5291963033378124e-05","12.017891417024657","model_done","False","0","4","0","The contents of /testbed/dir3/subdir1/subsubdir1/textfile3.txt are not a subset of /testbed/dir2/subdir1/textfile2.txt"
+"intercode-nl2bash-fs1-014","development","llama","always_slow","False","4","0","4","","4459","4459","7.108580082771368","0.2811085839057341","6.020802538841963e-05","7.966317834099755","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-015","development","llama","always_slow","False","3","0","3","","2850","2850","4.706666626036167","0.13577504199929535","1.7458107322454453e-05","5.494641958968714","model_done","False","0","0","0","Files with 'FooBar' in path copied successfully"
+"intercode-nl2bash-fs1-016","development","llama","always_slow","False","2","0","2","","1525","1525","3.3487620829837397","0.12061416602227837","8.66700429469347e-06","4.117768958909437","model_done","False","0","0","0","The construction was successful."
+"intercode-nl2bash-fs1-021","development","llama","always_slow","True","2","0","2","","1476","1476","3.0618818759685382","0.10344312503002584","8.66700429469347e-06","3.79559395799879","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-023","development","llama","always_slow","False","3","0","3","","2675","2675","4.775796877103858","0.15408962510991842","1.9208062440156937e-05","5.594777291989885","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-029","development","llama","always_slow","True","4","0","4","","4256","4256","6.49821929296013","0.24866424989886582","3.2791984267532825e-05","7.333518833038397","model_done","False","0","0","1","0"
+"intercode-nl2bash-fs1-031","development","llama","always_slow","False","2","0","2","","1447","1447","2.9712362920399755","0.11638379108626395","3.2207928597927094e-05","3.792530957958661","model_done","False","0","0","0","31"
+"intercode-nl2bash-fs1-032","development","llama","always_slow","False","4","0","4","","4080","4080","6.126483250875026","0.1982966671930626","2.808414865285158e-05","6.948954250081442","model_done","False","0","0","1","0"
+"intercode-nl2bash-fs1-033","development","llama","always_slow","False","3","0","3","","2629","2629","4.818640125100501","0.17482195794582367","3.679096698760986e-05","5.697659292025492","model_done","False","0","0","0","31"
+"intercode-nl2bash-fs1-034","development","llama","always_slow","False","5","0","5","","6645","6645","9.190926083130762","0.30982333386782557","4.258414264768362e-05","10.148510499973781","model_done","False","0","0","0","The number of lines in each *.php file is: 1 line in /testbed/dir1/info.php, 1 line in /testbed/hello.php"
+"intercode-nl2bash-fs1-035","development","llama","always_slow","False","8","0","8","","14938","14938","15.348093624110334","0.5224087490933016","9.345891885459423e-05","16.565763999940827","model_done","False","0","2","1","The sorted list of PHP files with their line counts is: 1 /testbed/hello.php, 1 /testbed/dir1/info.php"
+"intercode-nl2bash-fs1-038","development","llama","always_slow","False","6","0","6","","9760","9760","11.04671033390332","0.4142483751056716","8.058187086135149e-05","12.057615916011855","model_done","False","0","2","0","The '/etc/networks' file does not exist in the testbed."
+"intercode-nl2bash-fs1-040","development","llama","always_slow","True","3","0","3","","2644","2644","4.474226834019646","0.20515691593755037","6.591703277081251e-05","5.407858374994248","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-045","development","llama","always_slow","False","3","0","3","","2784","2784","5.440308916964568","0.13558191701304168","1.8291990272700787e-05","6.317938791005872","model_done","False","0","0","0","The archive /backup1.tar was created successfully with the expected contents."
+"intercode-nl2bash-fs1-048","development","llama","always_slow","False","5","0","5","","6777","6777","9.992432876024395","0.31837129197083414","6.333517376333475e-05","10.909163374919444","model_done","False","0","1","1","The 5 largest files in the /testbed directory and its sub-directories are: [list of files]"
+"intercode-nl2bash-fs1-050","development","llama","always_slow","False","3","0","3","","3273","3273","6.8460473319282755","0.18194883305113763","3.658293280750513e-05","7.673809209023602","model_done","False","0","0","0","The 5 smallest files are: /testbed/recent.txt, /testbed/dir3/textfile6.txt, /testbed/dir1/textfile1.txt, /testbed/dir3/subdir1/subsubdir1/file.txt, /testbed/dir3/subdir1/subsubdir1/tmp/tmp.txt"
+"intercode-nl2bash-fs1-051","development","llama","always_slow","False","6","0","6","","9924","9924","11.685815207893029","0.35710645909421146","5.2541960030794144e-05","12.660078792017885","model_done","False","0","0","0","The largest file size within /testbed directory is the size of the directory itself."
+"intercode-nl2bash-fs1-052","development","llama","always_slow","False","3","0","3","","2825","2825","5.477978290989995","0.1555771240964532","4.041590727865696e-05","6.341584459063597","model_done","False","0","0","0","No .java files containing 'Hello' found in the testbed directory tree."
+"intercode-nl2bash-fs1-055","development","llama","always_slow","False","3","0","3","","2763","2763","4.666704416042194","0.13715795800089836","1.9582919776439667e-05","25.502417542040348","model_done","False","0","0","0","Directories where files containing 'Hello' are placed: /testbed, /testbed/dir1, /testbed"
+"intercode-nl2bash-fs1-057","development","llama","always_slow","False","4","0","4","","4598","4598","7.240787540911697","0.2917349999770522","7.675110828131437e-05","8.199436708004214","model_done","False","0","2","0","Symbolic link created successfully."
+"intercode-nl2bash-fs1-058","development","llama","always_slow","False","6","0","6","","8511","8511","10.831423043040559","20.444584790966474","8.966703899204731e-05","31.966143166064285","model_done","False","0","2","0","The files with sticky bit set and permissions 553 in /testbed/dir1 are listed in /testbed/dir1/find_output.txt"
+"intercode-nl2bash-fs2-000","development","llama","always_slow","False","6","0","6","","11176","11176","13.833183499868028","0.45612070709466934","0.00010987604036927223","14.892994959023781","repeated_action_stop","False","0","5","2",""
+"intercode-nl2bash-fs2-005","development","llama","always_slow","False","7","0","7","","10767","10767","11.489157959003933","0.5016122909728438","0.00012124981731176376","12.63664612499997","repeated_action_stop","False","0","3","2",""
+"intercode-nl2bash-fs2-007","development","llama","always_slow","False","8","0","8","","13464","13464","12.71956583217252","40.71377495885827","0.00017145811580121517","54.13158529100474","model_done","False","0","6","2","Task completed successfully"
+"intercode-nl2bash-fs2-008","development","llama","always_slow","False","4","0","4","","4553","4553","7.2205122919986024","0.2991212080232799","0.00010195898357778788","8.236297708004713","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs2-009","development","llama","always_slow","False","5","0","5","","7068","7068","9.151398124056868","0.46825295803137124","3.791716881096363e-05","10.467710292083211","model_done","False","0","0","0","All files under /system/folder1 have been successfully renamed from 'special' to 'regular'."
+"intercode-nl2bash-fs2-011","development","llama","always_slow","False","3","0","3","","2796","2796","4.914424500078894","0.2015151660889387","6.616604514420033e-05","5.8207072500372306","model_done","False","0","0","0","special text4.txt, empty.txt, text1.txt, text1_dbg.txt, sql1.sql"
+"intercode-nl2bash-fs2-012","development","llama","always_slow","False","5","0","5","","5948","5948","7.72695641790051","0.3269042909378186","6.883300375193357e-05","8.658681374974549","model_done","False","0","1","0","The string 'special' was found in the contents."
+"intercode-nl2bash-fs2-016","development","llama","always_slow","False","3","0","3","","2788","2788","5.400104625965469","0.20205550105310977","6.616604514420033e-05","6.289673708030023","model_done","False","0","1","0","All *.txt files in the '/system' directory have been deleted."
+"intercode-nl2bash-fs2-019","development","llama","always_slow","True","7","0","7","","11333","11333","12.094708125921898","0.41471271018963307","5.849881563335657e-05","13.092111708014272","model_done","False","0","2","2","All outdated *.txt files under /system/folder1 have been removed."
+"intercode-nl2bash-fs2-020","development","llama","always_slow","False","6","0","6","","8244","8244","9.928298835176975","0.35330175003036857","5.124998278915882e-05","10.861513625015505","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs2-021","development","llama","always_slow","False","6","0","6","","8679","8679","10.232845251681283","0.379364749067463","5.4875039495527744e-05","11.228709541028365","model_done","False","0","5","1","All a.out, *.o, and core files under '/system' have been removed"
+"intercode-nl2bash-fs2-022","development","llama","always_slow","True","4","0","4","","4724","4724","7.759106499957852","0.26932037505321205","7.52920750528574e-05","8.73170708399266","model_done","False","0","0","1","The file /system/folder1/data.csv now contains only 5 comma-separated fields from each line."
+"intercode-nl2bash-fs2-025","development","llama","always_slow","False","4","0","4","","4742","4742","7.496662042103708","0.20962283399421722","3.349978942424059e-05","8.31149158300832","model_done","False","0","1","0","All files 'a.out' and *.o modified more than 7 days ago in /system have been deleted"
+"intercode-nl2bash-fs2-026","development","llama","always_slow","False","9","0","9","","17915","17915","15.386607501190156","0.6428515410516411","0.0001236669486388564","16.762453542090952","repeated_action_stop","False","0","3","3",""
+"intercode-nl2bash-fs2-027","development","llama","always_slow","False","3","0","3","","2440","2440","4.416370915947482","0.21799854096025229","4.270905628800392e-05","5.31600754102692","model_done","False","0","0","0","No empty directories found in /system"
+"intercode-nl2bash-fs2-029","development","llama","always_slow","False","4","0","4","","4823","4823","7.6610460840165615","0.19906262401491404","2.820801455527544e-05","8.485918208025396","model_done","False","0","2","1","No files to remove"
+"intercode-nl2bash-fs2-032","development","llama","always_slow","True","3","0","3","","2600","2600","4.6897150840377435","0.11608420789707452","1.7376034520566463e-05","5.540601292042993","model_done","False","0","0","0","Task complete"
+"intercode-nl2bash-fs2-033","development","llama","always_slow","False","12","0","12","","30208","30208","21.857877083937638","0.9820990419248119","0.00020691670943051577","23.520599249983206","max_steps","True","0","9","3",""
+"intercode-nl2bash-fs2-034","development","llama","always_slow","False","4","0","4","","3948","3948","6.46805796015542","0.30736124992836267","7.054104935377836e-05","7.505882082972676","model_done","False","0","0","1","The /system directory tree is now empty."
+"intercode-nl2bash-fs2-038","development","llama","always_slow","False","4","0","4","","4534","4534","7.234692625934258","0.24444508308079094","3.0125142075121403e-05","8.091468417085707","model_done","False","0","0","0","The first 10 directories with the most subdirectories under /system are: /system/folder3/temp/temp1/temp_1, /system/folder3/temp/temp1/temp, /system/folder3/temp/temp1, /system/folder3/temp, /system/folder3/backup_dbg/backup, /system/folder3/backup_dbg, /system/folder3, /system/folder2, /system/folder1, /system/temp"
+"intercode-nl2bash-fs2-040","development","llama","always_slow","False","4","0","4","","4178","4178","7.283866083016619","0.2450635830173269","5.1915994845330715e-05","8.132109708036296","model_done","False","0","0","0","The symbolic link /system/folder1/root points to /testbed"
+"intercode-nl2bash-fs2-043","development","llama","always_slow","False","5","0","5","","6628","6628","8.875534291844815","0.3352520407643169","3.679108340293169e-05","9.894948749919422","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs2-044","development","llama","always_slow","False","5","0","5","","6148","6148","7.9406177920755","0.33319487585686147","7.004186045378447e-05","8.997391666984186","model_done","False","0","2","1","Compression successful"
+"intercode-nl2bash-fs2-045","development","llama","always_slow","False","12","0","12","","33111","33111","22.989655459066853","1.1722555417800322","0.00020308501552790403","24.94266095792409","model_done","False","0","5","1","All files in /system directory except those containing 'text' were copied to /system/folder3/backup_dbg/backup."
+"intercode-nl2bash-fs2-047","development","llama","always_slow","False","2","0","2","","1394","1394","3.3247196240117773","0.09804775007069111","1.1791009455919266e-05","4.077841582940891","model_done","False","0","0","0","Hello world!"
+"intercode-nl2bash-fs2-048","development","llama","always_slow","False","6","0","6","","9872","9872","10.234311668085866","0.3933214589487761","6.508291698992252e-05","11.233839749940671","repeated_action_stop","False","0","3","1",""
+"intercode-nl2bash-fs2-050","development","llama","always_slow","True","7","0","7","","9924","9924","10.877651667105965","0.5142912507290021","0.00010533316526561975","11.987417625030503","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs2-051","development","llama","always_slow","False","5","0","5","","6878","6878","9.24625045817811","0.3487770830979571","4.966708365827799e-05","10.208590124966577","model_done","False","0","0","0","The md5sum of the sorted list of .txt files under /system is d41d8cd98f00b204e9800998ecf8427e"
+"intercode-nl2bash-fs3-000","development","llama","always_slow","False","5","0","5","","5730","5730","8.258406750042923","20.38720124901738","8.658308070152998e-05","29.283549417043105","model_done","False","0","1","0","No files modified 30 days ago were found"
+"intercode-nl2bash-fs3-001","development","llama","always_slow","True","4","0","4","","4364","4364","7.201718708034605","0.275843333103694","7.437390740960836e-05","8.098212209064513","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs3-004","development","llama","always_slow","False","8","0","8","","13359","13359","13.342943167081103","0.5530787499155849","0.00010495912283658981","14.487710915971547","repeated_action_stop","False","0","1","1",""
+"intercode-nl2bash-fs3-009","development","llama","always_slow","False","7","0","7","","12213","12213","12.166453957906924","0.4517764179036021","5.8916048146784306e-05","13.267819334054366","repeated_action_stop","False","0","4","2",""
+"intercode-nl2bash-fs3-010","development","llama","always_slow","False","11","0","11","","25115","25115","17.099501167656854","0.8232763319974765","0.00020066474098712206","18.585201416979544","repeated_action_stop","False","0","6","3",""
+"intercode-nl2bash-fs3-012","development","llama","always_slow","True","4","0","4","","4342","4342","7.058383834082633","0.24078604101669043","2.9416987672448158e-05","10.700868875021115","model_done","False","0","1","0","All files older than one day in /workspace have been moved to /."
+"intercode-nl2bash-fs3-013","development","llama","always_slow","True","4","0","4","","4219","4219","6.367720332928002","0.2535970009630546","4.15419926866889e-05","7.302098665968515","model_done","False","0","2","0","The filenames containing 'hello' in /workspace/dir1 are hello.txt and hello.c"
+"intercode-nl2bash-fs3-014","development","llama","always_slow","False","3","0","3","","2673","2673","4.619718666886911","0.20447795814834535","5.40000619366765e-05","5.493049999931827","model_done","False","0","0","0","No disk usage values found"
+"intercode-nl2bash-fs3-017","development","llama","always_slow","False","3","0","3","","2618","2618","4.59642691607587","0.17992241692263633","5.670799873769283e-05","5.453936207923107","model_done","False","0","0","1","The first line of the file is 'The first line'"
+"intercode-nl2bash-fs3-018","development","llama","always_slow","True","5","0","5","","5769","5769","7.536375999916345","0.28200083307456225","4.5291963033378124e-05","8.499876208021306","model_done","False","1","0","1","The first line"
+"intercode-nl2bash-fs3-019","development","llama","always_slow","False","3","0","3","","2377","2377","4.079202082939446","0.1868239170871675","1.9958941265940666e-05","4.922691999934614","model_done","False","0","0","0","Workspace directory is empty"
+"intercode-nl2bash-fs3-021","development","llama","always_slow","False","3","0","3","","3332","3332","6.312480751075782","0.1965151249896735","5.537504330277443e-05","7.1902814590139315","model_done","False","0","0","0","The sorted list of file names is:
+/workspace/.hidden.txt
+/workspace/archive.tar.gz
+/workspace/dir1/.hidden1.txt
+/workspace/dir1/a.txt
+/workspace/dir1/all.txt
+/workspace/dir1/file.c
+/workspace/dir1/file.txt
+/workspace/dir1/hello.c
+/workspace/dir1/hello.txt
+/workspace/dir1/long.txt
+/workspace/dir1/new1.sh
+/workspace/dir1/readonly.txt
+/workspace/dir1/script1.sh
+/workspace/dir1/sum.c
+/workspace/dir1/terminate.txt
+/workspace/dir2/csvfile1.csv
+/workspace/dir2/foo.txt
+/workspace/dir2/hello.txt
+/workspace/dir2/mysql/sql1.sql
+/workspace/files.txt
+/workspace/new.sh
+/workspace/old2.txt
+/workspace/recent1.txt
+/workspace/results.txt"
+"intercode-nl2bash-fs3-026","development","llama","always_slow","False","7","0","7","","17127","17127","13.200917833833955","0.49621416989248246","0.00012341595720499754","14.304329750011675","model_done","False","0","2","2","The file foo was not found in the /workspace folder."
+"intercode-nl2bash-fs3-028","development","llama","always_slow","False","2","0","2","","2819","2819","10.348814083030447","0.10655929194763303","1.1916039511561394e-05","11.139646916999482","model_done","False","0","0","0","The md5 sums of all files in /workspace directory are as follows:
+73f369633560985902e921f25f4c719e  /workspace/results.txt
+fde7af370e4bea930e584390dcbb9e50  /workspace/files.txt
+f7029d399ae782fb8f3860986b7535d6  /workspace/new.sh
+d41d8cd98f00b204e9800998ecf8427e  /workspace/old2.txt
+7c7c34df69c43566e490bca484088585  /workspace/archive.tar.gz
+d41d8cd98f00b204e9800998ecf8427e  /workspace/recent1.txt
+b8722e02cb8a308049d627f44a6fa34e  /workspace/.hidden.txt
+94d098bed182dde0ab8721800cbf895f  /workspace/dir1/long.txt
+8b8db3dfa426f6bdb1798d578f5239ae  /workspace/dir1/hello.txt
+620f0b67a91f7f74151bc5be745b7110  /workspace/dir1/file.txt
+c99a74c555371a433d121f551d6c6398  /workspace/dir1/file.c
+7803e02080c2131dc1c6a53af1c378e7  /workspace/dir1/.hidden1.txt
+f7029d399ae782fb8f3860986b7535d6  /workspace/dir1/new1.sh
+3add5e1546cfbbb91c765a1a67021a10  /workspace/dir1/hello.c
+56ffd3e71d612b1b218c5d6c5ba376d5  /workspace/dir1/sum.c
+fd58478c962652af8e07021061aca66a  /workspace/dir1/script1.sh
+d41d8cd98f00b204e9800998ecf8427e  /workspace/dir1/all.txt
+c260d983a362d037fec0331a8a8ad112  /workspace/dir1/terminate.txt
+d41d8cd98f00b204e9800998ecf8427e  /workspace/dir1/readonly.txt
+6e6aa4f4bd0506361054fd363338d301  /workspace/dir1/a.txt
+8b8db3dfa426f6bdb1798d578f5239ae  /workspace/dir2/hello.txt
+5bf6b7349149944d65ea0b1f423b5009  /workspace/dir2/mysql/sql1.sql
+296c284c2f77e2f56926bbf7b12ad8e3  /workspace/dir2/foo.txt
+10cf89885a2167cf37ff7338c34355c1  /workspace/dir2/csvfile1.csv"
+"intercode-nl2bash-fs3-029","development","llama","always_slow","False","3","0","3","","4395","4395","8.957383665954694","0.12365958408918232","1.8541933968663216e-05","9.712055167066865","model_done","False","0","0","0","The md5 sums of all files in /workspace are:
+73f369633560985902e921f25f4c719e
+fde7af370e4bea930e584390dcbb9e50
+f7029d399ae782fb8f3860986b7535d6
+d41d8cd98f00b204e9800998ecf8427e
+7c7c34df69c43566e490bca484088585
+b8722e02cb8a308049d627f44a6fa34e
+94d098bed182dde0ab8721800cbf895f
+8b8db3dfa426f6bdb1798d578f5239ae
+620f0b67a91f7f74151bc5be745b7110
+c99a74c555371a433d121f551d6c6398
+7803e02080c2131dc1c6a53af1c378e7
+f7029d399ae782fb8f3860986b7535d6
+3add5e1546cfbbb91c765a1a67021a10
+56ffd3e71d612b1b218c5d6c5ba376d5
+fd58478c962652af8e07021061aca66a
+d41d8cd98f00b204e9800998ecf8427e
+c260d983a362d037fec0331a8a8ad112
+d41d8cd98f00b204e9800998ecf8427e
+6e6aa4f4bd0506361054fd363338d301
+8b8db3dfa426f6bdb1798d578f5239ae
+5bf6b7349149944d65ea0b1f423b5009
+296c284c2f77e2f56926bbf7b12ad8e3
+10cf89885a2167cf37ff7338c34355c1"
+"intercode-nl2bash-fs3-031","development","llama","always_slow","False","3","0","3","","2771","2771","4.7109044580720365","0.21776766597758979","4.7874986194074154e-05","5.5448801250895485","model_done","False","0","0","0","4"
+"intercode-nl2bash-fs3-034","development","llama","always_slow","False","5","0","5","","6384","6384","8.5578052069759","0.3551331670023501","7.304304745048285e-05","9.600930582964793","model_done","False","0","0","0","/workspace/test/dir1 and /workspace"
+"intercode-nl2bash-fs3-037","development","llama","always_slow","False","2","0","2","","1430","1430","3.0651586659951136","0.10447841696441174","2.0666047930717468e-05","3.8594148750416934","model_done","False","0","0","0","24"
+"intercode-nl2bash-fs3-038","development","llama","always_slow","False","7","0","7","","14456","14456","14.834618082968518","0.5625845828326419","8.671008981764317e-05","15.995126667083241","repeated_action_stop","False","0","3","2",""
+"intercode-nl2bash-fs3-039","development","llama","always_slow","False","2","0","2","","1482","1482","3.395979792927392","0.07938712497707456","1.1958996765315533e-05","4.157631458947435","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs3-040","development","llama","always_slow","False","3","0","3","","2971","2971","4.934352042037062","0.202542167971842","3.954209387302399e-05","5.810395917040296","model_done","False","0","0","0","7"
+"intercode-nl2bash-fs3-045","development","llama","always_slow","False","2","0","2","","1719","1719","3.508158083073795","0.09681408398319036","9.582960046827793e-06","4.270223791943863","model_done","False","0","0","0","The dump of floating point values of double size from /workspace/dir1/long.txt is successfully displayed."
+"intercode-nl2bash-fs3-049","development","llama","always_slow","False","3","0","3","","2812","2812","4.872664624010213","0.16989679192192852","3.766606096178293e-05","5.677218374912627","model_done","False","0","0","0","The list of file sizes and paths sorted in descending order of size, excluding the self-referential directory"
+"intercode-nl2bash-fs3-050","development","llama","always_slow","False","3","0","3","","2738","2738","4.8866685420507565","0.12640366598498076","2.712488640099764e-05","5.680714542046189","model_done","False","0","0","0","10.9375%"
+"intercode-nl2bash-fs3-053","development","llama","always_slow","False","5","0","5","","5871","5871","7.931923583033495","0.2830626660725102","4.0623126551508904e-05","8.809359165956266","model_done","False","0","2","1","The symbolic link /workspace/dir1/root points to the root folder"
+"intercode-nl2bash-fs3-054","development","llama","always_slow","False","2","0","2","","1937","1937","3.901228667004034","0.11270166595932096","1.1791009455919266e-05","4.648994457907975","model_done","False","0","0","0","The files in /workspace have been successfully listed with their permissions, user, group, and full path."
+"intercode-nl2bash-fs3-055","development","llama","always_slow","False","3","0","3","","2787","2787","4.98571758181788","0.16144041600637138","3.133306745439768e-05","5.771476374939084","model_done","False","0","0","0","The search for 'hello' in all files under /workspace directory tree found the following matches:
+/workspace/dir1/hello.txt:hello!
+/workspace/dir1/hello.c: printf(""Hello, World!"");
+/workspace/dir2/hello.txt:hello!
+/workspace/dir2/foo.txt:Another hello world file"
+"intercode-nl2bash-fs3-056","development","llama","always_slow","False","11","0","11","","28338","28338","21.298834665096365","0.7262551642488688","9.812391363084316e-05","22.66083229193464","model_done","False","0","6","4","The archive was successfully split into files in the /workspace directory"
+"intercode-nl2bash-fs3-057","development","llama","always_slow","False","3","0","3","","2606","2606","4.741358042112552","0.18391666701063514","2.475001383572817e-05","5.733275625039823","model_done","False","0","0","0","All gz archives in /workspace were unpacked successfully"
+"intercode-nl2bash-fs3-058","development","llama","always_slow","False","7","0","7","","9718","9718","10.771644584019668","0.3821875840658322","6.195798050612211e-05","11.922511750017293","model_done","False","0","0","0","The archive was successfully uncompressed and extracted to /backup"
+"intercode-nl2bash-fs3-059","development","llama","always_slow","False","6","0","6","","8636","8636","10.134278958197683","0.43542329187039286","6.883195601403713e-05","11.263060875004157","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs4-002","development","llama","always_slow","False","12","0","12","","62494","62494","30.37099020788446","1.178946333238855","0.00024258194025605917","32.18627095792908","max_steps","True","0","3","3",""
+"intercode-nl2bash-fs4-003","development","llama","always_slow","False","10","0","10","","18370","18370","16.477580289007165","0.6710464589996263","0.00018866488244384527","17.823756417026743","repeated_action_stop","False","1","0","1",""
+"intercode-nl2bash-fs4-004","development","llama","always_slow","False","3","0","3","","2901","2901","5.706798708066344","0.1999861659714952","6.04590168222785e-05","6.561615040991455","model_done","False","0","1","0","HOSTNAME=a5cf62628066, PWD=/, HOME=/root, SHLVL=0, TESTBED=/, PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, _=/usr/bin/printenv"
+"intercode-nl2bash-fs4-006","development","llama","always_slow","True","3","0","3","","2667","2667","4.524547791108489","0.20055987499654293","2.245896030217409e-05","5.358248334028758","model_done","False","0","0","0","Directories 'dir', 'subdir', and 'subsubdir' created successfully"
+"intercode-nl2bash-fs4-011","development","llama","always_slow","False","10","0","10","","19683","19683","18.784172666841187","20.92538816598244","0.00026216811966151","40.5262351250276","model_done","False","0","6","1","No smbfs mounts available."
+"intercode-nl2bash-fs4-013","development","llama","always_slow","True","2","0","2","","1495","1495","3.4516282910481095","0.0939099999377504","2.6499968953430653e-05","4.2130729999626055","model_done","False","0","0","0",";876"
+"intercode-nl2bash-fs4-015","development","llama","always_slow","False","4","0","4","","3984","3984","6.079555250937119","0.28335108305327594","3.683299291878939e-05","7.046674083103426","model_done","False","0","0","0","98"
+"intercode-nl2bash-fs4-017","development","llama","always_slow","False","2","0","2","","1429","1429","2.987294499995187","0.06398191605694592","1.1167023330926895e-05","3.63357254199218","model_done","False","0","0","0","HOSTNAME, HOME, SHLVL, PATH"
+"intercode-nl2bash-fs4-019","development","llama","always_slow","False","5","0","5","","6641","6641","9.947732375818305","45.42097566789016","0.00010820804163813591","56.062819957965985","model_done","False","0","4","0","192.168.11"
+"intercode-nl2bash-fs4-020","development","llama","always_slow","False","2","0","2","","1384","1384","2.949246749980375","0.09692420798819512","1.0792049579322338e-05","3.718752707936801","model_done","False","0","0","0","A line of 99 '=' characters printed to the console"
+"intercode-nl2bash-fs4-021","development","llama","always_slow","False","12","0","12","","30122","30122","23.03101195790805","0.9363505821675062","0.000209708116017282","24.654770333087072","model_done","False","0","6","0","0"
+"intercode-nl2bash-fs4-022","development","llama","always_slow","True","2","0","2","","1404","1404","3.5198145419126377","0.10235145792830735","2.8792070224881172e-05","4.307755500078201","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs4-023","development","llama","always_slow","True","2","0","2","","1754","1754","3.2390003328910097","0.09372300002723932","1.0791001841425896e-05","3.9944189589004964","model_done","False","0","0","0","The calendar for December 2120, January 2121, and February 2121 has been successfully displayed."
+"intercode-nl2bash-fs4-024","development","llama","always_slow","True","5","0","5","","6261","6261","8.431106418021955","0.4006600430002436","0.00011370878200978041","9.479494792059995","model_done","False","0","0","1","The sorted list of group names is: root, daemon, bin, sys, adm, tty, disk, lp, mail, news, uucp, man, proxy, kmem, dialout, fax, voice, cdrom, floppy, tape, sudo, audio, dip, www-data, backup, operator, list, irc, src, gnats, shadow, utmp, video, sasl, plugdev, staff, games, users, nogroup, crontab"
+"intercode-nl2bash-fs4-025","development","llama","always_slow","False","4","0","4","","4409","4409","6.43704745802097","0.23368112498428673","5.22910850122571e-05","7.263129333034158","model_done","False","0","2","1","0.79"
+"intercode-nl2bash-fs4-026","development","llama","always_slow","False","6","0","6","","8116","8116","9.463473459123634","0.3826593350386247","7.379206363111734e-05","10.44224599993322","repeated_action_stop","False","0","5","1",""

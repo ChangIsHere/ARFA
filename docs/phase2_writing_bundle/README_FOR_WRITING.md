@@ -1,6 +1,10 @@
-# Phase 2 Writing Bundle
+# Phase 2 Single-Model Characterization Bundle
 
-Evidence for the Phase 2 always-reason ReAct baselines. No residual routing is enabled here.
+Evidence for eight Phase 2 always-reason ReAct agents used one model at a time.
+No residual routing is enabled here. This bundle characterizes standalone model
+capability and cost and supports fast/slow pair selection. The primary baselines
+for residual-routing claims are the matched Phase 3 `always_slow` and
+`always_fast` policies.
 
 ## Evidence Status
 
@@ -20,7 +24,7 @@ Evidence for the Phase 2 always-reason ReAct baselines. No residual routing is e
 - Phi-4 Mini 3.8B: 25/200 = 12.5%; 3.72 calls/task; 5535.1 tokens/task; 26.46 s/task.
 - Phi-4 14B: 51/200 = 25.5%; 3.14 calls/task; 4356.9 tokens/task; 94.80 s/task.
 
-## Planned Pair Comparisons
+## Fast/Slow Pair Characterization
 
 - Qwen2.5-Coder 14B minus Qwen2.5-Coder 7B: +14.0% success (paired 95% CI [+7.5%, +20.5%]); McNemar p=6.17e-05.
 - Llama 3.1 8B minus Llama 3.2 3B: +7.5% success (paired 95% CI [+1.0%, +14.0%]); McNemar p=0.0357.
