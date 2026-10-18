@@ -45,18 +45,26 @@ does not select a residual threshold and does not access final tasks.
 
 ## Stage 2: Residual-Specific Controls
 
-Run the strongest three pairs on development tasks with matched controls:
+First run Qwen on the shared 100 development tasks with matched controls, then
+extend to Gemma and any qualified mixed pair. The
+[control-extension protocol](phase3_control_extension.md) contains the exact
+first-round setup and its current status.
 
 - `always_slow`;
 - `always_fast`;
 - `residual`;
 - `observation_only`;
-- `random_budget_matched`;
-- `fixed_budget_matched`.
+- `learned_observation_only`;
+- `expectation_gate_only`;
+- `random_budget`;
+- `fixed_budget`.
 
-Random and fixed routing must use the fast-call rate frozen from development.
-This separates the value of expectation-observation residual from the generic
-benefit of occasionally calling a smaller model.
+The learned observation-only controller is especially important because its
+offline AUC is not lower than the full residual's AUC. Random and fixed
+policies use development-selected target budgets; their *achieved* fast-call
+rates must be checked before claiming budget matching. These comparisons test
+whether expectation-observation residual adds value beyond observation-only
+scoring, expectation-quality gating, or generic use of a smaller model.
 
 ## Stage 3: Freeze
 
@@ -80,10 +88,12 @@ viewing final results.
 
 ## Stage 5: External Benchmark
 
-Evaluate the two strongest pairs on a second coding-agent benchmark with at
-least 100 independent held-out tasks. This is the main external-validity step
-for a regular paper. The second benchmark does not reuse InterCode thresholds
-unless threshold transfer is itself the stated test.
+Evaluate the two strongest pairs on a second coding-agent benchmark with its
+official harness and a declared task count. Terminal-Bench 2.0 has 89 tasks,
+so a complete run is more informative than imposing an arbitrary 100-task
+minimum. This is the main external-validity step for a regular paper. The
+second benchmark does not reuse InterCode thresholds unless threshold
+transfer is itself the stated test.
 
 ## Stage 6: Ablations And Stability
 

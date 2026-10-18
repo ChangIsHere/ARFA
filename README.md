@@ -35,6 +35,17 @@ slow-only success while reducing slow calls. Gemma produced the clearest
 development tradeoff. Llama and Phi show that a smaller model can add latency,
 tokens, or retries even when routing invokes the larger model less often.
 
+## Current Extension
+
+The next study tests whether residual adds anything beyond other ways to pick
+the fast model. The offline learned observation-only comparator has ROC-AUC
+0.749 versus 0.743 for full residual, so that question is open. A Qwen online
+control matrix is prepared on the same 100 development tasks: learned and
+rule-based observation-only, expectation gate only, random/fixed budgets, and
+the three existing policies. A validation-only threshold calibration is saved;
+**no new online control results or external-benchmark results are claimed yet**.
+See [the control-extension protocol](docs/phase3_control_extension.md).
+
 ## Writing And Evidence
 
 Start with [the manuscript handoff](docs/README_FOR_WRITING.md). It lists the
@@ -46,6 +57,7 @@ should remain qualified.
 - [Four-pair Phase 3 evidence](evidence/phase3_design/README.md)
 - [Online experiment design](docs/04_phase3_arfa_dual_track.md)
 - [Next experiments for a full paper](docs/phase3_publication_experiment_plan.md)
+- [Matched routing controls and external-benchmark setup](docs/phase3_control_extension.md)
 
 ## Repository Map
 

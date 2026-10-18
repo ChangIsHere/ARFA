@@ -151,7 +151,10 @@ def analyze(
     summaries = [_policy_summary(policy, rows, expected) for policy, rows in sorted(policy_rows.items())]
     comparisons: dict[str, Any] = {}
     if "residual" in policy_rows:
-        for comparator in ("always_slow", "always_fast", "observation_only", "fixed_switch"):
+        for comparator in (
+            "always_slow", "always_fast", "observation_only", "learned_observation_only", "fixed_switch",
+            "expectation_gate_only", "random_budget", "fixed_budget",
+        ):
             if comparator in policy_rows:
                 comparisons[f"residual_vs_{comparator}"] = _paired_comparison(
                     policy_rows["residual"], policy_rows[comparator], samples, seed

@@ -1,0 +1,67 @@
+locked: false
+protocol_version: phase3-controls-development-v1
+stage: phase3_development
+scope: online_router_controls
+formal_claims_enabled: false
+use_phase3_final_tasks: false
+engineering_gate_result: evidence/phase1_5_exploratory/exploratory_gate.json
+reason: Development controls only; final tasks remain locked.
+
+model:
+  model_interface: ollama_native_structured
+  base_url: http://127.0.0.1:11435/v1
+  api_key_env: ARFA_LOCAL_MODEL_API_KEY
+  temperature: 0.0
+  max_tokens: 900
+  context_length: 8192
+  request_timeout_seconds: 180
+  request_attempts: 3
+  keep_alive: -1
+
+pairs:
+  qwen:
+    fast_model: arfa-qwen2.5-coder:7b-8k
+    slow_model: arfa-qwen2.5-coder:14b-8k
+    fast_baseline_dir: qwen2.5-coder-7b
+    slow_baseline_dir: qwen2.5-coder-14b
+
+agent:
+  max_steps: 12
+  maximum_identical_action_occurrences: 2
+
+execution:
+  trajectory_workers: 8
+  inference_parallelism: 8
+
+router:
+  threshold_source: development_calibration
+  residual_method: structured_expectation_observation
+  residual_threshold: 0.35
+  observation_threshold: 0.55
+  minimum_expectation_quality: 0.70
+  max_consecutive_fast_calls: 1
+  fail_open_to_reasoning: true
+  fast_call_budget: 0.42
+  random_seed: 1507
+  learned_observation_only:
+    annotation_path: data/phase1_5/annotation/primary_ai_labeled.jsonl
+    source_map_path: data/phase1_5/annotation/private_source_map.jsonl
+    threshold: 0.6030643268693344
+    seed: 1507
+    calibration_path: evidence/phase3_design/learned_observation_validation.json
+
+data:
+  task_path: data/phase2/intercode_nl2bash_official_200.jsonl
+  split_path: data/phase1_5/task_splits.json
+  development_tasks: 100
+  final_tasks: 100
+
+environment:
+  image_prefix: arfa/intercode-nl2bash:fs
+  command_timeout_seconds: 20
+  max_observation_chars: 4000
+  container_memory: 1g
+  network_mode: bridge
+
+outputs:
+  result_root: results/phase3_arfa/nrp/nrp-qwen-controls-v1

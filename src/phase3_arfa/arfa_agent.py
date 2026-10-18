@@ -258,6 +258,7 @@ class ARFAAgent:
                 parse_error=parse_error,
                 consecutive_fast_calls=consecutive_fast_calls,
                 step_id=step_id,
+                task_id=str(task["task_id"]),
             )
             router_latency = time.perf_counter() - router_started
             steps.append(

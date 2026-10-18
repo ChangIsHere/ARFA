@@ -5,6 +5,10 @@ current evidence. The data support a paper about residual-guided model selection
 and model-pair dependence. They do not yet support a broad claim that ARFA is
 universally faster, safer, or more energy efficient.
 
+The [control extension](phase3_control_extension.md) is prepared but has no
+online results yet. Do not add its planned controls to the current results
+table or describe them as completed experiments.
+
 ## Research Question
 
 Terminal agents normally invoke a reasoning model again after every action.

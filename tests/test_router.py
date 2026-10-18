@@ -8,6 +8,7 @@ from src.phase2_baseline.terminal_environment import LocalTerminalEnvironment
 from src.phase3_arfa.arfa_agent import ARFAAgent
 from src.phase3_arfa.analyze_results import _paired_comparison
 from src.phase3_arfa.fast_track import FastTrack
+from src.phase3_arfa.learned_observation import LearnedObservationScorer
 from src.phase3_arfa.router import ResidualRouter
 from src.phase3_arfa.run_arfa import _iter_completed, _model_metadata, phase3_status
 from src.phase3_arfa.slow_track import SlowTrack
@@ -136,6 +137,70 @@ def test_high_residual_keeps_next_turn_on_slow_model(tmp_path):
     assert [step.model_role for step in run.steps] == ["slow", "slow"]
     assert run.steps[0].structured_residual >= 0.35
     assert fast.calls == 0
+
+
+def test_observation_only_does_not_require_expectation_residual():
+    router = ResidualRouter("observation_only", 0.35, 0.55, 0.70, 1)
+    decision = router.after_observation(
+        residual=None, expectation_quality=0.0, exit_code=0, stderr="",
+        observation="ok", parse_error=None, consecutive_fast_calls=0, step_id=1,
+    )
+    assert decision.selected_role == "fast"
+
+
+def test_gate_only_does_not_read_mismatch_score():
+    router = ResidualRouter("expectation_gate_only", 0.35, 0.55, 0.70, 1)
+    decision = router.after_observation(
+        residual=1.0, expectation_quality=0.90, exit_code=1, stderr="error",
+        observation="error", parse_error=None, consecutive_fast_calls=0, step_id=1,
+    )
+    assert decision.selected_role == "fast"
+    assert decision.reason == "expectation_quality_high"
+
+
+def test_random_budget_is_task_stable_and_does_not_read_observation():
+    router = ResidualRouter("random_budget", 0.35, 0.55, 0.70, 1, 0.35, 1507)
+    kwargs = dict(residual=None, expectation_quality=0.0, exit_code=1, stderr="error",
+                  observation="error", parse_error=None, consecutive_fast_calls=0,
+                  step_id=2, task_id="task-a")
+    first = router.after_observation(**kwargs)
+    second = router.after_observation(**{**kwargs, "observation": "different", "stderr": ""})
+    assert first == second
+    assert router.initial().selected_role == "slow"
+
+
+def test_fixed_budget_respects_fast_call_limit():
+    router = ResidualRouter("fixed_budget", 0.35, 0.55, 0.70, 1, 0.5, 1507)
+    kwargs = dict(residual=None, expectation_quality=0.0, exit_code=0, stderr="",
+                  observation="ok", parse_error=None, step_id=1, task_id="task-a")
+    assert router.after_observation(consecutive_fast_calls=0, **kwargs).selected_role == "fast"
+    assert router.after_observation(consecutive_fast_calls=1, **kwargs).selected_role == "slow"
+
+
+def test_learned_observation_uses_only_development_observations(tmp_path):
+    annotations = tmp_path / "labels.jsonl"
+    sources = tmp_path / "sources.jsonl"
+    rows = [
+        {"annotation_id": "train-a", "actual_observation": "exit_code=0\nstdout:\nok", "exit_code": 0,
+         "slow_reasoning_needed": "no", "expected_outcome": "ignored"},
+        {"annotation_id": "train-b", "actual_observation": "exit_code=1\nstderr:\nerror", "exit_code": 1,
+         "slow_reasoning_needed": "yes", "expected_outcome": "ignored"},
+        {"annotation_id": "test-c", "actual_observation": "exit_code=1\nstderr:\nerror", "exit_code": 1,
+         "slow_reasoning_needed": "no", "expected_outcome": "ignored"},
+    ]
+    annotations.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+    sources.write_text("\n".join(json.dumps({"annotation_id": row["annotation_id"], "split": split})
+                                  for row, split in zip(rows, ["shadow_development", "shadow_development", "shadow_test"])) + "\n")
+    scorer = LearnedObservationScorer(str(annotations), str(sources))
+    assert scorer.training_summary["training_items"] == 2
+    router = ResidualRouter("learned_observation_only", 0.35, 0.55, 0.70, 1,
+                            learned_observation_scorer=scorer)
+    args = dict(residual=None, expectation_quality=0.0, exit_code=0, stderr="",
+                observation="exit_code=0\nstdout:\nok", parse_error=None,
+                consecutive_fast_calls=0, step_id=1)
+    assert router.after_observation(**args) == router.after_observation(
+        **{**args, "residual": 1.0, "expectation_quality": 1.0}
+    )
 
 
 def test_model_request_error_is_recorded_without_aborting_matrix(tmp_path):

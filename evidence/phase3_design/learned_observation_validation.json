@@ -1,0 +1,20 @@
+{
+  "training": {
+    "training_split": "shadow_development",
+    "training_items": 287,
+    "positive_items": 91,
+    "annotation_path": "data/phase1_5/annotation/primary_ai_labeled.jsonl",
+    "source_map_path": "data/phase1_5/annotation/private_source_map.jsonl",
+    "text_backend": "tfidf",
+    "seed": 1507
+  },
+  "validation_split": "shadow_validation",
+  "validation_binary_items": 150,
+  "validation_positive_items": 56,
+  "selection_rule": "maximize balanced accuracy; prefer higher threshold on ties",
+  "threshold": 0.6030643268693344,
+  "validation_balanced_accuracy": 0.8020516717325228,
+  "validation_roc_auc": 0.8231382978723404,
+  "annotation_sha256": "63800ea049c37fde8775ced8d6e0bbcba52ef8c4a5249766775b4cc30dd101d7",
+  "source_map_sha256": "8616e8dcb17948274d653e52e0aeff40dfbcc8d01d34be76de5bcf5bc02359a2"
+}

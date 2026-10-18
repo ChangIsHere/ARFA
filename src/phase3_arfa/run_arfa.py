@@ -18,6 +18,7 @@ from src.phase1_5_shadow.json_model_client import OllamaStructuredClient
 from src.phase2_baseline.intercode_docker_environment import InterCodeDockerEnvironment
 from src.phase3_arfa.arfa_agent import ARFAAgent, ARFARun
 from src.phase3_arfa.fast_track import FastTrack
+from src.phase3_arfa.learned_observation import LearnedObservationScorer
 from src.phase3_arfa.router import ResidualRouter
 from src.phase3_arfa.slow_track import SlowTrack
 
@@ -144,6 +145,9 @@ def _provenance(
     source_files = [
         "src/phase3_arfa/arfa_agent.py",
         "src/phase3_arfa/router.py",
+        "src/phase3_arfa/learned_observation.py",
+        "src/phase3_arfa/calibrate_observation_control.py",
+        "src/phase1_5_shadow/observation_baseline.py",
         "src/phase3_arfa/prompts.py",
         "src/phase1_5_shadow/residual.py",
         "src/phase1_5_shadow/json_model_client.py",
@@ -177,6 +181,15 @@ def _provenance(
         ),
         "docker_image_digests": _docker_digests(tasks, str(config["environment"]["image_prefix"])),
     }
+    if policy == "learned_observation_only":
+        learned = config["router"]["learned_observation_only"]
+        result["learned_observation_training"] = {
+            "annotation_sha256": _sha256(learned["annotation_path"]),
+            "source_map_sha256": _sha256(learned["source_map_path"]),
+            "threshold": float(learned["threshold"]),
+            "seed": int(learned.get("seed", 1507)),
+            "calibration_sha256": _sha256(learned["calibration_path"]),
+        }
     fingerprint_payload = {key: value for key, value in result.items() if key not in {"git_commit", "git_worktree_dirty"}}
     serialized = json.dumps(fingerprint_payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
     result["fingerprint"] = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
@@ -361,6 +374,23 @@ def main() -> None:
         raise SystemExit(str(exc)) from exc
 
     threshold = float(args.threshold if args.threshold is not None else config["router"]["residual_threshold"])
+    fast_call_budget = float(config["router"].get("fast_call_budget", 0.0))
+    random_seed = int(config["router"].get("random_seed", 1507))
+    learned_config = config["router"].get("learned_observation_only", {})
+    learned_scorer = None
+    if args.policy == "learned_observation_only":
+        calibration = json.loads(Path(learned_config["calibration_path"]).read_text(encoding="utf-8"))
+        if float(calibration["threshold"]) != float(learned_config["threshold"]):
+            raise SystemExit("Learned observation threshold does not match the saved validation calibration")
+        if calibration["annotation_sha256"] != _sha256(learned_config["annotation_path"]):
+            raise SystemExit("Learned observation annotation source changed since validation calibration")
+        if calibration["source_map_sha256"] != _sha256(learned_config["source_map_path"]):
+            raise SystemExit("Learned observation source map changed since validation calibration")
+        learned_scorer = LearnedObservationScorer(
+            str(learned_config["annotation_path"]),
+            str(learned_config["source_map_path"]),
+            int(learned_config.get("seed", 1507)),
+        )
     workers = int(
         args.workers
         if args.workers is not None
@@ -394,6 +424,10 @@ def main() -> None:
         observation_threshold=float(config["router"]["observation_threshold"]),
         minimum_expectation_quality=float(config["router"]["minimum_expectation_quality"]),
         max_consecutive_fast_calls=int(config["router"]["max_consecutive_fast_calls"]),
+        fast_call_budget=fast_call_budget,
+        random_seed=random_seed,
+        learned_observation_scorer=learned_scorer,
+        learned_observation_threshold=float(learned_config.get("threshold", 0.5)),
     )
     agent = ARFAAgent(
         fast_track=FastTrack(
