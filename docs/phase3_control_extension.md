@@ -53,6 +53,16 @@ bash deployment/nrp/run_qwen_controls.sh learned_observation_only full
 Repeat `full` for the other six policies. `full` performs its own smoke first
 and resumes only from matching provenance. The experiment is incomplete until
 all intended cells contain 100 unique matching task IDs.
+Run the analysis with `--strict-controls` to reject a mismatch in task IDs,
+config, code, model identities, or Docker images. Its `control_audit` reports
+achieved fast-call rates and whether the budget controls are actually within
+five percentage points of residual:
+
+```bash
+.venv/bin/python -m src.phase3_arfa.analyze_results \
+  --result-root results/phase3_arfa/nrp/nrp-qwen-controls-v1 \
+  --split development --pair qwen --strict-controls
+```
 
 ## Beyond the first pair
 

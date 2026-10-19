@@ -121,6 +121,51 @@ def _paired_comparison(
     }
 
 
+def _control_audit(
+    policy_rows: dict[str, list[dict[str, str]]],
+    provenances: dict[str, dict[str, Any]],
+    expected: int,
+    budget_tolerance: float = 0.05,
+) -> dict[str, Any]:
+    if not policy_rows:
+        return {"ready": False, "reason": "no_policy_runs"}
+    reference = next(iter(policy_rows))
+    reference_ids = {row["task_id"] for row in policy_rows[reference]}
+    shared_keys = (
+        "config_sha256", "task_manifest_sha256", "split_manifest_sha256",
+        "selected_task_ids_sha256", "source_sha256", "fast_model", "slow_model",
+        "docker_image_digests", "trajectory_workers",
+    )
+    task_sets_match = all(
+        {row["task_id"] for row in rows} == reference_ids for rows in policy_rows.values()
+    )
+    provenance_matches = all(
+        all(provenances.get(policy, {}).get(key) == provenances.get(reference, {}).get(key)
+            and provenances.get(policy, {}).get(key) is not None for key in shared_keys)
+        for policy in policy_rows
+    )
+    complete = all(len(rows) == expected for rows in policy_rows.values())
+    rates = {policy: _policy_summary(policy, rows, expected)["fast_call_rate"]
+             for policy, rows in policy_rows.items()}
+    budget_gaps = {
+        policy: abs(rates[policy] - rates["residual"])
+        for policy in ("random_budget", "fixed_budget")
+        if policy in rates and "residual" in rates
+    }
+    return {
+        "ready": complete and task_sets_match and provenance_matches,
+        "complete": complete,
+        "task_sets_match": task_sets_match,
+        "provenance_matches": provenance_matches,
+        "actual_fast_call_rates": rates,
+        "budget_rate_gaps_vs_residual": budget_gaps,
+        "budget_tolerance": budget_tolerance,
+        "budget_matched": bool(budget_gaps) and complete and all(
+            gap <= budget_tolerance for gap in budget_gaps.values()
+        ),
+    }
+
+
 def analyze(
     result_root: Path,
     split: str,
@@ -128,10 +173,12 @@ def analyze(
     samples: int,
     seed: int,
     expected: int = 100,
+    strict_controls: bool = False,
 ) -> dict[str, Any]:
     pair_root = result_root / split / pair
     policy_rows: dict[str, list[dict[str, str]]] = {}
     policy_workers: dict[str, int | None] = {}
+    provenances: dict[str, dict[str, Any]] = {}
     for policy_dir in sorted(pair_root.iterdir()) if pair_root.is_dir() else []:
         metrics = policy_dir / "metrics.csv"
         if metrics.is_file():
@@ -144,9 +191,16 @@ def analyze(
             summary = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.is_file() else {}
             value = summary.get("trajectory_workers")
             policy_workers[policy_dir.name] = int(value) if value is not None else None
+            provenances[policy_dir.name] = summary.get("provenance", {})
 
     if len(set(policy_workers.values())) > 1:
         raise ValueError(f"Policy runs use different trajectory concurrency: {policy_workers}")
+
+    control_audit = _control_audit(policy_rows, provenances, expected)
+    if strict_controls and not control_audit.get("provenance_matches", False):
+        raise ValueError("Policy runs do not share the same frozen config, models, code, tasks, and images")
+    if strict_controls and control_audit["complete"] and not control_audit["task_sets_match"]:
+        raise ValueError("Complete policy runs have different task ID sets")
 
     summaries = [_policy_summary(policy, rows, expected) for policy, rows in sorted(policy_rows.items())]
     comparisons: dict[str, Any] = {}
@@ -166,6 +220,7 @@ def analyze(
         "available_policies": sorted(policy_rows),
         "trajectory_workers": next(iter(policy_workers.values()), None),
         "all_available_policies_complete": bool(summaries) and all(row["complete"] for row in summaries),
+        "control_audit": control_audit,
         "policy_summaries": summaries,
         "paired_comparisons": comparisons,
         "bootstrap_samples": samples,
@@ -181,6 +236,7 @@ def main() -> None:
     parser.add_argument("--expected-tasks", type=int, default=100)
     parser.add_argument("--bootstrap-samples", type=int, default=10000)
     parser.add_argument("--bootstrap-seed", type=int, default=1507)
+    parser.add_argument("--strict-controls", action="store_true")
     parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
     report = analyze(
@@ -190,6 +246,7 @@ def main() -> None:
         args.bootstrap_samples,
         args.bootstrap_seed,
         args.expected_tasks,
+        args.strict_controls,
     )
     output_dir = args.output_dir or args.result_root / "analysis" / args.split / args.pair
     output_dir.mkdir(parents=True, exist_ok=True)

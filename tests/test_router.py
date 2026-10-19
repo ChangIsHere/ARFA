@@ -6,7 +6,7 @@ from src.phase1_5_shadow.json_model_client import JSONModelRequestError
 from src.phase2_baseline.model_client import ChatResult
 from src.phase2_baseline.terminal_environment import LocalTerminalEnvironment
 from src.phase3_arfa.arfa_agent import ARFAAgent
-from src.phase3_arfa.analyze_results import _paired_comparison
+from src.phase3_arfa.analyze_results import _control_audit, _paired_comparison
 from src.phase3_arfa.fast_track import FastTrack
 from src.phase3_arfa.learned_observation import LearnedObservationScorer
 from src.phase3_arfa.router import ResidualRouter
@@ -243,6 +243,28 @@ def test_phase3_paired_analysis_uses_matching_task_ids():
     assert result["candidate_only_successes"] == 0
     assert result["comparator_only_successes"] == 1
     assert result["exact_mcnemar_pvalue"] == 1.0
+
+
+def test_control_audit_reports_achieved_budget_and_mismatched_tasks():
+    def row(task_id, fast):
+        return {"task_id": task_id, "success": "True", "model_calls": "2",
+                "fast_model_calls": str(fast), "slow_model_calls": str(2 - fast),
+                "total_task_wall_seconds": "1", "total_tokens": "10"}
+
+    provenance = {"config_sha256": "same", "task_manifest_sha256": "same",
+                  "split_manifest_sha256": "same", "selected_task_ids_sha256": "same",
+                  "source_sha256": {"router.py": "same"}, "fast_model": {"id": "fast"},
+                  "slow_model": {"id": "slow"}, "docker_image_digests": {"image": "same"},
+                  "trajectory_workers": 8}
+    rows = {"residual": [row("a", 1), row("b", 1)],
+            "random_budget": [row("a", 1), row("b", 0)]}
+    audit = _control_audit(rows, {key: provenance for key in rows}, expected=2)
+    assert audit["ready"] is True
+    assert audit["budget_matched"] is False
+    assert audit["budget_rate_gaps_vs_residual"]["random_budget"] == 0.25
+
+    rows["random_budget"][1]["task_id"] = "c"
+    assert _control_audit(rows, {key: provenance for key in rows}, expected=2)["ready"] is False
 
 
 def test_parallel_task_iterator_is_bounded():
