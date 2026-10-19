@@ -53,6 +53,11 @@ bash deployment/nrp/run_qwen_controls.sh learned_observation_only full
 Repeat `full` for the other six policies. `full` performs its own smoke first
 and resumes only from matching provenance. The experiment is incomplete until
 all intended cells contain 100 unique matching task IDs.
+To run all eight policies sequentially, use
+`bash deployment/nrp/run_qwen_controls_matrix.sh run`.
+Use `plan` to inspect the sequence without allocating a GPU. Progress is
+written to `logs/matrix.log` under the result root. Each policy releases its
+GPU Job before the next starts, and an error stops the sequence.
 Run the analysis with `--strict-controls` to reject a mismatch in task IDs,
 config, code, model identities, or Docker images. Its `control_audit` reports
 achieved fast-call rates and whether the budget controls are actually within
