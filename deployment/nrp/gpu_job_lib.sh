@@ -76,6 +76,10 @@ nrp_cleanup() {
     nrp_capture_exit_diagnostics
     kubectl --context nautilus -n "${NRP_NAMESPACE}" delete job "${NRP_JOB}" \
       --ignore-not-found --wait=false >/dev/null 2>&1 || true
+    if [[ -n "${NRP_SERVICE:-}" ]]; then
+      kubectl --context nautilus -n "${NRP_NAMESPACE}" delete service "${NRP_SERVICE}" \
+        --ignore-not-found --wait=false >/dev/null 2>&1 || true
+    fi
     NRP_JOB_OWNED=""
   fi
   nrp_release_runner_lock
