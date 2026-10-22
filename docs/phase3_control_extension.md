@@ -41,7 +41,7 @@ Wall time and energy are different outcomes; do not infer one from the other.
 
 Run one bounded NRP Job per policy. The Job has a deadline and the runner
 deletes it on exit. Check both model residents before and after every run.
-The output directory is `results/phase3_arfa/nrp/nrp-qwen-controls-v1/`.
+The current output directory is `results/phase3_arfa/nrp/nrp-qwen-controls-v2/`; the earlier smoke run remains under `nrp-qwen-controls-v1/`.
 First run a 12-task smoke, then the complete 100-task development cell:
 
 ```bash
@@ -65,7 +65,7 @@ five percentage points of residual:
 
 ```bash
 .venv/bin/python -m src.phase3_arfa.analyze_results \
-  --result-root results/phase3_arfa/nrp/nrp-qwen-controls-v1 \
+  --result-root results/phase3_arfa/nrp/nrp-qwen-controls-v2 \
   --split development --pair qwen --strict-controls
 ```
 

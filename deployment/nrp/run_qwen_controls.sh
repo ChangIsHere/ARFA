@@ -19,10 +19,10 @@ NRP_NAMESPACE="ucr-qzhang"
 NRP_JOB="arfa-qwen-controls-run"
 NRP_SERVICE="arfa-qwen-controls"
 NRP_LOCAL_PORT="11435"
-NRP_LOG_DIR="results/phase3_arfa/nrp/nrp-qwen-controls-v1/logs/${policy}"
+NRP_LOG_DIR="results/phase3_arfa/nrp/nrp-qwen-controls-v2/logs/${policy}"
 NRP_PROVENANCE_FILES="config/phase3_qwen_controls.yaml deployment/nrp/60-qwen-controls-service.yaml deployment/nrp/run_qwen_controls.sh deployment/nrp/gpu_job_lib.sh"
 config="config/phase3_qwen_controls.yaml"
-result_root="results/phase3_arfa/nrp/nrp-qwen-controls-v1"
+result_root="results/phase3_arfa/nrp/nrp-qwen-controls-v2"
 mkdir -p "${NRP_LOG_DIR}"
 
 nrp_acquire_runner_lock

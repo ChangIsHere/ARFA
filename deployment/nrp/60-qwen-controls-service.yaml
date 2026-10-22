@@ -15,7 +15,7 @@ spec:
       labels:
         app.kubernetes.io/name: arfa
         app.kubernetes.io/component: qwen-controls
-        arfa.run-id: nrp-qwen-controls-v1
+        arfa.run-id: nrp-qwen-controls-v2
     spec:
       restartPolicy: Never
       affinity:
@@ -82,7 +82,7 @@ spec:
               wait "${server_pid}"
           env:
             - name: ARFA_RUN_ID
-              value: nrp-qwen-controls-v1
+              value: nrp-qwen-controls-v2
             - name: OLLAMA_HOST
               value: 0.0.0.0:11434
             - name: OLLAMA_MODELS

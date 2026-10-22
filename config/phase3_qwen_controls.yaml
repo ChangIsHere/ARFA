@@ -64,4 +64,4 @@ environment:
   network_mode: bridge
 
 outputs:
-  result_root: results/phase3_arfa/nrp/nrp-qwen-controls-v1
+  result_root: results/phase3_arfa/nrp/nrp-qwen-controls-v2

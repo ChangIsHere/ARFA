@@ -13,7 +13,7 @@ policies=(
   residual always_slow always_fast learned_observation_only
   observation_only expectation_gate_only random_budget fixed_budget
 )
-result_root="results/phase3_arfa/nrp/nrp-qwen-controls-v1"
+result_root="results/phase3_arfa/nrp/nrp-qwen-controls-v2"
 
 if [[ "${mode}" == "plan" ]]; then
   for policy in "${policies[@]}"; do
