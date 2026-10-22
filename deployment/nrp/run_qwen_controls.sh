@@ -40,6 +40,7 @@ trap 'exit 143' TERM
 
 kubectl --context nautilus -n "${NRP_NAMESPACE}" apply -f deployment/nrp/20-qwen-configmap.yaml
 nrp_start_job deployment/nrp/60-qwen-controls-service.yaml
+export OLLAMA_HOST="http://127.0.0.1:${NRP_LOCAL_PORT}"
 (
   while true; do
     kubectl --context nautilus -n "${NRP_NAMESPACE}" exec "job/${NRP_JOB}" -- \
