@@ -26,7 +26,7 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values:
-                      - NVIDIA-A40
+                      - NVIDIA-GeForce-RTX-3090
       containers:
         - name: ollama
           image: ollama/ollama:0.34.1
@@ -96,12 +96,12 @@ spec:
               cpu: "1"
               memory: 32Gi
               ephemeral-storage: 20Gi
-              nvidia.com/a40: "1"
+              nvidia.com/gpu: "2"
             limits:
               cpu: 1200m
               memory: 32Gi
               ephemeral-storage: 20Gi
-              nvidia.com/a40: "1"
+              nvidia.com/gpu: "2"
           volumeMounts:
             - name: workspace
               mountPath: /workspace

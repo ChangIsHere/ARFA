@@ -12,7 +12,7 @@ isolate the value of expectation-observation comparison.
 
 Start with Qwen 7B/14B on the same 100 development task IDs used in Phase 3.
 Keep the prompt, evaluator, Docker images, context length, temperature, step
-cap, trajectory concurrency, GPU class (one 48GB NVIDIA A40), and model
+cap, trajectory concurrency, GPU class (two 24GB NVIDIA RTX 3090s), and model
 artifacts fixed across policies. Use a new result root; do not merge these
 runs with the earlier Qwen development records.
 
