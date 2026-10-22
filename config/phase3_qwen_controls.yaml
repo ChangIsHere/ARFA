@@ -30,8 +30,8 @@ agent:
   maximum_identical_action_occurrences: 2
 
 execution:
-  trajectory_workers: 4
-  inference_parallelism: 4
+  trajectory_workers: 1
+  inference_parallelism: 1
 
 router:
   threshold_source: development_calibration

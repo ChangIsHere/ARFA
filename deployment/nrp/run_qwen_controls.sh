@@ -48,7 +48,7 @@ nrp_start_job deployment/nrp/60-qwen-controls-service.yaml
   done
 ) &
 heartbeat_pid=$!
-nrp_verify_runtime_contract 4 'arfa-qwen2.5-coder:7b-8k' 'arfa-qwen2.5-coder:14b-8k'
+nrp_verify_runtime_contract 1 'arfa-qwen2.5-coder:7b-8k' 'arfa-qwen2.5-coder:14b-8k'
 
 .venv/bin/python -m src.phase3_arfa.runtime_preflight \
   --config "${config}" --output "${NRP_LOG_DIR}/runtime-preflight.json"
@@ -57,7 +57,7 @@ smoke_metrics="${NRP_LOG_DIR}/gpu-utilization-smoke.csv"
 nrp_start_gpu_monitor "${smoke_metrics}"
 .venv/bin/python -m src.phase3_arfa.run_arfa \
   --config "${config}" --pair qwen --policy "${policy}" \
-  --split development --workers 4 --task-limit 12 \
+  --split development --workers 1 --task-limit 12 \
   --output-dir "${result_root}/smoke/${policy}" --resume
 nrp_stop_gpu_monitor
 nrp_report_gpu_utilization "${smoke_metrics}"
@@ -70,7 +70,7 @@ if [[ "${mode}" == "full" ]]; then
   nrp_start_gpu_monitor "${full_metrics}"
   .venv/bin/python -m src.phase3_arfa.run_arfa \
     --config "${config}" --pair qwen --policy "${policy}" \
-    --split development --workers 4 --resume
+    --split development --workers 1 --resume
   nrp_stop_gpu_monitor
   nrp_report_gpu_utilization "${full_metrics}"
   nrp_verify_residency_after_run 'arfa-qwen2.5-coder:7b-8k' 'arfa-qwen2.5-coder:14b-8k'

@@ -70,7 +70,7 @@ spec:
             - name: OLLAMA_MAX_LOADED_MODELS
               value: "2"
             - name: OLLAMA_NUM_PARALLEL
-              value: "4"
+              value: "1"
           ports:
             - name: ollama
               containerPort: 11434
@@ -96,12 +96,12 @@ spec:
               cpu: "1"
               memory: 32Gi
               ephemeral-storage: 20Gi
-              nvidia.com/gpu: "2"
+              nvidia.com/gpu: "1"
             limits:
               cpu: 1200m
               memory: 32Gi
               ephemeral-storage: 20Gi
-              nvidia.com/gpu: "2"
+              nvidia.com/gpu: "1"
           volumeMounts:
             - name: workspace
               mountPath: /workspace
