@@ -1,0 +1,5 @@
+policy,success_rate,task_count,total_tokens,total_model_calls,fast_call_rate,avg_task_wall_seconds,request_errors
+"residual",0.42,100,283253,275,0.4,158.98640712836058,0
+"learned_observation_only",0.43,100,288731,280,0.3892857142857143,166.0228295683232,0
+"expectation_gate_only",0.38,100,279066,274,0.45985401459854014,154.66626908909763,0
+"random_budget",0.41,100,285784,278,0.41007194244604317,169.17285751123913,0

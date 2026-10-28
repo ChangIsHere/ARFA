@@ -1,0 +1,18 @@
+captured_at_utc=2026-10-27T08:45:10Z
+git_commit=95c272e935c2067f6f7efa851f06c353b3c0e8f0
+git_worktree_dirty=true
+job=arfa-gemma-controls-run
+pod=arfa-gemma-controls-run-rjwwt
+node=hcc-prp-c5038.unl.edu
+pod_uid=bd333503-bb9a-4141-8c15-09c1d365fb10
+image=docker.io/ollama/ollama:0.34.1
+image_id=docker.io/ollama/ollama@sha256:0c0a83210471fb50226bcdc2d6611d20ab13ae87e024cc304c94a6a5765c5e65
+Python 3.10.11
+Name: PyYAML
+Version: 6.0.3
+sha256:
+890e2f41e6193bd66fd150e81b2873a0506f79549feb17cabb47f7798156b867  config/phase3_gemma_controls.yaml
+38a352aec6f56226000e7ef9b1db8669b0cde05580c80c0c54939ee03598a0f9  deployment/nrp/24-gemma-controls-configmap.yaml
+6f9645f8f3a09f9035aa3b91faf07da51494005ea63360139f360d30b3c1ab7f  deployment/nrp/60-gemma-controls-service.yaml
+864e2535a329e39ba00a407ce041b71c36e45f51abeff66486c55ff1816e3b34  deployment/nrp/run_gemma_controls.sh
+e409b6d42b6de2552f6741cf2926ca3e1bfaecf0b821cb86e491ff289f578bfe  deployment/nrp/gpu_job_lib.sh

@@ -102,6 +102,7 @@ nrp_port_forward_supervisor() {
 nrp_start_job() {
   local manifest="$1"
   local failed=""
+  local job_seen=""
   local pod_name=""
   local ready=""
   mkdir -p "${NRP_LOG_DIR}"
@@ -115,9 +116,12 @@ nrp_start_job() {
   fi
   kubectl --context nautilus apply -f "${manifest}"
   NRP_JOB_OWNED="1"
+  job_seen="1"
 
   local attempts="${NRP_SCHEDULING_ATTEMPTS:-360}"
   for _ in $(seq 1 "${attempts}"); do
+    # A transient Kubernetes API outage must not be treated as a deleted Job.
+    # Readiness and failure checks below retry until the scheduling deadline.
     pod_name=$(kubectl --context nautilus -n "${NRP_NAMESPACE}" get pod \
       -l "job-name=${NRP_JOB}" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
     failed=$(kubectl --context nautilus -n "${NRP_NAMESPACE}" get job "${NRP_JOB}" \

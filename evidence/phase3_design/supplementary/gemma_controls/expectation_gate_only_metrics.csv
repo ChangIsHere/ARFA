@@ -1,0 +1,139 @@
+"task_id","experiment_split","pair_name","policy","trajectory_workers","success","model_calls","fast_model_calls","slow_model_calls","fast_model_tokens","slow_model_tokens","total_tokens","model_latency_seconds","command_latency_seconds","router_latency_seconds","total_task_wall_seconds","termination_reason","max_steps_reached","parse_error_count","nonzero_exit_count","repeated_action_count","final_answer"
+"intercode-nl2bash-fs1-000","development","gemma","expectation_gate_only","16","False","3","1","2","1229","2530","3759","226.12705312576145","0.19173912494443357","7.687602192163467e-05","229.94334141584113","model_done","False","0","0","0","f32a3a97638afeb2ee2a15cfe335ab72"
+"intercode-nl2bash-fs1-001","development","gemma","expectation_gate_only","16","False","12","6","6","10752","10209","20961","1464.993003998883","1.0423658336512744","0.000498082023113966","1469.6916765000205","repeated_action_stop","False","0","6","2",""
+"intercode-nl2bash-fs1-009","development","gemma","expectation_gate_only","16","False","3","1","2","1083","2094","3177","269.8584803750273","0.2449680829886347","0.00011833407916128635","274.0862388329115","model_done","False","0","1","0","No"
+"intercode-nl2bash-fs1-010","development","gemma","expectation_gate_only","16","False","3","1","2","1227","2303","3530","276.60333912516944","0.18583204201422632","8.920812979340553e-05","280.76692495890893","model_done","False","0","0","0","textfile3.txt is a subset of textfile2.txt"
+"intercode-nl2bash-fs1-014","development","gemma","expectation_gate_only","16","False","3","1","2","1453","2511","3964","303.31203241692856","0.14337520860135555","6.370805203914642e-05","307.9416873329319","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-015","development","gemma","expectation_gate_only","16","False","6","3","3","4818","4430","9248","666.1102804585826","0.41877699992619455","0.00016554282046854496","670.4640518748201","model_done","False","0","3","1","Files with 'FooBar' in their path under '/testbed/dir1' have been copied to '/testbed/dir3/subdir1/subsubdir1/tmp/'."
+"intercode-nl2bash-fs1-016","development","gemma","expectation_gate_only","16","False","2","1","1","1087","730","1817","89.98960966616869","0.10534691694192588","5.5999960750341415e-05","94.17769633303396","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-021","development","gemma","expectation_gate_only","16","False","2","1","1","1117","760","1877","119.4292894161772","0.10102937510237098","1.616613008081913e-05","123.69628466595896","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-023","development","gemma","expectation_gate_only","16","False","2","1","1","1053","699","1752","138.53038729191758","0.060990167083218694","2.1459069103002548e-05","142.99418554198928","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs1-029","development","gemma","expectation_gate_only","16","False","2","1","1","1146","762","1908","164.9389595419634","0.10429341602139175","4.195794463157654e-05","169.35817458387464","model_done","False","0","0","0","31"
+"intercode-nl2bash-fs1-031","development","gemma","expectation_gate_only","16","False","6","3","3","4091","3950","8041","775.6724208320957","0.4160806240979582","0.00010916800238192081","780.6346320419107","model_done","False","0","0","1","1"
+"intercode-nl2bash-fs1-032","development","gemma","expectation_gate_only","16","False","4","2","2","2868","2496","5364","548.1204087913502","0.2577504990622401","0.00016583292745053768","553.426472207997","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs1-033","development","gemma","expectation_gate_only","16","True","2","1","1","998","694","1692","181.84861829085276","0.053324125008657575","3.970903344452381e-05","186.7103530841414","model_done","False","0","0","0","31"
+"intercode-nl2bash-fs1-034","development","gemma","expectation_gate_only","16","True","2","1","1","1091","729","1820","203.52889774995856","0.06688379100523889","1.6292091459035873e-05","209.4521860841196","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-035","development","gemma","expectation_gate_only","16","True","2","1","1","1150","774","1924","196.91658233315684","0.09027779195457697","1.6040867194533348e-05","201.5978527921252","model_done","False","0","0","0","Counts lines in each *.php file in /testbed directory, sorted by number of lines, descending."
+"intercode-nl2bash-fs1-038","development","gemma","expectation_gate_only","16","False","8","4","4","5948","5648","11596","1045.8222971651703","0.8132830439135432","0.00042741652578115463","1050.9902571667917","model_done","False","0","0","2",""
+"intercode-nl2bash-fs1-040","development","gemma","expectation_gate_only","16","False","2","1","1","1085","718","1803","231.47565258317627","0.07058383384719491","3.754207864403725e-05","232.34251362504438","model_done","False","0","0","0","1"
+"intercode-nl2bash-fs1-045","development","gemma","expectation_gate_only","16","False","2","1","1","1549","748","2297","243.7008358342573","0.07681129197590053","4.0125101804733276e-05","244.9923241669312","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-048","development","gemma","expectation_gate_only","16","False","2","1","1","1132","737","1869","249.8979986240156","0.0910276249051094","5.029095336794853e-05","250.9075745001901","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-050","development","gemma","expectation_gate_only","16","False","2","1","1","1143","739","1882","264.66694091586396","0.11633587488904595","5.3042080253362656e-05","266.0528883750085","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-051","development","gemma","expectation_gate_only","16","False","2","1","1","1294","750","2044","282.28757758275606","0.06999466684646904","1.5584053471684456e-05","283.26345604192466","model_done","False","0","0","0","The biggest file sizes in the /testbed directory are listed above."
+"intercode-nl2bash-fs1-052","development","gemma","expectation_gate_only","16","False","3","1","2","1165","2233","3398","542.7111858748831","0.18433487508445978","9.179092012345791e-05","544.1958991249558","model_done","False","0","1","0","/testbed/Hello.java
+/testbed/dir1/AnotherHello.java
+/testbed/Hello1.java"
+"intercode-nl2bash-fs1-055","development","gemma","expectation_gate_only","16","False","2","1","1","1077","709","1786","291.7835734160617","0.08388916682451963","2.129189670085907e-05","314.4626044998877","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-057","development","gemma","expectation_gate_only","16","False","5","2","3","2422","3541","5963","857.5231418320909","0.33365795807912946","0.00013554305769503117","858.9765868331306","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs1-058","development","gemma","expectation_gate_only","16","True","3","1","2","1172","2164","3336","549.358180334093","0.15702912490814924","3.0624913051724434e-05","551.0765641659964","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-000","development","gemma","expectation_gate_only","16","False","12","6","6","11929","11063","22992","1804.4187505021691","1.2891145835164934","0.0005262088961899281","1807.320390708046","max_steps","True","0","2","2",""
+"intercode-nl2bash-fs2-005","development","gemma","expectation_gate_only","16","False","7","0","7","","11688","11688","1919.2374477509875","0.9489423341583461","0.00025137607008218765","1924.3597522918135","model_done","False","0","2","1",""
+"intercode-nl2bash-fs2-007","development","gemma","expectation_gate_only","16","False","4","2","2","2803","2383","5186","601.0686769580934","0.28071154234930873","0.00012008403427898884","602.8016052499879","repeated_action_stop","False","0","3","1",""
+"intercode-nl2bash-fs2-008","development","gemma","expectation_gate_only","16","True","2","1","1","1100","737","1837","296.80533450003713","0.11529058311134577","0.00010933307930827141","298.0761319170706","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-009","development","gemma","expectation_gate_only","16","False","7","3","4","5093","6572","11665","1186.82848345791","0.7217446239665151","0.00030883424915373325","1188.8267631661147","repeated_action_stop","False","0","4","1",""
+"intercode-nl2bash-fs2-011","development","gemma","expectation_gate_only","16","True","2","1","1","1050","705","1755","277.16251770895906","0.07587600010447204","3.74161172658205e-05","278.99996070796624","model_done","False","0","0","0","special text4.txt
+empty.txt
+text1.txt
+text1_dbg.txt
+sql1.sql"
+"intercode-nl2bash-fs2-012","development","gemma","expectation_gate_only","16","False","5","2","3","2666","3767","6433","877.2311347487848","0.4658018338959664","0.00014070793986320496","878.4122156249359","repeated_action_stop","False","0","3","1",""
+"intercode-nl2bash-fs2-016","development","gemma","expectation_gate_only","16","False","2","1","1","1039","687","1726","272.71844091592357","0.06478095799684525","2.674991264939308e-05","273.74213895900175","model_done","False","0","0","0"," "
+"intercode-nl2bash-fs2-019","development","gemma","expectation_gate_only","16","False","2","1","1","1265","777","2042","283.90243804175407","0.1121432080399245","6.570899859070778e-05","285.8492995421402","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-020","development","gemma","expectation_gate_only","16","True","3","1","2","1057","1996","3053","556.7372734148521","0.18304179119877517","7.591606117784977e-05","557.8041418748908","model_done","False","0","0","0","All files matching the criteria have been removed."
+"intercode-nl2bash-fs2-021","development","gemma","expectation_gate_only","16","False","3","1","2","1159","2173","3332","559.9602091670968","0.19911391590721905","7.687625475227833e-05","560.9214521248359","model_done","False","0","0","0","All a.out, *.o, and core files under /system have been removed."
+"intercode-nl2bash-fs2-022","development","gemma","expectation_gate_only","16","True","3","1","2","1102","2060","3162","548.8224527921993","0.22503891587257385","6.187520921230316e-05","549.8257502089255","model_done","False","0","0","0","6,7,8,9,10"
+"intercode-nl2bash-fs2-025","development","gemma","expectation_gate_only","16","False","2","1","1","1255","805","2060","293.9052969159093","0.0907610000576824","3.945804201066494e-05","295.4989695411641","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-026","development","gemma","expectation_gate_only","16","True","2","1","1","1240","823","2063","309.95154441706836","0.09804095816798508","2.7125002816319466e-05","311.0576087499503","model_done","False","0","0","0","Task completed."
+"intercode-nl2bash-fs2-027","development","gemma","expectation_gate_only","16","False","3","1","2","1106","2063","3169","554.0981437908486","0.18586804205551744","0.00013366690836846828","555.0397950839251","model_done","False","0","0","0","Task completed successfully."
+"intercode-nl2bash-fs2-029","development","gemma","expectation_gate_only","16","False","2","1","1","1084","680","1764","276.4417728751432","0.11484174989163876","4.529207944869995e-05","277.414463999914","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-032","development","gemma","expectation_gate_only","16","False","2","1","1","1486","784","2270","317.768892042106","0.10915279085747898","5.6541990488767624e-05","318.6494536669925","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-033","development","gemma","expectation_gate_only","16","False","2","1","1","1044","706","1750","295.29606349999085","0.0721853340510279","3.641587682068348e-05","296.0613961671479","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-034","development","gemma","expectation_gate_only","16","False","4","2","2","2322","2094","4416","560.6027964178938","0.31119949906133115","0.000155207933858037","561.8667468340136","model_done","False","0","1","0",""
+"intercode-nl2bash-fs2-038","development","gemma","expectation_gate_only","16","False","3","1","2","1216","2435","3651","568.1494212921243","0.16741879098117352","8.291611447930336e-05","569.4219212499447","model_done","False","0","0","0","144	/system
+48	/system/folder1
+44	/system/folder3
+20	/system/folder3/temp
+20	/system/folder2
+16	/system/folder3/temp/temp1
+16	/system/folder3/backup_dbg
+4	/system/text3.txt
+4	/system/text1.txt
+4	/system/temp"
+"intercode-nl2bash-fs2-040","development","gemma","expectation_gate_only","16","False","5","2","3","2378","3544","5922","815.0799021271523","0.4101275000721216","0.00020058336667716503","816.3333141249605","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs2-043","development","gemma","expectation_gate_only","16","False","4","2","2","3347","2789","6136","586.4414802070241","0.32746862480416894","0.00012787478044629097","587.7637083749287","model_done","False","0","2","0",""
+"intercode-nl2bash-fs2-044","development","gemma","expectation_gate_only","16","False","4","2","2","2756","2365","5121","574.0229273338336","0.30193562526255846","0.00011629215441644192","575.1073079588823","model_done","False","0","3","1",""
+"intercode-nl2bash-fs2-045","development","gemma","expectation_gate_only","16","False","12","6","6","14325","13287","27612","1685.7350978306495","1.4023855431005359","0.0006127061787992716","1687.945657833945","max_steps","True","0","11","2",""
+"intercode-nl2bash-fs2-047","development","gemma","expectation_gate_only","16","False","2","1","1","932","646","1578","280.33506395784207","0.07140000001527369","2.304092049598694e-05","281.7732234580908","model_done","False","0","0","0","Hello world!"
+"intercode-nl2bash-fs2-048","development","gemma","expectation_gate_only","16","True","2","1","1","1203","705","1908","280.965697000036","0.06914104195311666","1.8249964341521263e-05","282.43563066702336","model_done","False","0","0","0","DONE"
+"intercode-nl2bash-fs2-050","development","gemma","expectation_gate_only","16","True","2","1","1","998","699","1697","275.6953862910159","0.23706008307635784","5.141599103808403e-05","276.9490417088382","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-051","development","gemma","expectation_gate_only","16","False","4","2","2","3038","2790","5828","563.1154993751552","0.19010258303023875","0.00011041620746254921","564.1399549997877","model_done","False","0","0","0","d41d8cd98f00b204e9800998ecf8427e"
+"intercode-nl2bash-fs3-000","development","gemma","expectation_gate_only","16","False","3","1","2","1053","2541","3594","555.4804484168999","0.35217458405531943","3.4624943509697914e-05","556.721680625109","model_done","False","0","0","0","/workspace/results.txt /workspace/files.txt /workspace/new.sh /workspace/old2.txt /workspace/archive.tar.gz /workspace/test /workspace/test/dir1 /workspace/test/2dir /workspace/test/3dir /workspace/recent1.txt /workspace/.hidden.txt /workspace/dir1 /workspace/dir1/long.txt /workspace/dir1/hello.txt /workspace/dir1/file.txt /workspace/dir1/file.c /workspace/dir1/.hidden1.txt /workspace/dir1/new1.sh /workspace/dir1/hello.c /workspace/dir1/sum.c /workspace/dir1/script1.sh /workspace/dir1/all.txt /workspace/dir1/terminate.txt /workspace/dir1/readonly.txt /workspace/dir1/a.txt /workspace/dir2 /workspace/dir2/hello.txt /workspace/dir2/mysql /workspace/dir2/mysql/sql1.sql /workspace/dir2/foo.txt /workspace/dir2/csvfile1.csv"
+"intercode-nl2bash-fs3-001","development","gemma","expectation_gate_only","16","True","2","1","1","1021","685","1706","267.98273654212244","0.6879294170066714","3.408314660191536e-05","269.4236854999326","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-004","development","gemma","expectation_gate_only","16","False","2","1","1","911","644","1555","263.55444400012493","0.07484749983996153","2.4833017960190773e-05","264.5052753749769","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-009","development","gemma","expectation_gate_only","16","False","3","1","2","1053","2050","3103","517.0748132078443","0.14767637592740357","0.00031383405439555645","519.0679502920248","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs3-010","development","gemma","expectation_gate_only","16","True","2","1","1","1040","664","1704","268.7468284999486","0.08136137505061924","4.9833906814455986e-05","270.10113404202275","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-012","development","gemma","expectation_gate_only","16","False","3","1","2","1300","2227","3527","524.0077246238943","0.18069358286447823","7.7791977673769e-05","527.494111625012","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-013","development","gemma","expectation_gate_only","16","True","2","1","1","1040","713","1753","278.07392366579734","0.14416224998421967","3.7250109016895294e-05","280.3443816660438","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-014","development","gemma","expectation_gate_only","16","False","2","1","1","1086","694","1780","271.9925956670195","0.06379545899108052","1.9249971956014633e-05","272.9196319999173","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-017","development","gemma","expectation_gate_only","16","True","2","1","1","906","632","1538","257.63218479207717","0.061656124889850616","1.6333069652318954e-05","259.1067021249328","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-018","development","gemma","expectation_gate_only","16","True","3","1","2","1054","2013","3067","510.91989108501","0.2024452919140458","8.904212154448032e-05","512.3400705829263","model_done","False","0","0","0","The first line"
+"intercode-nl2bash-fs3-019","development","gemma","expectation_gate_only","16","False","2","1","1","1009","697","1706","258.6617082920857","0.7909030001610518","0.00012175017036497593","260.74916450004093","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-021","development","gemma","expectation_gate_only","16","False","3","1","2","1325","2580","3905","536.9603945408016","0.270720541710034","6.591714918613434e-05","538.2423979998566","model_done","False","0","0","0","/workspace/results.txt
+/workspace/files.txt
+/workspace/new.sh
+/workspace/old2.txt
+/workspace/archive.tar.gz
+/workspace/recent1.txt
+/workspace/.hidden.txt
+/workspace/dir1/long.txt
+/workspace/dir1/hello.txt
+/workspace/dir1/file.txt
+/workspace/dir1/file.c
+/workspace/dir1/.hidden1.txt
+/workspace/dir1/new1.sh
+/workspace/dir1/hello.c
+/workspace/dir1/sum.c
+/workspace/dir1/script1.sh
+/workspace/dir1/all.txt
+/workspace/dir1/terminate.txt
+/workspace/dir1/readonly.txt
+/workspace/dir1/a.txt
+/workspace/dir2/hello.txt
+/workspace/dir2/mysql/sql1.sql
+/workspace/dir2/foo.txt
+/workspace/dir2/csvfile1.csv"
+"intercode-nl2bash-fs3-026","development","gemma","expectation_gate_only","16","False","4","2","2","2469","2156","4625","523.4285905407742","0.5098224577959627","0.001563207944855094","525.3053014168981","model_done","False","0","1","1",""
+"intercode-nl2bash-fs3-028","development","gemma","expectation_gate_only","16","False","2","1","1","1979","732","2711","271.1531959157437","0.8196098750922829","0.00011908309534192085","273.0825222921558","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-029","development","gemma","expectation_gate_only","16","False","2","1","1","1979","717","2696","239.48375874990597","0.16568191698752344","4.2082974687218666e-05","241.30510420817882","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-031","development","gemma","expectation_gate_only","16","False","7","3","4","4711","5849","10560","1028.825612500077","0.6037334580905735","0.00021337508223950863","1031.0049000829458","model_done","False","0","1","0","6"
+"intercode-nl2bash-fs3-034","development","gemma","expectation_gate_only","16","False","2","1","1","1008","678","1686","256.3774075419642","0.10244612512178719","1.895800232887268e-05","258.04407904087566","model_done","False","0","0","0","dir1, dir2"
+"intercode-nl2bash-fs3-037","development","gemma","expectation_gate_only","16","False","4","2","2","2511","2227","4738","505.49165070801973","0.337710376130417","7.129181176424026e-05","507.33904991694726","model_done","False","0","1","0","25"
+"intercode-nl2bash-fs3-038","development","gemma","expectation_gate_only","16","False","3","1","2","1055","2050","3105","470.79648304218426","0.28160020895302296","0.0005703750066459179","472.1527990831528","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-039","development","gemma","expectation_gate_only","16","False","2","1","1","994","685","1679","254.62667237501591","0.10264966706745327","3.383401781320572e-05","255.99891108297743","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs3-040","development","gemma","expectation_gate_only","16","False","3","1","2","1173","2350","3523","506.6594494590536","0.21781379217281938","9.129219688475132e-05","508.1813608328812","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs3-045","development","gemma","expectation_gate_only","16","False","2","1","1","1371","750","2121","257.3061977077741","0.2582079579588026","5.220901221036911e-05","259.94218974979594","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-049","development","gemma","expectation_gate_only","16","False","3","1","2","1122","2243","3365","494.6978422498796","0.34382954193279147","0.00010754074901342392","497.3152064590249","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs3-050","development","gemma","expectation_gate_only","16","False","2","1","1","1019","662","1681","261.09748833300546","0.2976239158306271","3.3542048186063766e-05","263.05651716701686","model_done","False","0","0","0","1%"
+"intercode-nl2bash-fs3-053","development","gemma","expectation_gate_only","16","False","3","1","2","1064","2026","3090","454.03372424980626","0.9853457920253277","8.25000461190939e-05","456.43482879106887","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-054","development","gemma","expectation_gate_only","16","False","2","1","1","2309","680","2989","247.12834758288227","0.1115230000577867","2.308306284248829e-05","257.8810937500093","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-055","development","gemma","expectation_gate_only","16","True","2","1","1","1027","685","1712","234.04344533313997","0.08162566600367427","3.2833078876137733e-05","235.2129767499864","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-056","development","gemma","expectation_gate_only","16","False","7","3","4","4817","5545","10362","962.1531524178572","0.46510533383116126","0.00019112625159323215","963.8650793328416","model_done","False","0","3","2",""
+"intercode-nl2bash-fs3-057","development","gemma","expectation_gate_only","16","True","2","1","1","1032","707","1739","224.80477133393288","0.0812025829218328","2.600019797682762e-05","226.10954070906155","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-058","development","gemma","expectation_gate_only","16","True","2","1","1","999","696","1695","245.36525441682898","0.07319954200647771","2.1666986867785454e-05","246.5486088329926","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-059","development","gemma","expectation_gate_only","16","False","2","1","1","988","685","1673","229.88298587407917","0.06015787506476045","2.287491224706173e-05","231.46427116682753","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-002","development","gemma","expectation_gate_only","16","False","7","3","4","4224","5591","9815","914.6978295422159","1.0691137476824224","0.00028154393658041954","916.7961431250442","repeated_action_stop","False","0","4","2",""
+"intercode-nl2bash-fs4-003","development","gemma","expectation_gate_only","16","False","10","5","5","6338","6023","12361","979.5789586254396","1.3390340425539762","0.0004124182742089033","983.4870714161079","repeated_action_stop","False","0","9","3",""
+"intercode-nl2bash-fs4-004","development","gemma","expectation_gate_only","16","True","2","1","1","1042","682","1724","220.19501412496902","0.08521199994720519","2.129189670085907e-05","221.51062641688623","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-006","development","gemma","expectation_gate_only","16","True","4","2","2","2118","1862","3980","451.51507433410734","0.28264504112303257","9.783287532627583e-05","460.3920873750467","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-011","development","gemma","expectation_gate_only","16","False","4","2","2","3073","2718","5791","513.1439397081267","0.29457066720351577","0.00015616673044860363","514.3676677499898","model_done","False","0","0","1","No smbfs mounts found."
+"intercode-nl2bash-fs4-013","development","gemma","expectation_gate_only","16","True","2","1","1","939","660","1599","238.4825816671364","0.08820045809261501","2.60830856859684e-05","239.37183437496424","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-015","development","gemma","expectation_gate_only","16","False","2","1","1","943","651","1594","231.22112791705877","0.11166108306497335","3.929203376173973e-05","232.12301900004968","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-017","development","gemma","expectation_gate_only","16","False","2","1","1","1001","670","1671","247.73520712531172","0.0892600838560611","3.0125025659799576e-05","248.72615799983032","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-019","development","gemma","expectation_gate_only","16","False","12","6","6","8244","9508","17752","906.0171041653957","61.14075937634334","0.000520333182066679","968.1111479171086","model_request_error","False","1","8","1",""
+"intercode-nl2bash-fs4-020","development","gemma","expectation_gate_only","16","False","2","1","1","939","653","1592","233.08580800006166","0.07689620810560882","2.3624859750270844e-05","234.11058416590095","model_done","False","0","0","0","99 '=' characters"
+"intercode-nl2bash-fs4-021","development","gemma","expectation_gate_only","16","False","9","4","5","5884","8321","14205","862.5251792070922","0.9437374176923186","0.0003101231995970011","864.3981862911023","model_done","False","0","3","2","22"
+"intercode-nl2bash-fs4-022","development","gemma","expectation_gate_only","16","False","2","1","1","970","674","1644","239.34940412617289","0.13520683301612735","4.4999876990914345e-05","240.95001262496226","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs4-023","development","gemma","expectation_gate_only","16","True","4","2","2","2645","2287","4932","479.44161887606606","0.5478163757361472","8.479109965264797e-05","480.8214777498506","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-024","development","gemma","expectation_gate_only","16","True","2","1","1","1072","683","1755","249.82928666612133","0.14279429079033434","4.2584026232361794e-05","251.17388941696845","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-025","development","gemma","expectation_gate_only","16","False","2","1","1","1158","733","1891","250.6828643339686","0.12056229216977954","0.00015904195606708527","251.61349470796995","model_done","False","0","0","0","proc_load_average=1.60"
+"intercode-nl2bash-fs4-026","development","gemma","expectation_gate_only","16","True","4","2","2","2438","2123","4561","440.682601375971","0.22594516724348068","0.00011108280159533024","441.72083308314905","model_done","False","0","2","0","55"

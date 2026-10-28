@@ -4,7 +4,7 @@
   "selection": {
     "split": "development",
     "selected_residual_threshold": 0.30,
-    "selection_source": "evidence/phase3_design/gemma_high_memory_parallel4_calibration/threshold_calibration.json",
+    "selection_source": "development threshold sweep; only the selected run is retained",
     "held_out": false
   },
   "hardware": {

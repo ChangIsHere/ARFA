@@ -2,117 +2,89 @@
 
 ## Goal
 
-Build evidence that execution residual improves fast/slow model selection, not
-merely that two models can be mixed. Development data is used for design and
-calibration. The reserved final split is evaluated once after the protocol is
-frozen.
+Test whether execution residual improves fast/slow model selection, identify
+which model pairs benefit, and check whether the result transfers beyond the
+development benchmark.
 
-## Current Position
+## Existing Evidence
 
-- Phase 1.5 contains the offline residual study.
-- Phase 2 contains 1,600 standalone model runs.
-- Phase 3 development contains matched 100-task results for Qwen, Llama, Gemma,
-  and Phi.
-- Qwen and Gemma show an efficiency benefit. Llama and Phi reduce slow-model
-  calls without reducing total trajectory cost.
-- The 100-task final split has not been used.
+- Phase 1.5 contains the offline residual analysis.
+- Phase 2 characterizes eight standalone models on the same 200 tasks.
+- Phase 3 compares four native fast/slow pairs under residual, always-slow, and
+  always-fast routing on 100 shared development tasks.
+- Gemma 4B/12B has the clearest development tradeoff. Qwen, Llama, and Phi show
+  that reduced slow-model use does not always reduce total trajectory cost.
+- The reserved 100-task Phase 3 final split has not been used.
 
-The current material is sufficient for a workshop draft. The stages below are
-needed for a stronger confirmatory paper.
+## Stage 1: Within-Family Routing Controls (complete)
 
-## Stage 1: Mixed-Pair Qualification
+The Gemma 4B/12B and Qwen 7B/14B development matrices are complete:
 
-Purpose: determine whether the Llama and Phi outcomes are caused by residual
-routing or by the original fast models.
+- residual;
+- learned observation-only;
+- expectation-gate-only;
+- random routing at a matched fast-call budget;
+- the completed always-slow and always-fast endpoints.
 
-Candidates:
+All online controls use the same tasks, model artifacts, prompt, evaluator,
+context, concurrency, and step cap within a pair. Residual beat the two simple
+controls in both pairs, but did not clearly beat learned observation-only
+routing.
 
-- Gemma 3 4B -> Llama 3.1 8B;
-- Gemma 3 4B -> Phi-4 14B.
+## Stage 2: Cost-Reversal Analysis (complete)
 
-Each candidate uses the same 20 development tasks under residual, slow-only,
-and fast-only policies. A candidate advances only when:
+Trace-level analysis of Llama and Phi measures calls per task, tokens per call,
+repeated actions, parse errors, and max-step rates. A nominally smaller model
+can cost more by extending the trajectory. Fast-model action quality is
+therefore part of the model-pair selection problem.
 
-- all three cells contain 20 unique tasks;
-- model request errors are zero;
-- fast-model parse errors are at most 5% of calls;
-- fast-model latency per call is at least 25% below the slow model;
-- residual success is within one task of slow-only;
-- residual total calls are no more than 110% of slow-only.
+## Stage 3: Mixed Pairs
 
-The criteria are implemented in `src/phase3_arfa/qualify_pair.py`. Qualification
-does not select a residual threshold and does not access final tasks.
+Hold one side of the pair fixed while changing the other. Measure how
+fast-model latency, schema adherence, success, and recovery work affect the
+residual tradeoff. This stage explains the pair dependence observed in the
+four-family study.
 
-## Stage 2: Residual-Specific Controls
+Short development qualifications may reject pairs that cannot keep both models
+resident, produce excessive parse errors, or make the nominal fast model slower
+than the slow model. Pair qualification does not use final tasks.
 
-First run Qwen on the shared 100 development tasks with matched controls, then
-extend to Gemma and any qualified mixed pair. The
-[control-extension protocol](phase3_control_extension.md) contains the exact
-first-round setup and its current status.
-
-- `always_slow`;
-- `always_fast`;
-- `residual`;
-- `observation_only`;
-- `learned_observation_only`;
-- `expectation_gate_only`;
-- `random_budget`;
-- `fixed_budget`.
-
-The learned observation-only controller is especially important because its
-offline AUC is not lower than the full residual's AUC. Random and fixed
-policies use development-selected target budgets; their *achieved* fast-call
-rates must be checked before claiming budget matching. These comparisons test
-whether expectation-observation residual adds value beyond observation-only
-scoring, expectation-quality gating, or generic use of a smaller model.
-
-## Stage 3: Freeze
+## Stage 4: Freeze
 
 Freeze model hashes, prompts, parser, residual formula, threshold, fast-call
-budget, random seeds, task IDs, maximum steps, Docker images, GPU concurrency,
-analysis code, and acceptance criteria. Store their hashes in a manifest.
+budget, random seed, task IDs, step cap, Docker images, GPU concurrency, and
+analysis code. Store their hashes in a manifest.
 
-Primary comparisons:
+Primary comparisons are:
 
-- residual success versus matched slow-only;
-- residual wall time and energy versus slow-only;
-- residual success versus random and observation-only at matched fast-call
-  budgets.
+- residual success and cost versus always-slow;
+- residual success and cost versus learned observation-only;
+- residual success versus random routing at a matched achieved fast-call rate.
 
-## Stage 4: InterCode Final
+## Stage 5: InterCode Final
 
-Run the frozen policies once on all 100 reserved tasks. Every policy uses the
-same task IDs, hardware class, concurrency, prompt, context, and evaluator.
-Report paired bootstrap intervals and exact McNemar tests. Do not retune after
-viewing final results.
+Evaluate the frozen policies once on all 100 reserved tasks. Use identical task
+IDs, hardware class, concurrency, prompt, context, and evaluator. Report paired
+bootstrap intervals and exact McNemar tests. Do not retune after viewing the
+final results.
 
-## Stage 5: External Benchmark
+## Stage 6: External Benchmark
 
-Evaluate the two strongest pairs on a second coding-agent benchmark with its
-official harness and a declared task count. Terminal-Bench 2.0 has 89 tasks,
-so a complete run is more informative than imposing an arbitrary 100-task
-minimum. This is the main external-validity step for a regular paper. The
-second benchmark does not reuse InterCode thresholds unless threshold
-transfer is itself the stated test.
+Evaluate the frozen representative pair on a second terminal or coding-agent
+benchmark using its official harness. A complete benchmark run is preferable
+to an arbitrary sample-size target. Report both direct threshold transfer and,
+if needed, a separately labeled benchmark-specific calibration.
 
-## Stage 6: Ablations And Stability
+## Stage 7: Ablations And Stability
 
-On development or separate validation data, measure:
+Use development or separate validation data for residual-component ablations,
+threshold sensitivity, task-category analysis, repeated runs on a fixed subset,
+and measured GPU energy per task and per successful task.
 
-- residual without expectation text;
-- semantic-only and structured-only residual;
-- threshold and fast-call-budget sensitivity;
-- task-category effects;
-- repeated runs on a fixed 30-50 task subset;
-- measured GPU energy per task and per successful task.
+## Intended Claim
 
-## Claim Boundary
-
-The intended claim is conditional:
-
-> Execution residual can improve fast/slow model selection when the fast model
-> is genuinely faster, follows the action schema, and avoids recovery work.
-
-Negative model pairs remain part of the evidence because they identify the
-conditions under which reduced slow-model use fails to produce end-to-end
-savings.
+The intended claim is conditional: execution residual can improve fast/slow
+model selection when the fast model is genuinely faster and capable enough to
+avoid extra retries and recovery work. The four-pair study establishes this
+dependence; the Gemma controls isolate the residual signal; mixed pairs explain
+the model-selection mechanism; and the second benchmark tests transfer.

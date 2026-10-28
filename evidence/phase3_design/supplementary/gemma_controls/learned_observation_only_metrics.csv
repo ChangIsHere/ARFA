@@ -1,0 +1,186 @@
+"task_id","experiment_split","pair_name","policy","trajectory_workers","success","model_calls","fast_model_calls","slow_model_calls","fast_model_tokens","slow_model_tokens","total_tokens","model_latency_seconds","command_latency_seconds","router_latency_seconds","total_task_wall_seconds","termination_reason","max_steps_reached","parse_error_count","nonzero_exit_count","repeated_action_count","final_answer"
+"intercode-nl2bash-fs1-000","development","gemma","learned_observation_only","16","False","5","2","3","3022","4397","7419","559.904383291956","0.3699114569462836","0.009677291382104158","563.816637000069","model_done","False","0","0","1","2a6e145fa1dd29fe71b487050146ef24, 343ef50f5c9b8684b9329a4d3840b131, f32a3a97638afeb2ee2a15cfe335ab72"
+"intercode-nl2bash-fs1-001","development","gemma","learned_observation_only","16","False","6","3","3","4546","4147","8693","582.3028253742959","0.5234454164747149","0.009128957754001021","586.5944905409124","model_done","False","0","1","1",""
+"intercode-nl2bash-fs1-009","development","gemma","learned_observation_only","16","False","2","0","2","","1679","1679","210.33789612492546","0.16100458381697536","0.0016644580755382776","214.07301933295093","model_done","False","0","1","0","The shell is not running inside a screen session."
+"intercode-nl2bash-fs1-010","development","gemma","learned_observation_only","16","False","3","1","2","1240","2312","3552","284.76004091720097","0.19313837494701147","0.004946208093315363","289.51639800006524","model_done","False","0","1","0","textfile3.txt is not a subset of textfile2.txt"
+"intercode-nl2bash-fs1-014","development","gemma","learned_observation_only","16","False","3","1","2","1453","2511","3964","307.68079491797835","0.18042549979873002","0.0027751249726861715","311.8325130830053","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-015","development","gemma","learned_observation_only","16","False","5","2","3","2951","4345","7296","642.8420180829708","0.3642838338855654","0.006669417256489396","647.2766305420082","model_done","False","0","2","0","done"
+"intercode-nl2bash-fs1-016","development","gemma","learned_observation_only","16","False","2","1","1","1087","730","1817","111.85072412411682","0.07311537489295006","0.000890625175088644","115.98044466599822","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-021","development","gemma","learned_observation_only","16","False","2","1","1","1067","708","1775","109.74317429191433","0.2510594171471894","0.005278750089928508","114.19457862502895","model_done","False","0","0","0","1"
+"intercode-nl2bash-fs1-023","development","gemma","learned_observation_only","16","False","2","1","1","1071","703","1774","159.4300877500791","0.07453558291308582","0.0008960000704973936","163.9775008331053","model_done","False","0","0","0","4"
+"intercode-nl2bash-fs1-029","development","gemma","learned_observation_only","16","False","2","1","1","1149","765","1914","198.2210676248651","0.07507324987091124","0.001617334084585309","203.3302169579547","model_done","False","0","0","0","31"
+"intercode-nl2bash-fs1-031","development","gemma","learned_observation_only","16","False","6","3","3","4406","4194","8600","762.2760244579986","0.4207635000348091","0.009259373880922794","767.5008559168782","model_done","False","0","0","0","1"
+"intercode-nl2bash-fs1-032","development","gemma","learned_observation_only","16","False","9","4","5","5900","7428","13328","1289.7219367513899","0.5939896267373115","0.021425335202366114","1294.3803861672059","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs1-033","development","gemma","learned_observation_only","16","True","2","1","1","1030","706","1736","180.67831625021063","0.08458949998021126","0.001155500067397952","185.33707416593097","model_done","False","0","0","0","31"
+"intercode-nl2bash-fs1-034","development","gemma","learned_observation_only","16","True","2","1","1","1075","725","1800","215.3848959582392","0.27918458404019475","0.0039404998533427715","220.65601512487046","model_done","False","0","0","0","The line count for each PHP file in /testbed is sorted by filename."
+"intercode-nl2bash-fs1-035","development","gemma","learned_observation_only","16","True","2","1","1","1112","752","1864","146.59804354188964","0.10575133305974305","0.002526083029806614","150.88511004205793","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-038","development","gemma","learned_observation_only","16","False","4","1","3","1588","3669","5257","727.2023954999167","0.3005300839431584","0.004912667209282517","732.1820062920451","model_done","False","0","2","1",""
+"intercode-nl2bash-fs1-040","development","gemma","learned_observation_only","16","False","2","1","1","1084","718","1802","242.56902029225603","0.11700541689060628","0.005877749994397163","243.6185173750855","model_done","False","0","0","0","1"
+"intercode-nl2bash-fs1-045","development","gemma","learned_observation_only","16","False","2","1","1","1074","730","1804","243.0997126251459","0.09824645891785622","0.00208033318631351","244.27669112500735","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-048","development","gemma","learned_observation_only","16","False","2","1","1","1126","734","1860","270.3275207502302","0.09102604095824063","0.002205000026151538","271.3835157081485","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-050","development","gemma","learned_observation_only","16","False","2","1","1","1141","737","1878","262.7114084160421","0.1205214171204716","0.003024832811206579","264.0707726671826","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-051","development","gemma","learned_observation_only","16","False","2","1","1","1184","720","1904","269.7986614999827","0.12451195809990168","0.001803083810955286","271.1127933750395","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-052","development","gemma","learned_observation_only","16","False","7","1","6","1418","7774","9192","1656.4871981248725","0.8006224590353668","0.03396450006403029","1677.5012711249292","model_done","False","0","5","1",""
+"intercode-nl2bash-fs1-055","development","gemma","learned_observation_only","16","False","2","1","1","1077","709","1786","299.1013251671102","0.11476916680112481","0.0027257080655544996","320.5693417910952","model_done","False","0","0","0",""
+"intercode-nl2bash-fs1-057","development","gemma","learned_observation_only","16","False","4","2","2","2414","2086","4500","569.9813934999984","0.24664729181677103","0.006284249946475029","571.3697540410794","model_done","False","0","1","1",""
+"intercode-nl2bash-fs1-058","development","gemma","learned_observation_only","16","True","5","1","4","1580","5031","6611","1139.4900275829714","0.3422254170291126","0.008245501201599836","1141.1688405410387","model_done","False","0","2","1",""
+"intercode-nl2bash-fs2-000","development","gemma","learned_observation_only","16","False","6","2","4","3180","6051","9231","1170.1017532919068","0.5005165431648493","0.015625917352735996","1171.6374951659236","repeated_action_stop","False","0","3","1",""
+"intercode-nl2bash-fs2-005","development","gemma","learned_observation_only","16","False","6","1","5","5756","11984","17740","1439.297394333873","26.55841395794414","0.01697499956935644","1472.8124876250513","model_done","False","0","2","0","done"
+"intercode-nl2bash-fs2-007","development","gemma","learned_observation_only","16","False","5","2","3","3025","3546","6571","863.5465678330511","0.4015609179623425","0.010625668102875352","864.8791795000434","model_done","False","0","1","0","done"
+"intercode-nl2bash-fs2-008","development","gemma","learned_observation_only","16","True","2","1","1","1012","699","1711","282.1388365828898","0.08529466693289578","0.00250708288513124","283.1674211251084","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-009","development","gemma","learned_observation_only","16","False","4","1","3","1376","4262","5638","877.4198727910407","0.3119393330998719","0.005855584051460028","878.8596102090087","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs2-011","development","gemma","learned_observation_only","16","True","2","1","1","1050","705","1755","277.04835558193736","0.11232545785605907","0.00286333286203444","278.78789112507366","model_done","False","0","0","0","special text4.txt
+empty.txt
+text1.txt
+text1_dbg.txt
+sql1.sql"
+"intercode-nl2bash-fs2-012","development","gemma","learned_observation_only","16","False","6","1","5","1631","7143","8774","1416.7163131667767","0.3563983750063926","0.007308248896151781","1419.1345152081922","model_done","False","0","4","1","Failed to extract and search the archive due to an unresolvable error. The archive may be corrupted or contain unexpected content."
+"intercode-nl2bash-fs2-016","development","gemma","learned_observation_only","16","True","2","1","1","1000","692","1692","281.1470551658422","0.05958191701211035","0.0031561660580337048","282.36392679205164","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-019","development","gemma","learned_observation_only","16","True","3","1","2","1292","2350","3642","552.961459166836","0.20425716694444418","0.006059041013941169","554.2593609581236","model_done","False","0","0","0","Task completed successfully."
+"intercode-nl2bash-fs2-020","development","gemma","learned_observation_only","16","True","2","1","1","1070","726","1796","297.18175320816226","0.11285112495534122","0.0037412079982459545","298.35516758379526","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-021","development","gemma","learned_observation_only","16","True","2","1","1","1077","728","1805","301.4551600406412","0.11524591688066721","0.0030787079595029354","303.25317745888606","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-022","development","gemma","learned_observation_only","16","True","4","2","2","2825","2545","5370","147.58834229176864","2.6213588337413967","0.009289333131164312","152.8947095000185","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs2-025","development","gemma","learned_observation_only","16","False","2","1","1","1249","807","2056","301.967272501206","0.08734045806340873","0.0019325839821249247","303.2935695829801","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-026","development","gemma","learned_observation_only","16","True","2","1","1","1380","855","2235","304.21091841720045","0.08642249996773899","0.003266792045906186","305.78832333302125","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-027","development","gemma","learned_observation_only","16","False","5","2","3","2662","3749","6411","847.4620152499992","0.40665275091305375","0.009560707723721862","848.6608070421498","repeated_action_stop","False","0","1","1",""
+"intercode-nl2bash-fs2-029","development","gemma","learned_observation_only","16","False","2","0","2","","1697","1697","562.2379879171494","0.11619645799510181","0.0024707920383661985","563.1753528749105","model_done","False","0","1","0","The files do not exist."
+"intercode-nl2bash-fs2-032","development","gemma","learned_observation_only","16","False","2","1","1","1486","784","2270","296.3441045412328","0.10114704095758498","0.0029529579915106297","297.16468799998984","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-033","development","gemma","learned_observation_only","16","False","2","1","1","1018","707","1725","266.3686748750042","0.10415420914068818","0.002803958021104336","267.1985245409887","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-034","development","gemma","learned_observation_only","16","False","3","0","3","","3545","3545","821.6413777079433","0.1338049580808729","0.003902251133695245","842.2440239579882","repeated_action_stop","False","0","2","1",""
+"intercode-nl2bash-fs2-038","development","gemma","learned_observation_only","16","False","3","1","2","1327","2575","3902","549.2944533759728","0.2142503741197288","0.00543825002387166","550.2624700828455","model_done","False","0","0","0","144 /system
+48 /system/folder1
+44 /system/folder3
+20 /system/folder3/temp
+20 /system/folder2
+16 /system/folder3/temp/temp1
+16 /system/folder3/backup_dbg
+4 /system/text3.txt
+4 /system/text1.txt
+4 /system/temp"
+"intercode-nl2bash-fs2-040","development","gemma","learned_observation_only","16","False","5","2","3","2381","3553","5934","818.0315684159286","0.369187000207603","0.010424290550872684","821.4475237911101","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs2-043","development","gemma","learned_observation_only","16","False","3","1","2","1913","2117","4030","80.48647412541322","0.4911149158142507","0.0040040838066488504","102.89361520810053","model_done","False","0","1","0","The file /system/folder3/temp/empty.txt has been created and contains the concatenated content of all .txt files in /system."
+"intercode-nl2bash-fs2-044","development","gemma","learned_observation_only","16","False","3","1","2","1078","2542","3620","548.7545260817278","0.16866904217749834","0.004532667109742761","549.8679117909633","model_done","False","0","0","0","/backup/system.tar.gz"
+"intercode-nl2bash-fs2-045","development","gemma","learned_observation_only","16","False","4","2","2","2844","2539","5383","585.1488726269454","0.522887542610988","0.01806229166686535","616.0733608331066","model_done","False","0","1","0","done"
+"intercode-nl2bash-fs2-047","development","gemma","learned_observation_only","16","False","2","1","1","932","646","1578","253.55625412496738","0.11316433292813599","0.0032355841249227524","254.40564995794557","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-048","development","gemma","learned_observation_only","16","True","2","1","1","1206","705","1911","268.95429908297956","0.09087120904587209","0.0025827919598668814","269.97102120914496","model_done","False","0","0","0","DONE"
+"intercode-nl2bash-fs2-050","development","gemma","learned_observation_only","16","True","2","1","1","994","695","1689","267.1469375009183","0.10789920901879668","0.009281541919335723","268.1540415000636","model_done","False","0","0","0",""
+"intercode-nl2bash-fs2-051","development","gemma","learned_observation_only","16","False","4","2","2","3465","3096","6561","563.5993644162081","0.5853610830381513","0.04966158396564424","568.9187007499859","model_done","False","0","1","0",""
+"intercode-nl2bash-fs3-000","development","gemma","learned_observation_only","16","False","2","1","1","1052","712","1764","67.05364312510937","0.5076849998440593","0.00027308310382068157","73.6142410421744","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-001","development","gemma","learned_observation_only","16","True","2","1","1","1020","685","1705","312.6406357088126","0.3012210000306368","0.033177000004798174","314.69439429207705","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-004","development","gemma","learned_observation_only","16","False","2","1","1","911","644","1555","283.62984416703694","0.30985650001093745","0.031596416840329766","304.0099922500085","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-009","development","gemma","learned_observation_only","16","False","3","1","2","1060","2111","3171","99.04524049977772","1.3385085421614349","0.0025264171417802572","103.05973149999045","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs3-010","development","gemma","learned_observation_only","16","True","2","1","1","1039","663","1702","277.2087050001137","0.11921712500043213","0.0037147081457078457","279.3373703339603","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-012","development","gemma","learned_observation_only","16","False","2","1","1","1504","703","2207","271.2724481660407","0.09585937508381903","0.0032679170835763216","275.1898369169794","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-013","development","gemma","learned_observation_only","16","True","2","1","1","1022","695","1717","49.61859395774081","0.47084775008261204","0.003676292020827532","73.44898816617206","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-014","development","gemma","learned_observation_only","16","False","2","1","1","1086","694","1780","66.98918370879255","0.5009773750789464","0.00044141686521470547","74.53084345790558","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-017","development","gemma","learned_observation_only","16","True","2","1","1","905","631","1536","21.670583958970383","0.10831770906224847","0.01412141602486372","23.172948374878615","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-018","development","gemma","learned_observation_only","16","True","3","1","2","1052","2009","3061","99.46372366673313","0.8928886249195784","0.003944708965718746","103.15645029093139","model_done","False","0","0","0","The first line"
+"intercode-nl2bash-fs3-019","development","gemma","learned_observation_only","16","False","2","1","1","1009","697","1706","67.06629674928263","0.529610333032906","0.001148583134636283","74.28811495797709","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-021","development","gemma","learned_observation_only","16","False","2","1","1","1216","695","1911","39.86683295783587","0.08580654207617044","0.002676416886970401","42.081959542119876","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-026","development","gemma","learned_observation_only","16","True","6","3","3","5002","4246","9248","248.31071487464942","5.690778625197709","0.06928641721606255","257.8206338339951","model_done","False","0","1","1",""
+"intercode-nl2bash-fs3-028","development","gemma","learned_observation_only","16","False","2","1","1","2014","736","2750","67.16280341590755","0.45956162502989173","0.0008316249586641788","75.01093820901588","model_done","False","0","0","0","done"
+"intercode-nl2bash-fs3-029","development","gemma","learned_observation_only","16","False","2","1","1","1979","717","2696","67.31967379106209","0.44766179099678993","0.0010069168638437986","75.02592483302578","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-031","development","gemma","learned_observation_only","16","False","4","2","2","2453","2288","4741","120.22508445824496","1.9144201672170311","0.011001584120094776","125.0788055001758","model_done","False","0","0","0","0"
+"intercode-nl2bash-fs3-034","development","gemma","learned_observation_only","16","False","2","1","1","1007","678","1685","67.11279050004669","0.4614509588573128","0.0006416670512408018","74.7320603330154","model_done","False","0","0","0","dir1, dir2"
+"intercode-nl2bash-fs3-037","development","gemma","learned_observation_only","16","False","3","1","2","1458","1912","3370","75.22830395796336","1.299551208037883","0.0030807089060544968","101.42166949994862","model_done","False","0","0","0","25"
+"intercode-nl2bash-fs3-038","development","gemma","learned_observation_only","16","False","2","1","1","1037","695","1732","36.45118337520398","0.7968038748949766","0.0005288750398904085","78.26185891591012","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-039","development","gemma","learned_observation_only","16","False","2","1","1","1059","721","1780","35.46842870884575","0.800518041010946","0.0044039161875844","59.34813741594553","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs3-040","development","gemma","learned_observation_only","16","False","4","2","2","2615","2333","4948","95.72872333298437","2.278202708112076","0.008031208999454975","103.65216583409347","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs3-045","development","gemma","learned_observation_only","16","False","2","1","1","1365","741","2106","40.662282249191776","0.1565800418611616","0.001474957913160324","51.546493666945025","model_done","False","0","0","0","Task complete."
+"intercode-nl2bash-fs3-049","development","gemma","learned_observation_only","16","False","3","1","2","1409","3337","4746","169.30300858383998","1.8172357508447021","0.009152583312243223","183.96459841681644","model_done","False","0","0","0","114688	/workspace
+49152	/workspace/dir1
+24576	/workspace/dir2
+16384	/workspace/test
+8192	/workspace/dir2/mysql
+4096	/workspace/test/dir1
+4096	/workspace/test/3dir
+4096	/workspace/test/2dir
+4096	/workspace/results.txt
+4096	/workspace/new.sh
+4096	/workspace/files.txt
+4096	/workspace/dir2/mysql/sql1.sql
+4096	/workspace/dir2/hello.txt
+4096	/workspace/dir2/foo.txt
+4096	/workspace/dir2/csvfile1.csv
+4096	/workspace/dir1/terminate.txt
+4096	/workspace/dir1/sum.c
+4096	/workspace/dir1/script1.sh
+4096	/workspace/dir1/new1.sh
+4096	/workspace/dir1/long.txt
+4096	/workspace/dir1/hello.txt
+4096	/workspace/dir1/hello.c
+4096	/workspace/dir1/file.txt
+4096	/workspace/dir1/file.c
+4096	/workspace/dir1/a.txt
+4096	/workspace/dir1/.hidden1.txt
+4096	/workspace/archive.tar.gz
+4096	/workspace/.hidden.txt
+0	/workspace/recent1.txt
+0	/workspace/old2.txt
+0	/workspace/dir1/readonly.txt
+0	/workspace/dir1/all.txt"
+"intercode-nl2bash-fs3-050","development","gemma","learned_observation_only","16","True","4","2","2","2372","2168","4540","151.43703016801737","2.590321166906506","0.004129958106204867","183.24444212508388","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-053","development","gemma","learned_observation_only","16","False","6","3","3","4594","4019","8613","200.4693657499738","3.0168395000509918","0.03483587480150163","214.5502382090781","repeated_action_stop","False","0","2","2",""
+"intercode-nl2bash-fs3-054","development","gemma","learned_observation_only","16","False","2","1","1","2301","669","2970","38.48644920904189","0.5851444581057876","0.0022565829567611217","49.91765408311039","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-055","development","gemma","learned_observation_only","16","True","2","1","1","1093","731","1824","66.27169995801523","1.0443227079231292","0.0014222089666873217","77.72961812489666","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-056","development","gemma","learned_observation_only","16","False","12","0","12","","23230","23230","395.2219308351632","8.455061461078003","0.02218958386220038","406.3435414589476","max_steps","True","0","11","0",""
+"intercode-nl2bash-fs3-057","development","gemma","learned_observation_only","16","True","2","1","1","1043","713","1756","58.118109500035644","14.733615041011944","0.0020638341084122658","75.73181137489155","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-058","development","gemma","learned_observation_only","16","True","2","1","1","999","694","1693","47.96690250118263","0.2845791250001639","0.000690957996994257","51.544924583053216","model_done","False","0","0","0",""
+"intercode-nl2bash-fs3-059","development","gemma","learned_observation_only","16","False","2","1","1","988","685","1673","46.795056415954605","0.9555723341181874","0.0010058339685201645","50.32710416591726","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-002","development","gemma","learned_observation_only","16","False","2","0","2","","1825","1825","98.02596816699952","0.6819252090062946","0.0012526670470833778","100.87905370886438","model_done","False","0","1","0","The 'c++' command was not found in the system's PATH."
+"intercode-nl2bash-fs4-003","development","gemma","learned_observation_only","16","False","2","1","1","1050","674","1724","71.45270508201793","0.7511895000934601","0.0008827908895909786","73.98014883301221","model_done","False","0","0","0","www.google.com"
+"intercode-nl2bash-fs4-004","development","gemma","learned_observation_only","16","True","2","1","1","1043","682","1725","49.26768841710873","0.7283123750239611","0.015162333147600293","52.17067724978551","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-006","development","gemma","learned_observation_only","16","True","4","2","2","2118","1862","3980","127.50734020676464","1.6129713749978691","0.01191700086928904","132.75426091603003","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-011","development","gemma","learned_observation_only","16","True","5","2","3","3052","4771","7823","206.31222437601537","4.9859800839331","0.0119782080873847","230.76795329200104","repeated_action_stop","False","0","0","2",""
+"intercode-nl2bash-fs4-013","development","gemma","learned_observation_only","16","True","2","1","1","963","677","1640","78.56458841590211","0.12345533282496035","0.002517916029319167","83.76705883280374","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-015","development","gemma","learned_observation_only","16","False","2","1","1","944","660","1604","97.45915970788337","0.8095692920032889","0.0035270829685032368","105.1533202920109","model_done","False","0","0","0","98765432"
+"intercode-nl2bash-fs4-017","development","gemma","learned_observation_only","16","False","2","1","1","996","660","1656","98.14402574999258","0.09549541701562703","0.0010434170253574848","105.23710845806636","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-019","development","gemma","learned_observation_only","16","False","12","4","8","7750","13624","21374","366.9294440844096","47.719434624072164","0.04546333407051861","419.7710301668849","repeated_action_stop","False","0","4","1",""
+"intercode-nl2bash-fs4-020","development","gemma","learned_observation_only","16","False","2","1","1","934","653","1587","76.80203591822647","0.5258824171032757","0.00041041686199605465","81.06691241706721","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-021","development","gemma","learned_observation_only","16","False","3","1","2","1183","2411","3594","128.79099383414723","1.7613733331672847","0.005797290941700339","132.7543746670708","repeated_action_stop","False","0","0","1",""
+"intercode-nl2bash-fs4-022","development","gemma","learned_observation_only","16","False","2","1","1","965","675","1640","76.7497057907749","0.5197452921420336","0.008238625014200807","80.89598775003105","model_done","False","0","0","0","2"
+"intercode-nl2bash-fs4-023","development","gemma","learned_observation_only","16","True","2","1","1","1157","720","1877","77.11238350020722","0.11230383417569101","0.003753416007384658","80.84327716589905","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-024","development","gemma","learned_observation_only","16","True","2","1","1","1208","683","1891","103.00458245794289","0.9253757910337299","0.0023189999628812075","105.81058445805684","model_done","False","0","0","0","adm
+audio
+backup
+bin
+cdrom
+crontab
+datasync
+debug
+dhcp
+dialout
+dip
+disk
+fax
+floppy
+games
+gnats
+irc
+kmem
+list
+lp
+mail
+man
+news
+nogroup
+operator
+plugdev
+proxy
+root
+rsyslog
+shadow
+src
+staff
+sudo
+sys
+tape
+ttty
+users
+utmpx
+uucp
+video
+voice
+www-data"
+"intercode-nl2bash-fs4-025","development","gemma","learned_observation_only","16","False","2","1","1","1128","725","1853","51.17429108382203","0.07451291591860354","0.0027100828010588884","52.902228333987296","model_done","False","0","0","0",""
+"intercode-nl2bash-fs4-026","development","gemma","learned_observation_only","16","True","4","1","3","1393","3235","4628","95.25691200001165","1.1230814999435097","0.00844691600650549","98.37824812508188","model_done","False","0","2","0","55"

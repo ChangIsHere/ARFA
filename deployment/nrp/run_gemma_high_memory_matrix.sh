@@ -110,5 +110,5 @@ nrp_report_gpu_utilization "${calibration_metrics}"
   --pair gemma \
   --split development \
   --thresholds 0.15 0.20 0.25 0.30 0.35 \
-  --output-dir evidence/phase3_design/gemma_high_memory_parallel4_calibration
+  --output-dir "${result_root}/calibration_analysis"
 nrp_verify_residency_after_run 'arfa-gemma3:4b-8k' 'arfa-gemma3:12b-8k'

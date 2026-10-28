@@ -1,7 +1,7 @@
 {
   "phase": "phase3_runtime_preflight",
-  "protocol_version": "phase3-dual-model-v1",
-  "config_sha256": "e5662a5742fe55e643609cd98d229d91bb06269773fef771187a52dbd52fd360",
+  "protocol_version": "phase3-gemma-controls-development-v2",
+  "config_sha256": "890e2f41e6193bd66fd150e81b2873a0506f79549feb17cabb47f7798156b867",
   "ready_for_development": true,
   "ready_for_final": false,
   "checks": {
@@ -36,27 +36,27 @@
     }
   },
   "models": {
-    "arfa-llama3.2:3b-8k": {
+    "arfa-gemma3:4b-8k": {
       "available": true,
       "detail": "ok"
     },
-    "arfa-llama3.1:8b-8k": {
+    "arfa-gemma3:12b-8k": {
       "available": true,
       "detail": "ok"
     }
   },
   "phase2_baselines": {
-    "llama.fast": {
-      "model_name": "arfa-llama3.2:3b-8k",
+    "gemma.fast": {
+      "model_name": "arfa-gemma3:4b-8k",
       "task_count": 200,
-      "success_count": 36,
+      "success_count": 52,
       "issues": [],
       "ready": true
     },
-    "llama.slow": {
-      "model_name": "arfa-llama3.1:8b-8k",
+    "gemma.slow": {
+      "model_name": "arfa-gemma3:12b-8k",
       "task_count": 200,
-      "success_count": 51,
+      "success_count": 63,
       "issues": [],
       "ready": true
     }

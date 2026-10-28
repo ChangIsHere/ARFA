@@ -1,0 +1,11 @@
+pair,comparison,metric,paired_tasks,mean_difference,ci95_low,ci95_high
+llama,always_fast_minus_always_slow,model_calls,100,1.27,0.52,2.02
+llama,always_fast_minus_always_slow,tokens_per_call,100,235.96078823953826,60.93843109668112,427.27240526695505
+llama,always_fast_minus_always_slow,repeated_actions,100,0.14,-0.06,0.34
+llama,always_fast_minus_always_slow,parse_errors,100,0.01,-0.03,0.05
+llama,always_fast_minus_always_slow,max_steps,100,0.1,0.03,0.17
+phi,always_fast_minus_always_slow,model_calls,100,1.12,0.52,1.72
+phi,always_fast_minus_always_slow,tokens_per_call,100,-1.4743730158730182,-78.99294325396825,77.59439841269841
+phi,always_fast_minus_always_slow,repeated_actions,100,0.42,0.25,0.59
+phi,always_fast_minus_always_slow,parse_errors,100,0.31,0.06,0.65
+phi,always_fast_minus_always_slow,max_steps,100,0.0,-0.05,0.05

@@ -1,29 +1,25 @@
-# Phase 3 Evidence
+# Phase 3 Development Evidence
 
-- `development_summary.csv` is the compact four-pair result table.
-- `qwen_h100_development/` contains the Qwen matched-policy summaries, paired
-  analysis, runtime notes, and trace hashes.
-- `llama_24gb_development/` contains the equivalent Llama evidence.
-- `gemma_development/` contains the development-selected threshold result and
-  records that selection in its manifest.
-- `phi_development/` contains the best-success diagnostic result and records
-  that no tested threshold passed the saved selection rule.
-- `gemma_high_memory_parallel4_calibration/` and
-  `phi_high_memory_parallel4_calibration/` retain the complete threshold tables.
-- `runtime_preflight_nrp_qwen.json` and `runtime_preflight_nrp_llama.json`
-  record accepted preflight checks.
+`native_pairs/` is the paper-facing result set. It contains four model pairs,
+three policies per pair, and the same 100 InterCode NL2Bash development tasks.
 
-Each pair bundle contains `residual_metrics.csv`, `always_slow_metrics.csv`, and
-`always_fast_metrics.csv`. These paper-facing per-task records support paired
-checks of success, calls, tokens, and latency without publishing the much larger
-terminal traces. `analysis.json` contains the confidence intervals, while
-`manifest.json` records run status, hardware, model identities, and trace hashes.
+- `native_pairs/results.csv`: the compact main table.
+- `native_pairs/qwen/`: Qwen2.5-Coder 7B/14B at threshold `0.35`.
+- `native_pairs/gemma/`: Gemma 3 4B/12B at the development-selected threshold
+  `0.30`.
+- `native_pairs/llama/`: Llama 3.2 3B/3.1 8B at threshold `0.35`.
+- `native_pairs/phi/`: Phi-4 Mini/14B diagnostic at threshold `0.15`.
 
-Raw traces remain under `results/phase3_arfa/nrp/` and are not committed. The
-evidence manifests link them by SHA-256. All four studies used the same 100
-development task IDs and three matched policies. Hardware differed, so absolute
-latency is interpreted within each pair rather than pooled across pairs.
+Each pair directory contains task-level metrics, policy summaries, paired
+analysis, runtime metadata, and hashes for the ignored raw traces. Qwen and
+Gemma are the positive cases. Llama and Phi show that reducing slow-model calls
+does not always reduce total cost.
 
-The reserved Phase 3 final split has not been opened. Decision rules are in
-`docs/phase3_study_protocol.md`; the manuscript handoff is
-`docs/README_FOR_WRITING.md`.
+`supplementary/` contains the Gemma and Qwen routing controls plus the
+fast-model cost-reversal analysis. These results are useful for analysis but do
+not belong in the native-pair main table. Raw traces remain under the ignored
+`results/phase3_arfa/nrp/` directory.
+
+All results here are development results. The reserved final split has not been
+opened, and absolute latency is compared only within a model pair because the
+pairs ran on different hardware.

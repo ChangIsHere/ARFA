@@ -35,16 +35,24 @@ slow-only success while reducing slow calls. Gemma produced the clearest
 development tradeoff. Llama and Phi show that a smaller model can add latency,
 tokens, or retries even when routing invokes the larger model less often.
 
-## Current Extension
+Trace analysis explains part of this reversal. Relative to slow-only, the
+Llama fast model used 26.6% more calls per task and 23.4% more tokens per call;
+the Phi fast model used 37.5% more calls and produced more repeated actions and
+parse errors. A smaller model is therefore not automatically a cheaper route.
 
-The next study tests whether residual adds anything beyond other ways to pick
-the fast model. The offline learned observation-only comparator has ROC-AUC
-0.749 versus 0.743 for full residual, so that question is open. A Qwen online
-control matrix is prepared on the same 100 development tasks: learned and
-rule-based observation-only, expectation gate only, random/fixed budgets, and
-the three existing policies. A validation-only threshold calibration is saved;
-**no new online control results or external-benchmark results are claimed yet**.
-See [the control-extension protocol](docs/phase3_control_extension.md).
+## Routing Controls
+
+The Gemma 4B/12B control study is complete on the 100-task development split.
+Residual routing completed 28 tasks, compared with 25 for expectation-gate-only
+and 25 for budget-matched random routing, while using fewer tokens and model
+calls. Learned observation-only completed 31 tasks with similar token use.
+These differences are not statistically significant at the current sample
+size. The result supports residual over simple routing controls, but not over
+the learned observation baseline.
+
+The next paper-facing step is a frozen evaluation on the reserved tasks,
+followed by broader mixed-pair coverage and a second benchmark. See
+[the control study](docs/phase3_control_extension.md).
 
 ## Writing And Evidence
 
@@ -55,9 +63,11 @@ should remain qualified.
 - [Residual definitions and offline diagnostics](docs/residual_diagnostics.md)
 - [Eight-model Phase 2 bundle](docs/phase2_writing_bundle/README_FOR_WRITING.md)
 - [Four-pair Phase 3 evidence](evidence/phase3_design/README.md)
+- [Four native-pair results](evidence/phase3_design/native_pairs/results.csv)
+- [Gemma routing-control evidence](evidence/phase3_design/supplementary/gemma_controls/README.md)
 - [Online experiment design](docs/04_phase3_arfa_dual_track.md)
 - [Next experiments for a full paper](docs/phase3_publication_experiment_plan.md)
-- [Matched routing controls and external-benchmark setup](docs/phase3_control_extension.md)
+- [Gemma routing controls and follow-up experiments](docs/phase3_control_extension.md)
 
 ## Repository Map
 

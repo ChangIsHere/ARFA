@@ -3,7 +3,7 @@
 > Status note: this document preserves the pre-run Qwen decision rules. The
 > controller and matched H100 development core have since been implemented and
 > completed. Current results live in
-> `evidence/phase3_design/qwen_h100_development/`; the rules below remain the
+> `evidence/phase3_design/native_pairs/qwen/`; the rules below remain the
 > design record rather than a description of current implementation status.
 
 **Design version:** `phase3-qwen-pair-v1.1`, in
