@@ -1,0 +1,93 @@
+{
+  "phase": "phase3_final",
+  "pair": "gemma",
+  "protocol_version": "phase3-gemma-final-v1",
+  "locked": true,
+  "source_commit": "2673f898a0f230a61b819bde7f2972b07359bf13",
+  "files": {
+    "config/phase3_final_gemma.yaml": {
+      "sha256": "04ec12853cc4d7961c669bc762488130fddf4c60754c87bc77085a24489d633c",
+      "bytes": 2125
+    },
+    "data/phase1_5/task_splits.json": {
+      "sha256": "056fdb6f64638ed3afb04e7cc41624e8c5b4d5f33a2728e3639d17eaee5bbe52",
+      "bytes": 9247
+    },
+    "data/phase2/intercode_nl2bash_official_200.jsonl": {
+      "sha256": "c6936840f27441f3310efdf958ef45d2adf9ac47d87c1ffa8cb04c2207dc3557",
+      "bytes": 134532
+    },
+    "deployment/nrp/24-gemma-controls-configmap.yaml": {
+      "sha256": "38a352aec6f56226000e7ef9b1db8669b0cde05580c80c0c54939ee03598a0f9",
+      "bytes": 2608
+    },
+    "deployment/nrp/64-gemma-final-service.yaml": {
+      "sha256": "0ad2e156ce52ef39fb30e2d54d6fb90fc75f28312e1f7fb1b6cc26ddab5840d1",
+      "bytes": 3352
+    },
+    "deployment/nrp/gpu_job_lib.sh": {
+      "sha256": "e409b6d42b6de2552f6741cf2926ca3e1bfaecf0b821cb86e491ff289f578bfe",
+      "bytes": 12901
+    },
+    "deployment/nrp/run_phase3_final.sh": {
+      "sha256": "bf95cfc8a9a2c624573a5a8e4a40df58f43e3c6f7da2679f656ee205c533a7c4",
+      "bytes": 3687
+    },
+    "evidence/phase3_design/supplementary/learned_observation_validation.json": {
+      "sha256": "ae63ae6eb39dd5e8f444dbfbd64a41a11d95af45ad59e924f435a963909df328",
+      "bytes": 829
+    },
+    "requirements.txt": {
+      "sha256": "5f551fba571129b3a578a6b9c33295c20fef6f82ab35afa8b6814d63cca76b92",
+      "bytes": 72
+    },
+    "src/common/config.py": {
+      "sha256": "18f53ddac7866b5423fd214415a851ab90e785a431c30cab32da02e96b3bb645",
+      "bytes": 1303
+    },
+    "src/common/utils.py": {
+      "sha256": "f1bb604fe4e07ec796c17e793f2d12b7fd2b9f2ee35afca09937c48ebb082e86",
+      "bytes": 1656
+    },
+    "src/phase1_5_shadow/observation_baseline.py": {
+      "sha256": "d2869d21abe33e79b164ae247d1355cb9b786b1ffa95859e88a202c11c754ae5",
+      "bytes": 4479
+    },
+    "src/phase1_5_shadow/residual.py": {
+      "sha256": "443f7fa67a062a191e29e0370a724fae7c6813cc45c987f975ee518ff9174532",
+      "bytes": 4596
+    },
+    "src/phase2_baseline/intercode_docker_environment.py": {
+      "sha256": "8402cfbda3d3a21c1d1d96c2776464b5f594e76db693853ceb8bb0a84a49e63f",
+      "bytes": 12309
+    },
+    "src/phase3_arfa/analyze_results.py": {
+      "sha256": "bbe56cd279e2526adeb14a4c1578b7b1256596ab8afa6d1e25ef02fc4239955c",
+      "bytes": 11688
+    },
+    "src/phase3_arfa/arfa_agent.py": {
+      "sha256": "6bb4b7a1ae39ac235b8c1d47c8c09e634a31f0d3c8e9576a351f0e93bc804a25",
+      "bytes": 17392
+    },
+    "src/phase3_arfa/audit_policy_run.py": {
+      "sha256": "1063b44320d962fc20db8dc901acbf31caefcc02653d23f3953d5097e1effd7f",
+      "bytes": 3968
+    },
+    "src/phase3_arfa/freeze_final.py": {
+      "sha256": "70fe795d31b215d8781cea8c55f3cb43a2b18b2eadb7df97b19cbf26d881bd7f",
+      "bytes": 4532
+    },
+    "src/phase3_arfa/prompts.py": {
+      "sha256": "cabe9fe1c3acf3a19f8d9b942eac602dd9a3b9cb0e465d9b2377c75ed610768c",
+      "bytes": 2685
+    },
+    "src/phase3_arfa/router.py": {
+      "sha256": "0d0b6b2ec25482ceaf0f6561ea2823ca465f75883759c125b5163420b3a9af37",
+      "bytes": 7629
+    },
+    "src/phase3_arfa/run_arfa.py": {
+      "sha256": "96235d09b9adc9a3ca104c5c37e09a0061b7f89e96b3d1415afb103ed4e726b2",
+      "bytes": 21078
+    }
+  }
+}
