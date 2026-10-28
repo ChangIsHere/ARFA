@@ -27,6 +27,9 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values: [NVIDIA-RTX-A6000]
+                  - key: kubernetes.io/hostname
+                    operator: NotIn
+                    values: [hcc-prp-c5038.unl.edu]
       containers:
         - name: ollama
           image: ollama/ollama:0.34.1
