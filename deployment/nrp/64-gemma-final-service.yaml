@@ -26,12 +26,18 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values:
+                      - NVIDIA-A10
                       - NVIDIA-A40
+                      - NVIDIA-GeForce-RTX-3090
+                      - NVIDIA-GeForce-RTX-4090
+                      - NVIDIA-L4
                       - NVIDIA-L40
                       - NVIDIA-L40S
+                      - NVIDIA-RTX-A5000
                       - NVIDIA-RTX-A6000
                       - NVIDIA-RTX-5000-Ada-Generation
                       - NVIDIA-RTX-PRO-6000-Blackwell-Max-Q-Workstation-Edition
+                      - Quadro-RTX-6000
                       - Quadro-RTX-8000
                       - Tesla-V100-SXM2-32GB
                   - key: kubernetes.io/hostname
@@ -68,7 +74,7 @@ spec:
             - {name: OLLAMA_KEEP_ALIVE, value: "-1"}
             - {name: OLLAMA_LOAD_TIMEOUT, value: 60m}
             - {name: OLLAMA_MAX_LOADED_MODELS, value: "2"}
-            - {name: OLLAMA_NUM_PARALLEL, value: "8"}
+            - {name: OLLAMA_NUM_PARALLEL, value: "2"}
           ports: [{name: ollama, containerPort: 11434, protocol: TCP}]
           startupProbe:
             exec: {command: ["/bin/bash", "-c", "test -f /tmp/arfa-ready"]}

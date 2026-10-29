@@ -35,7 +35,7 @@ agent:
 
 execution:
   trajectory_workers: 48
-  inference_parallelism: 4
+  inference_parallelism: 2
 
 router:
   threshold_source: frozen_from_development
