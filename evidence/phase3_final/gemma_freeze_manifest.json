@@ -3,7 +3,7 @@
   "pair": "gemma",
   "protocol_version": "phase3-gemma-final-v1",
   "locked": true,
-  "source_commit": "e66a32867d62cb854f93ecd77479f55a44d4f4ae",
+  "source_commit": "ea2a1c58c28e92a60ac081b18d8794fcb35485da",
   "files": {
     "config/phase3_final_gemma.yaml": {
       "sha256": "b0602ccf8fdf0ba927a052c129a35d94161468861afb75eb771e7fc38a7577a1",
@@ -22,7 +22,7 @@
       "bytes": 2608
     },
     "deployment/nrp/64-gemma-final-service.yaml": {
-      "sha256": "2fbdc6a3c60de145e2e9545c0f574d316d309ae8223db1dbc1eb0922121e7ff6",
+      "sha256": "016af5859f0a8cbcef1b6db0953fd403f16774ff4d625e8c485f17af45848ee6",
       "bytes": 4032
     },
     "deployment/nrp/gpu_job_lib.sh": {
