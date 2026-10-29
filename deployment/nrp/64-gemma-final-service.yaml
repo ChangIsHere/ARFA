@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/component: gemma-final
         arfa.run-id: phase3-final-gemma-v1
     spec:
+      priorityClassName: opportunistic2
       restartPolicy: Never
       affinity:
         nodeAffinity:
@@ -26,7 +27,8 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values:
-                      - NVIDIA-GeForce-RTX-3090
+                      - NVIDIA-A100-SXM4-80GB
+                      - NVIDIA-A100-80GB-PCIe
                   - key: kubernetes.io/hostname
                     operator: NotIn
                     values: [hcc-prp-c5038.unl.edu]
@@ -68,8 +70,8 @@ spec:
             periodSeconds: 10
             failureThreshold: 360
           resources:
-            requests: {cpu: "1", memory: 8Gi, ephemeral-storage: 20Gi, nvidia.com/gpu: "2"}
-            limits: {cpu: "4", memory: 30Gi, ephemeral-storage: 20Gi, nvidia.com/gpu: "2"}
+            requests: {cpu: "1", memory: 8Gi, ephemeral-storage: 20Gi, nvidia.com/a100: "1"}
+            limits: {cpu: "4", memory: 30Gi, ephemeral-storage: 20Gi, nvidia.com/a100: "1"}
           volumeMounts:
             - {name: workspace, mountPath: /workspace}
             - {name: config, mountPath: /opt/arfa, readOnly: true}
