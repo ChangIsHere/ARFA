@@ -75,7 +75,7 @@ spec:
             periodSeconds: 10
             failureThreshold: 360
           resources:
-            requests: {cpu: "4", memory: 24Gi, ephemeral-storage: 20Gi, nvidia.com/gpu: "1"}
+            requests: {cpu: "1", memory: 18Gi, ephemeral-storage: 20Gi, nvidia.com/gpu: "1"}
             limits: {cpu: "4", memory: 24Gi, ephemeral-storage: 20Gi, nvidia.com/gpu: "1"}
           volumeMounts:
             - {name: workspace, mountPath: /workspace}
