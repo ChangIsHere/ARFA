@@ -27,13 +27,6 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values:
-                      - NVIDIA-A40
-                      - NVIDIA-L40
-                      - NVIDIA-L40S
-                      - NVIDIA-RTX-A6000
-                      - NVIDIA-RTX-PRO-6000-Blackwell-Max-Q-Workstation-Edition
-                      - NVIDIA-A100-SXM4-80GB
-                      - NVIDIA-A100-80GB-PCIe
                       - NVIDIA-H100-80GB-HBM3
                   - key: kubernetes.io/hostname
                     operator: NotIn
@@ -76,8 +69,8 @@ spec:
             periodSeconds: 10
             failureThreshold: 360
           resources:
-            requests: {cpu: "1", memory: 18Gi, ephemeral-storage: 20Gi, nvidia.com/gpu: "1"}
-            limits: {cpu: "4", memory: 30Gi, ephemeral-storage: 20Gi, nvidia.com/gpu: "1"}
+            requests: {cpu: "1", memory: 18Gi, ephemeral-storage: 20Gi, nvidia.com/h100: "1"}
+            limits: {cpu: "4", memory: 30Gi, ephemeral-storage: 20Gi, nvidia.com/h100: "1"}
           volumeMounts:
             - {name: workspace, mountPath: /workspace}
             - {name: config, mountPath: /opt/arfa, readOnly: true}
