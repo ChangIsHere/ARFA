@@ -67,21 +67,28 @@ def _docker_digests(tasks: list[dict[str, Any]], image_prefix: str) -> dict[str,
 
 
 def phase3_status(config: dict[str, Any]) -> dict[str, Any]:
-    if config.get("locked", True):
+    stage = config.get("stage", "phase3_development")
+    frozen_final = (
+        bool(config.get("locked"))
+        and stage == "phase3_final"
+        and bool(config.get("formal_claims_enabled"))
+        and bool(config.get("use_phase3_final_tasks"))
+    )
+    if config.get("locked", True) and not frozen_final:
         return {
             "ready": False,
-            "stage": config.get("stage", "phase3_development"),
+            "stage": stage,
             "reason": config.get("reason", "Phase 3 is locked."),
         }
     return {
         "ready": True,
         "protocol_version": config.get("protocol_version"),
-        "stage": config.get("stage", "phase3_development"),
+        "stage": stage,
         "scope": config.get("scope", "online_dual_model_evaluation"),
         "formal_claims_enabled": bool(config.get("formal_claims_enabled", False)),
         "use_phase3_final_tasks": bool(config.get("use_phase3_final_tasks", False)),
         "router": config.get("router", {}),
-        "status": "controller_ready",
+        "status": "frozen_controller_ready" if frozen_final else "controller_ready",
         "controller_implemented": True,
         "execution_started": False,
     }

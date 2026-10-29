@@ -41,6 +41,23 @@ def test_phase3_controller_can_be_unlocked():
     assert status["execution_started"] is False
 
 
+def test_frozen_final_controller_is_ready_without_unlocking_config():
+    status = phase3_status(
+        {
+            "locked": True,
+            "stage": "phase3_final",
+            "formal_claims_enabled": True,
+            "use_phase3_final_tasks": True,
+            "protocol_version": "phase3-final-v1",
+            "router": {"fail_open_to_reasoning": True},
+        }
+    )
+
+    assert status["ready"] is True
+    assert status["status"] == "frozen_controller_ready"
+    assert status["use_phase3_final_tasks"] is True
+
+
 def test_remote_model_metadata_uses_frozen_artifact_identity():
     metadata = _model_metadata("remote-model", "base_id=abc;modelfile_sha256=def")
 
