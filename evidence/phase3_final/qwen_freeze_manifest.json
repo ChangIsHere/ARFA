@@ -3,7 +3,7 @@
   "pair": "qwen",
   "protocol_version": "phase3-qwen-final-v1",
   "locked": true,
-  "source_commit": "4213ab180a94d4c16ff38152a969c4326715deea",
+  "source_commit": "a3b2d48902543aa5032afa9e242395cf8795953d",
   "files": {
     "config/phase3_final_qwen.yaml": {
       "sha256": "0547c1069c6c069f47ac436af2c42a87366ee0d06488d297b47fd6c6e4355e52",
@@ -22,8 +22,8 @@
       "bytes": 2675
     },
     "deployment/nrp/63-qwen-final-service.yaml": {
-      "sha256": "29da7a44fb201eea5728972c300b4c2471896aea787e272a10e31f4503eaf8df",
-      "bytes": 3495
+      "sha256": "4ec3db4c1601040ea882aaa7b82ae028d85430f74b1cfc5bf602262fa0137a76",
+      "bytes": 3455
     },
     "deployment/nrp/gpu_job_lib.sh": {
       "sha256": "e409b6d42b6de2552f6741cf2926ca3e1bfaecf0b821cb86e491ff289f578bfe",
