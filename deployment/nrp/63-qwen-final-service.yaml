@@ -17,7 +17,6 @@ spec:
         app.kubernetes.io/component: qwen-final
         arfa.run-id: phase3-final-qwen-v1
     spec:
-      priorityClassName: opportunistic2
       restartPolicy: Never
       affinity:
         nodeAffinity:
