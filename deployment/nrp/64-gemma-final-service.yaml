@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/component: gemma-final
         arfa.run-id: phase3-final-gemma-v1
     spec:
+      priorityClassName: opportunistic2
       restartPolicy: Never
       affinity:
         nodeAffinity:
