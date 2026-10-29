@@ -3,7 +3,7 @@
   "pair": "qwen",
   "protocol_version": "phase3-qwen-final-v1",
   "locked": true,
-  "source_commit": "1f6f603e8234038c371b7e9e804f7e9368fde1b5",
+  "source_commit": "418278115ac39a0802ad4fa1fc21e8831765bcdb",
   "files": {
     "config/phase3_final_qwen.yaml": {
       "sha256": "2455b6f07d394c3b5fa7803a404b5f5366959028469ab0ab15e64c3698c43581",
@@ -86,8 +86,8 @@
       "bytes": 7629
     },
     "src/phase3_arfa/run_arfa.py": {
-      "sha256": "96235d09b9adc9a3ca104c5c37e09a0061b7f89e96b3d1415afb103ed4e726b2",
-      "bytes": 21078
+      "sha256": "b075a31ef03c6528e74ce801808b824aebbc376afba7cf133e7c164a5e769979",
+      "bytes": 21335
     }
   }
 }
