@@ -3,10 +3,10 @@
   "pair": "gemma",
   "protocol_version": "phase3-gemma-final-v1",
   "locked": true,
-  "source_commit": "418278115ac39a0802ad4fa1fc21e8831765bcdb",
+  "source_commit": "16273a8e5e055ea080d38e109605e0c6ecd8096e",
   "files": {
     "config/phase3_final_gemma.yaml": {
-      "sha256": "b0602ccf8fdf0ba927a052c129a35d94161468861afb75eb771e7fc38a7577a1",
+      "sha256": "04ec12853cc4d7961c669bc762488130fddf4c60754c87bc77085a24489d633c",
       "bytes": 2125
     },
     "data/phase1_5/task_splits.json": {
@@ -22,7 +22,7 @@
       "bytes": 2608
     },
     "deployment/nrp/64-gemma-final-service.yaml": {
-      "sha256": "ac796a62270d67b34cb6b6b682a92f00a8008abec78226389ea8a9f1823dfbc8",
+      "sha256": "d22ebe38a45a0930e98ddb980540130ad73df334bc86ad9cb46687123352a4d4",
       "bytes": 3553
     },
     "deployment/nrp/gpu_job_lib.sh": {
@@ -30,7 +30,7 @@
       "bytes": 12901
     },
     "deployment/nrp/run_phase3_final.sh": {
-      "sha256": "9cd467aa1e8e211cee40fce52e48e33bd63ef039fd21d522f01083466d73e942",
+      "sha256": "ca20167b565fb53f5a587c93d45b4d4c823dde3b3366100d1f86ef322027ba28",
       "bytes": 3687
     },
     "evidence/phase3_design/supplementary/learned_observation_validation.json": {
