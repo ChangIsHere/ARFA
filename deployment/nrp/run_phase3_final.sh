@@ -16,7 +16,7 @@ case "${pair}" in
     NRP_SERVICE="arfa-qwen-final"
     NRP_LOCAL_PORT="11439"
     workers=48
-    inference_parallel=2
+    inference_parallel=8
     fast_model="arfa-qwen2.5-coder:7b-8k"
     slow_model="arfa-qwen2.5-coder:14b-8k"
     ;;
@@ -30,7 +30,7 @@ case "${pair}" in
     NRP_SERVICE="arfa-gemma-final"
     NRP_LOCAL_PORT="11440"
     workers=16
-    inference_parallel=2
+    inference_parallel=8
     fast_model="arfa-gemma3:4b-8k"
     slow_model="arfa-gemma3:12b-8k"
     ;;
