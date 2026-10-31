@@ -15,7 +15,7 @@ spec:
       labels:
         app.kubernetes.io/name: arfa
         app.kubernetes.io/component: qwen-final
-        arfa.run-id: phase3-final-qwen-v2
+        arfa.run-id: phase3-final-qwen-v3
     spec:
       priorityClassName: opportunistic2
       restartPolicy: Never
@@ -53,13 +53,13 @@ spec:
               done
               wait "${server_pid}"
           env:
-            - {name: ARFA_RUN_ID, value: phase3-final-qwen-v2}
+            - {name: ARFA_RUN_ID, value: phase3-final-qwen-v3}
             - {name: OLLAMA_HOST, value: "0.0.0.0:11434"}
             - {name: OLLAMA_MODELS, value: /workspace/model-cache/ollama}
             - {name: OLLAMA_KEEP_ALIVE, value: "-1"}
             - {name: OLLAMA_LOAD_TIMEOUT, value: 60m}
             - {name: OLLAMA_MAX_LOADED_MODELS, value: "2"}
-            - {name: OLLAMA_NUM_PARALLEL, value: "8"}
+            - {name: OLLAMA_NUM_PARALLEL, value: "12"}
           ports: [{name: ollama, containerPort: 11434, protocol: TCP}]
           startupProbe:
             exec: {command: ["/bin/bash", "-c", "test -f /tmp/arfa-ready"]}
