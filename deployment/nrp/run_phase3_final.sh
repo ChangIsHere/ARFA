@@ -9,7 +9,7 @@ case "${pair}" in
   qwen)
     config="config/phase3_final_qwen.yaml"
     manifest="evidence/phase3_final/qwen_freeze_manifest.json"
-    result_root="results/phase3_arfa/final/qwen-v1"
+    result_root="results/phase3_arfa/final/qwen-v2"
     job_yaml="deployment/nrp/63-qwen-final-service.yaml"
     configmap_yaml="deployment/nrp/25-qwen-controls-configmap.yaml"
     NRP_JOB="arfa-qwen-final-run"
@@ -23,7 +23,7 @@ case "${pair}" in
   gemma)
     config="config/phase3_final_gemma.yaml"
     manifest="evidence/phase3_final/gemma_freeze_manifest.json"
-    result_root="results/phase3_arfa/final/gemma-v1"
+    result_root="results/phase3_arfa/final/gemma-v2"
     job_yaml="deployment/nrp/64-gemma-final-service.yaml"
     configmap_yaml="deployment/nrp/24-gemma-controls-configmap.yaml"
     NRP_JOB="arfa-gemma-final-run"
