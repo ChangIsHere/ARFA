@@ -9,28 +9,28 @@ case "${pair}" in
   qwen)
     config="config/phase3_final_qwen.yaml"
     manifest="evidence/phase3_final/qwen_freeze_manifest.json"
-    result_root="results/phase3_arfa/final/qwen-v3"
+    result_root="results/phase3_arfa/final/qwen-v4"
     job_yaml="deployment/nrp/63-qwen-final-service.yaml"
     configmap_yaml="deployment/nrp/25-qwen-controls-configmap.yaml"
     NRP_JOB="arfa-qwen-final-run"
     NRP_SERVICE="arfa-qwen-final"
     NRP_LOCAL_PORT="11439"
     workers=48
-    inference_parallel=12
+    inference_parallel=8
     fast_model="arfa-qwen2.5-coder:7b-8k"
     slow_model="arfa-qwen2.5-coder:14b-8k"
     ;;
   gemma)
     config="config/phase3_final_gemma.yaml"
     manifest="evidence/phase3_final/gemma_freeze_manifest.json"
-    result_root="results/phase3_arfa/final/gemma-v3"
+    result_root="results/phase3_arfa/final/gemma-v4"
     job_yaml="deployment/nrp/64-gemma-final-service.yaml"
     configmap_yaml="deployment/nrp/24-gemma-controls-configmap.yaml"
     NRP_JOB="arfa-gemma-final-run"
     NRP_SERVICE="arfa-gemma-final"
     NRP_LOCAL_PORT="11440"
-    workers=16
-    inference_parallel=16
+    workers=48
+    inference_parallel=8
     fast_model="arfa-gemma3:4b-8k"
     slow_model="arfa-gemma3:12b-8k"
     ;;

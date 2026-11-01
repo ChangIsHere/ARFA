@@ -1,5 +1,5 @@
 locked: true
-protocol_version: phase3-gemma-final-v3
+protocol_version: phase3-gemma-final-v4
 stage: phase3_final
 scope: frozen_online_router_evaluation
 formal_claims_enabled: true
@@ -34,8 +34,8 @@ agent:
   max_history_turns: 2
 
 execution:
-  trajectory_workers: 16
-  inference_parallelism: 16
+  trajectory_workers: 48
+  inference_parallelism: 8
 
 router:
   threshold_source: frozen_from_development
@@ -68,4 +68,4 @@ environment:
   network_mode: bridge
 
 outputs:
-  result_root: results/phase3_arfa/final/gemma-v3
+  result_root: results/phase3_arfa/final/gemma-v4
