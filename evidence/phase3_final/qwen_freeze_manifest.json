@@ -1,13 +1,13 @@
 {
   "phase": "phase3_final",
   "pair": "qwen",
-  "protocol_version": "phase3-qwen-final-v3",
+  "protocol_version": "phase3-qwen-final-v4",
   "locked": true,
-  "source_commit": "ffd1b033d8f3ec3a84ab527f68eef52803bf5d5a",
+  "source_commit": "eecee515d6225483d85c2b72b42522912102d28a",
   "files": {
     "config/phase3_final_qwen.yaml": {
-      "sha256": "4b1ab7ac48164c3455d4c0083173a6ef1a9c02be9eeb2794fb6129a137db9a6e",
-      "bytes": 2148
+      "sha256": "227546e8e6217fbd234a02f80a312afecf4612114bf601fa407966821485d454",
+      "bytes": 2147
     },
     "data/phase1_5/task_splits.json": {
       "sha256": "056fdb6f64638ed3afb04e7cc41624e8c5b4d5f33a2728e3639d17eaee5bbe52",
@@ -22,16 +22,16 @@
       "bytes": 2675
     },
     "deployment/nrp/63-qwen-final-service.yaml": {
-      "sha256": "a792962a4a43fab0713021107a6bf5e9148d5ef4e8ee3428a639cf4f3f98478c",
-      "bytes": 3366
+      "sha256": "dd89e148b1ec916972d29a19d2ed4f0c68a440273e4ba4ccc6e47c0b65565c46",
+      "bytes": 3365
     },
     "deployment/nrp/gpu_job_lib.sh": {
       "sha256": "e409b6d42b6de2552f6741cf2926ca3e1bfaecf0b821cb86e491ff289f578bfe",
       "bytes": 12901
     },
     "deployment/nrp/run_phase3_final.sh": {
-      "sha256": "67d0956a20079812f192f958698fb376368fa3466e3e6ed907e1fbe65eaf1956",
-      "bytes": 3689
+      "sha256": "1d6ec85483408185bfe76ee58b2cf49161b49bb25ae8cc1d7331bc5203ded6a2",
+      "bytes": 3687
     },
     "evidence/phase3_design/supplementary/learned_observation_validation.json": {
       "sha256": "ae63ae6eb39dd5e8f444dbfbd64a41a11d95af45ad59e924f435a963909df328",
