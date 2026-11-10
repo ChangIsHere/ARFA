@@ -451,6 +451,7 @@ def main() -> None:
         max_steps=int(config["agent"]["max_steps"]),
         maximum_identical_action_occurrences=int(config["agent"]["maximum_identical_action_occurrences"]),
         max_history_turns=int(config["agent"].get("max_history_turns", 2)),
+        handoff_mode=str(pair.get("handoff_mode", config["agent"].get("handoff_mode", "full_visible"))),
     )
 
     runs: list[ARFARun] = []

@@ -1,14 +1,27 @@
 # Local Results
 
-Generated traces and checkpoints are excluded from Git. Compact evidence used
-for writing is tracked under `evidence/` and `docs/phase2_writing_bundle/`.
+This directory contains generated raw traces, checkpoints, and run logs. It is
+excluded from Git. Compact paper-facing evidence is tracked in `evidence/` and
+the Phase 2 writing bundle.
 
-Retained Phase 3 roots are the completed Qwen, Llama, Gemma, and Phi development
-runs, the routing-control runs, and the successful mixed-pair qualification
-under `phase3_arfa/nrp/`. Superseded thresholds, smoke tests, logs, and failed
-qualification attempts have been removed.
+## Current Paper-Facing Raw Roots
 
-The completed Gemma observation-only trace is stored as `traces.jsonl.gz`.
-Compression is lossless and reduces an unusually repetitive raw trace from
-several gigabytes to a manageable archive. Paper-facing summaries and per-task
-metrics are tracked under `evidence/phase3_design/supplementary/gemma_controls/`.
+- `phase1_5_shadow/full/`: 300 shadow runs used by the residual diagnostics.
+- `phase2_baseline/paper/`: eight standalone model runs and Phase 2 analysis.
+- `phase3_arfa/nrp/`: successful native-pair development and control runs.
+- `phase3_arfa/final/qwen-v4/`: frozen Qwen reserved-split matrix.
+- `phase3_arfa/final/gemma-v4/`: frozen Gemma reserved-split matrix.
+- `phase3_arfa/mixed_pairs/v1/`: two cross-family matrices.
+- `phase3_arfa/handoff/v1/`: three handoff modes.
+
+The canonical result summaries are:
+
+- `docs/EXPERIMENT_RESULTS.md`
+- `evidence/phase3_design/`
+- `evidence/phase3_final/`
+- `evidence/phase3_mixed_pairs/`
+- `evidence/phase3_handoff/`
+
+Old partial final runs, failed infrastructure runs, and qualification-only runs
+are not part of the paper evidence. They may be removed after confirming that
+the compact evidence bundle and final raw root are intact.

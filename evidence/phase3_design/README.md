@@ -20,6 +20,7 @@ fast-model cost-reversal analysis. These results are useful for analysis but do
 not belong in the native-pair main table. Raw traces remain under the ignored
 `results/phase3_arfa/nrp/` directory.
 
-All results here are development results. The reserved final split has not been
-opened, and absolute latency is compared only within a model pair because the
-pairs ran on different hardware.
+All results here are development results. They predate the frozen Qwen and Gemma
+evaluation in [`evidence/phase3_final/`](../phase3_final/). Absolute latency is
+compared only within a model pair because the development pairs ran on different
+hardware.

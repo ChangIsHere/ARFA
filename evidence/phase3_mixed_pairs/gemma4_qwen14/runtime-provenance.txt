@@ -1,0 +1,19 @@
+captured_at_utc=2026-11-02T02:12:21Z
+git_commit=7184111d26ded55b96dd71e01df0d8011909446f
+git_worktree_dirty=true
+job=arfa-mixed-gemma4-qwen14-run
+pod=arfa-mixed-gemma4-qwen14-run-kz67t
+node=nrp-01.csumb.edu
+pod_uid=49411571-05d9-4210-90cf-fcac4e4229e3
+image=docker.io/ollama/ollama:0.34.1
+image_id=docker.io/ollama/ollama@sha256:0c0a83210471fb50226bcdc2d6611d20ab13ae87e024cc304c94a6a5765c5e65
+Python 3.10.11
+Name: PyYAML
+Version: 6.0.3
+sha256:
+6d85c38253dae50dde69604c833539397f658c48c3ee053ee5fb985605884994  config/phase3_mixed_gemma4_qwen14.yaml
+382f16e034f39d78220e313a2f01a24d56bc41c6fa0384701acd2259b27e5571  deployment/nrp/28-mixed-gemma4-qwen14-configmap.yaml
+e7cf6019af6f8bde33b245e9eb1067c4b3491a1524a226e5b8d2c5a23dd68931  deployment/nrp/66-mixed-gemma4-qwen14-service.yaml
+ffdfba6642f4442820c8dd3eeefa54d382f1df3325f7afa2a8ea19f4e18f68aa  deployment/nrp/run_mixed_pair_final.sh
+e409b6d42b6de2552f6741cf2926ca3e1bfaecf0b821cb86e491ff289f578bfe  deployment/nrp/gpu_job_lib.sh
+ac82f8c02a078202387065555a9efcb4741f2995145363c6eaa3d172eb58cb3a  evidence/phase3_mixed_pairs/freeze_manifest.sha256

@@ -6,6 +6,7 @@ from src.phase1_5_shadow.json_model_client import JSONModelRequestError
 from src.phase2_baseline.model_client import ChatResult
 from src.phase2_baseline.terminal_environment import LocalTerminalEnvironment
 from src.phase3_arfa.arfa_agent import ARFAAgent
+from src.phase3_arfa.prompts import build_user_prompt
 from src.phase3_arfa.analyze_results import _control_audit, _paired_comparison
 from src.phase3_arfa.fast_track import FastTrack
 from src.phase3_arfa.learned_observation import LearnedObservationScorer
@@ -317,3 +318,45 @@ def test_agent_context_keeps_system_and_recent_turns_only():
 
     assert bounded[0] == messages[0]
     assert bounded[1:] == messages[-4:]
+
+
+def test_structured_handoff_drops_previous_model_messages():
+    agent = ARFAAgent.__new__(ARFAAgent)
+    agent.max_history_turns = 2
+    agent.handoff_mode = "structured_state"
+    messages = [
+        {"role": "system", "content": "system"},
+        {"role": "assistant", "content": "old model state"},
+        {"role": "user", "content": "structured commitment and observation"},
+    ]
+
+    assert agent._handoff_messages(messages, role_changed=True) == [messages[0], messages[-1]]
+
+
+def test_full_visible_handoff_keeps_bounded_history():
+    agent = ARFAAgent.__new__(ARFAAgent)
+    agent.max_history_turns = 2
+    agent.handoff_mode = "full_visible"
+    messages = [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "old user"},
+        {"role": "assistant", "content": "old model state"},
+        {"role": "user", "content": "new user"},
+    ]
+
+    assert agent._handoff_messages(messages, role_changed=True) == messages
+
+
+def test_observation_only_prompt_omits_previous_commitment():
+    prompt = build_user_prompt(
+        instruction="inspect files",
+        testbed_path="/tmp/testbed",
+        selected_role="slow",
+        previous_observation="command succeeded",
+        previous_commitment="private structured state",
+        include_commitment=False,
+    )
+
+    assert "command succeeded" in prompt
+    assert "private structured state" not in prompt
+    assert "Previous pre-execution commitment" not in prompt

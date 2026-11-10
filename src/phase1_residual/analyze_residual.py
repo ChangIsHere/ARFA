@@ -1,3 +1,5 @@
+"""Analyze residual scores and produce metrics, figures, and reports."""
+
 from __future__ import annotations
 
 import argparse

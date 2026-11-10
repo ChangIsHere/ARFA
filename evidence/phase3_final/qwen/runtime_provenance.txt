@@ -1,0 +1,19 @@
+captured_at_utc=2026-11-01T10:33:20Z
+git_commit=7184111d26ded55b96dd71e01df0d8011909446f
+git_worktree_dirty=true
+job=arfa-qwen-final-run
+pod=arfa-qwen-final-run-chvhv
+node=nrp-01.csumb.edu
+pod_uid=cd802ec6-2c5e-42b7-b3a9-54e50d14a89c
+image=docker.io/ollama/ollama:0.34.1
+image_id=docker.io/ollama/ollama@sha256:0c0a83210471fb50226bcdc2d6611d20ab13ae87e024cc304c94a6a5765c5e65
+Python 3.10.11
+Name: PyYAML
+Version: 6.0.3
+sha256:
+227546e8e6217fbd234a02f80a312afecf4612114bf601fa407966821485d454  config/phase3_final_qwen.yaml
+b7973c5b8b3c6f07d351a4c7c152bd2bb84ef934325bc0f8dc5219f9176663d2  evidence/phase3_final/qwen_freeze_manifest.json
+df589ddce277e9f7fe72d8ce02f8155d04a1f28169f3bd7db413c4af7d041cf7  deployment/nrp/25-qwen-controls-configmap.yaml
+dd89e148b1ec916972d29a19d2ed4f0c68a440273e4ba4ccc6e47c0b65565c46  deployment/nrp/63-qwen-final-service.yaml
+1d6ec85483408185bfe76ee58b2cf49161b49bb25ae8cc1d7331bc5203ded6a2  deployment/nrp/run_phase3_final.sh
+e409b6d42b6de2552f6741cf2926ca3e1bfaecf0b821cb86e491ff289f578bfe  deployment/nrp/gpu_job_lib.sh

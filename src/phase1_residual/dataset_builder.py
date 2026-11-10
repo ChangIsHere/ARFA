@@ -1,3 +1,4 @@
+"""Build the original terminal-step residual dataset."""
 from __future__ import annotations
 
 import argparse

@@ -13,7 +13,8 @@ called the reasoning model afterward. Its fast decisions were suggestions only.
 A small residual can accompany a wrong plan or an unusable next command. The
 current command checker is a string heuristic and can miss missing stdin in a
 pipeline. All four Phase 3 development pairs measure actual execution and cost;
-the reserved final split is still unused.
+the later Qwen and Gemma matrices also evaluate frozen policies on the reserved
+final split.
 
 Full residual AUC was 0.743 against the reviewed labels, versus 0.749 for learned
 observation-only scoring. The selected semantic weight was zero. Task-outcome

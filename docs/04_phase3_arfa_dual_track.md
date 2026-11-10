@@ -13,6 +13,11 @@ matched controls.
 All four development pairs are complete. Each pair used 100 shared tasks under
 residual, always-slow, and always-fast policies, for 1,200 policy-task attempts.
 
+The later frozen Qwen and Gemma evaluations are also complete. Each pair ran six
+policies on the reserved 100-task split, for 1,200 additional attempts. Use
+[`evidence/phase3_final/`](../evidence/phase3_final/) for the confirmatory numbers;
+the results below document the earlier development stage.
+
 - Qwen residual matched always-slow at 41% success and reduced slow calls by
   40.86%. Its 4.87% wall-time reduction was inconclusive.
 - Llama residual reached 19% success versus 16% for always-slow, but increased
@@ -24,7 +29,7 @@ residual, always-slow, and always-fast policies, for 1,200 policy-task attempts.
   by 9.83%.
 
 See the [four-pair evidence index](../evidence/phase3_design/README.md). These are
-development results; the reserved final split remains unused.
+development results and should remain separate from the later frozen evaluation.
 
 ## Model Pairs
 
@@ -83,13 +88,22 @@ override.
 - `residual`: the main ARFA policy.
 - `always_slow`: matched slow-model control under the Phase 3 prompt.
 - `always_fast`: matched fast-model control.
-- `observation_only`: fast/slow routing without expectation text.
-- `fixed_switch`: alternating slow and fast calls without residual.
+- `learned_observation_only`: a learned router that reads terminal output and
+  exit status but not the pre-execution expectation.
+- `expectation_gate_only`: commitment-quality and continuation gates without an
+  expectation-observation mismatch score.
+- `random_budget`: seeded random routing matched to residual's achieved
+  fast-call rate.
 
 These controls separate the benefit of residual from model size, Phase 3 prompt
-overhead, and generic switching. Historical Phase 2 runs explain why each pair was
+overhead, observation-only routing, commitment gating, and generic use of a
+similar fast-model budget. Historical Phase 2 runs explain why each pair was
 chosen and show standalone capability. Matched Phase 3 controls are the primary
-baselines for routing-effect, latency, and cost claims.
+baselines for routing, latency, and cost claims.
+
+The reserved Qwen and Gemma matrices use all six policies. The cross-family
+matrices omit expectation-gate-only and use the remaining five. Exact results
+are summarized in [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md).
 
 ## Running Locally
 

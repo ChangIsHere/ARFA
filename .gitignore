@@ -12,6 +12,8 @@ screenlog.*
 kubeconfig
 *.kubeconfig
 oidc-cache/
+_archive/
+references/
 
 # External datasets and generated experiment artifacts.
 data/phase1/external_intercode/

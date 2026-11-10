@@ -2,91 +2,93 @@
 
 **Residual-Guided Model Selection for Terminal-Based Coding Agents**
 
-ARFA asks a narrow question: after a terminal action, can the difference between
-the expected and observed result help choose the model for the next reasoning
-turn? The agent records an expectation before execution, computes a structured
-execution residual afterward, and routes the next call to a fast or slow model.
+ARFA studies one decision in terminal agents: after a command finishes, should
+the next reasoning turn use a fast model or a slow model? Before execution, the
+agent records the expected outcome and observable signals. After execution, it
+computes an expectation-observation residual and uses that score to select the
+next model.
 
-## Evidence Snapshot
+## Current Result
 
-- **Offline diagnostics:** 300 shadow trajectories, 100 shared InterCode
-  NL2Bash tasks, three models, and 790 executed steps.
-- **Standalone characterization:** eight models each ran the same 200 tasks,
-  for 1,600 Phase 2 attempts.
-- **Online development study:** four fast/slow pairs each ran 100 shared tasks
-  under residual, always-slow, and always-fast policies, for 1,200 matched
-  policy-task attempts.
+The evidence supports a conditional result: residual-guided routing can reduce
+slow-model use and end-to-end cost, but the gain depends on the selected model
+pair.
 
-| Pair | Residual | Slow-only | Fast-only | Residual versus slow-only |
-| --- | ---: | ---: | ---: | --- |
-| Qwen 7B/14B | 41% | 41% | 31% | 40.9% fewer slow calls; wall-time CI crosses zero |
-| Llama 3B/8B | 19% | 16% | 8% | 22.6% fewer slow calls; 13.8% more wall time |
-| Gemma 4B/12B | 29% | 26% | 21% | 48.1% fewer slow calls; 30.6% less wall time and tokens |
-| Phi Mini/14B | 33% | 30% | 23% | 28.4% fewer slow calls; 9.8% more wall time |
+On the reserved 100-task InterCode NL2Bash split:
 
-These are development results. Gemma's threshold was selected on the same
-development tasks. No Phi threshold passed the saved selection rule, so its
-best-success result is diagnostic. The reserved Phase 3 final split remains
-unused.
+- **Gemma 4B/12B:** residual improved success by 9 percentage points over
+  always-slow, reduced wall time by 21.5%, reduced tokens by 12.7%, and reduced
+  slow-model calls by 43.5% (`p=0.0225`).
+- **Qwen 7B/14B:** residual preserved always-slow success within 1 point while
+  reducing wall time by 14.4%, tokens by 6.3%, and slow-model calls by 41.3%.
+- **Qwen 7B/Gemma 12B:** residual improved success by 4 points over always-slow,
+  reduced wall time by 33.5%, tokens by 25.8%, and slow-model calls by 49.5%.
+- **Gemma 4B/Qwen 14B:** residual reduced wall time by 29.8% and tokens by 7.3%
+  but lost 3 success points, showing that model size alone does not identify a
+  useful fast track.
 
-The main finding is therefore conditional: residual routing can reduce slow
-model use, but end-to-end savings depend on the model pair. Qwen preserved
-slow-only success while reducing slow calls. Gemma produced the clearest
-development tradeoff. Llama and Phi show that a smaller model can add latency,
-tokens, or retries even when routing invokes the larger model less often.
+The four-pair development study also includes Llama and Phi. In both pairs,
+residual reduced slow calls but increased total time or tokens because the fast
+model produced more steps, repeated actions, or parse failures.
 
-Trace analysis explains part of this reversal. Relative to slow-only, the
-Llama fast model used 26.6% more calls per task and 23.4% more tokens per call;
-the Phi fast model used 37.5% more calls and produced more repeated actions and
-parse errors. A smaller model is therefore not automatically a cheaper route.
+## Evidence At A Glance
 
-## Routing Controls
+- **Offline residual diagnostics:** 300 shadow trajectories, three model
+  conditions, 100 tasks, and 790 executed terminal steps.
+- **Standalone model characterization:** eight models on the same 200 tasks,
+  producing 1,600 attempts.
+- **Native-pair development study:** four pairs, three policies, and 100 shared
+  tasks per cell, producing 1,200 attempts.
+- **Reserved final policy study:** Qwen and Gemma, six policies, and 100 tasks
+  per cell, producing 1,200 attempts with zero model-request failures.
+- **Cross-family study:** two mixed pairs, five policies, and 100 tasks per cell,
+  producing 1,000 attempts.
+- **Handoff study:** three cross-model state-transfer modes on 100 shared tasks,
+  producing 300 attempts.
 
-The Gemma 4B/12B control study is complete on the 100-task development split.
-Residual routing completed 28 tasks, compared with 25 for expectation-gate-only
-and 25 for budget-matched random routing, while using fewer tokens and model
-calls. Learned observation-only completed 31 tasks with similar token use.
-These differences are not statistically significant at the current sample
-size. The result supports residual over simple routing controls, but not over
-the learned observation baseline.
+The main experiments therefore contain 5,600 task-level runs, including the 300
+shadow trajectories. All current task results use InterCode NL2Bash. Transfer to
+a pinned second benchmark remains future work.
 
-The next paper-facing step is a frozen evaluation on the reserved tasks,
-followed by broader mixed-pair coverage and a second benchmark. See
-[the control study](docs/phase3_control_extension.md).
+## Start Here
 
-## Writing And Evidence
-
-Start with [the manuscript handoff](docs/README_FOR_WRITING.md). It lists the
-supported claims, exact result sources, paper outline, and statements that
-should remain qualified.
-
-- [Residual definitions and offline diagnostics](docs/residual_diagnostics.md)
-- [Eight-model Phase 2 bundle](docs/phase2_writing_bundle/README_FOR_WRITING.md)
-- [Four-pair Phase 3 evidence](evidence/phase3_design/README.md)
-- [Four native-pair results](evidence/phase3_design/native_pairs/results.csv)
-- [Gemma routing-control evidence](evidence/phase3_design/supplementary/gemma_controls/README.md)
-- [Online experiment design](docs/04_phase3_arfa_dual_track.md)
-- [Next experiments for a full paper](docs/phase3_publication_experiment_plan.md)
-- [Gemma routing controls and follow-up experiments](docs/phase3_control_extension.md)
+- [Manuscript handoff](docs/README_FOR_WRITING.md): paper question,
+  contributions, narrative, outline, and claims.
+- [Experiment results](docs/EXPERIMENT_RESULTS.md): all paper-facing numbers in
+  one place, with residual-centered percentage comparisons.
+- [Evidence index](evidence/README.md): exact files behind each table and claim.
+- [Publication extension plan](docs/phase3_publication_experiment_plan.md):
+  external benchmark, repeated energy measurement, and residual ablations.
 
 ## Repository Map
 
-- `src/`: agents, scoring, runners, and analysis.
-- `config/`: experiment configurations.
-- `deployment/nrp/`: bounded NRP GPU jobs used by the completed runs.
-- `data/phase2/`: frozen 200-task InterCode manifest.
-- `evidence/`: compact results, confidence intervals, and provenance.
-- `docs/`: writing handoff, protocols, tables, and figures.
-- `results/`: ignored raw traces and checkpoints kept locally.
+- `src/`: residual scoring, agents, routing policies, runners, and analysis.
+- `config/`: frozen and development experiment configurations.
+- `data/phase2/`: the 200-task InterCode manifest used by the online studies.
+- `evidence/`: compact paper-facing metrics, confidence intervals, audits, and
+  provenance.
+- `docs/`: writing guide, methods, protocols, tables, figures, and next steps.
+- `deployment/nrp/`: bounded GPU Jobs and runners used for the recorded NRP
+  experiments.
+- `results/`: ignored local raw traces and checkpoints. These are not required
+  to read the paper-facing results.
 
-## Verification
+## Reproduce And Verify
 
 ```bash
-.venv/bin/python -m pytest -q
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pytest -q
+```
+
+Repository checks:
+
+```bash
 bash -n scripts/*.sh deployment/nrp/*.sh
 git diff --check
 ```
 
 Tasks come from [InterCode](https://github.com/princeton-nlp/intercode). Model
-weights, caches, raw traces, credentials, kubeconfig, and tokens are not
+weights, caches, raw traces, credentials, kubeconfig, and API tokens are not
 committed.

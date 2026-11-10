@@ -1,77 +1,70 @@
 # ARFA on NRP Nautilus
 
-This directory contains reusable Kubernetes resources for ARFA model inference
-in namespace `ucr-qzhang`. InterCode task environments remain isolated Docker
-containers on the client machine; only model inference runs on NRP GPUs. The
-paper-facing record of each completed run is its evidence bundle, not the
-current reusable deployment template.
+This directory contains Kubernetes resources and bounded runners used for ARFA
+model inference in namespace `ucr-qzhang`. InterCode task environments run in
+isolated Docker containers on the client; only model inference runs on NRP GPUs.
+
+The evidence bundle, not the current reusable YAML, is the record of a completed
+experiment. Model tags and infrastructure templates can change after a run, so
+each paper-facing result stores hashes and runtime provenance.
 
 ## Resource Rules
 
-- Credentials, kubeconfig, tokens, model weights, and caches are not committed.
-- Model caches and NRP environment records use the `arfa-nrp-workspace` PVC.
-- Every inference workload is a Kubernetes Job with `restartPolicy: Never`, a
-  12-hour deadline, no retry, and a cleanup trap in its runner.
-- Legacy ARFA Deployments are kept at zero replicas. Current runners do not use
-  them.
-- A short smoke run is required before a full matrix.
-- A global local lock prevents two ARFA runners from replacing each other's
-  Jobs. Runners also refuse to overwrite an existing Job.
-- Before the smoke run, both model tags must be resident at `100% GPU` with
-  infinite keep-alive. Both Ollama runners must report the configured parallel
-  sequence count.
-- GPU utilization, memory, and power draw are sampled every five seconds. Each
-  of `residual`, `always_slow`, and `always_fast` must average at least 40%
-  utilization separately. The power samples are integrated into an energy
-  estimate for each policy.
-- Failure, interruption, preemption, or a utilization result below 40% deletes
-  the Job. A full matrix is not started after a failed smoke run.
+- Never commit kubeconfig, CILogon tokens, API keys, model weights, or caches.
+- Store model caches and environment records on `arfa-nrp-workspace`.
+- Use Kubernetes Jobs, not long-lived Deployments, for experiments.
+- Every runner installs cleanup traps and deletes its Job after completion,
+  interruption, failed residency checks, or a utilization-policy failure.
+- Keep both models resident before collection and verify residency after every
+  policy.
+- Use identical trajectory and inference concurrency across policies in a
+  matched matrix.
+- Record GPU utilization, memory, power, node, image digest, model IDs, config
+  hash, and Git commit.
+- Do not combine partial results across different nodes or runtime contracts.
 
-## Completed Development Runs
+## Completed Studies
 
-- Qwen 7B/14B: NVIDIA H100 80GB, 100 tasks x 3 policies.
-- Llama 3B/8B: NVIDIA RTX 3090 24GB, 100 tasks x 3 policies.
-- Gemma 4B/12B: NVIDIA L40 48GB, 100 tasks x 3 policies plus development
-  threshold calibration.
-- Phi Mini/14B: NVIDIA L40 48GB, 100 tasks x 3 policies plus development
-  threshold calibration.
+- Qwen 7B/14B native development: H100 80GB, three policies x 100 tasks.
+- Llama 3B/8B native development: RTX 3090 24GB, three policies x 100 tasks.
+- Gemma 4B/12B native development: L40 48GB, three policies x 100 tasks.
+- Phi Mini/14B native development: L40 48GB, three policies x 100 tasks.
+- Qwen and Gemma routing-control development matrices.
+- Frozen Qwen 7B/14B final matrix: six policies x 100 tasks.
+- Frozen Gemma 4B/12B final matrix: six policies x 100 tasks.
+- Gemma 4B/Qwen 14B mixed matrix: five policies x 100 tasks.
+- Qwen 7B/Gemma 12B mixed matrix: five policies x 100 tasks.
+- Qwen 7B/Gemma 12B handoff ablation: three modes x 100 tasks.
 
-Compact results and hardware records are under `evidence/phase3_design/`. Raw
-GPU logs and traces stay in the ignored `results/phase3_arfa/nrp/` directory.
-Absolute latency is compared only within a matched pair because hardware and
-concurrency differ across studies.
+Compact results and provenance are in `evidence/phase3_design/`,
+`evidence/phase3_final/`, `evidence/phase3_mixed_pairs/`, and
+`evidence/phase3_handoff/`. Raw logs remain in the ignored `results/` tree.
 
-## Parallel Execution
+## Reusable Components
 
-`src/phase3_arfa/run_arfa.py` supports bounded trajectory workers. Each worker
-gets a separate InterCode container, while completed task records are written by
-the main thread in task order. Per-task wall time, model time, command time,
-router time, traces, and checkpoints retain the existing schema.
+- `gpu_job_lib.sh`: shared scheduling, port forwarding, monitoring, residency,
+  provenance, and cleanup helpers.
+- `20-` through `25-*-configmap.yaml`: model aliases and startup checks for the
+  native pairs and control matrices.
+- `40-`, `41-`, `44-`, and `50-*-service.yaml`: native-pair development Jobs.
+- `63-qwen-final-service.yaml` and `64-gemma-final-service.yaml`: frozen final
+  Jobs.
+- `66-mixed-gemma4-qwen14-service.yaml` and
+  `67-mixed-qwen7-gemma12-service.yaml`: cross-family and handoff Jobs.
+- `run_phase3_final.sh`: frozen Qwen/Gemma matrix runner.
+- `run_mixed_pair_final.sh`: one cross-family matrix.
+- `run_all_mixed_pairs.sh`: both cross-family matrices in sequence.
+- `run_handoff_ablation.sh`: three handoff modes.
 
-The same worker count is used for all three policies in a matched comparison.
-`analyze_results.py` and `calibrate_threshold.py` reject results with different
-worker counts.
+Development runners remain for reproducibility but are not the recommended
+entry point for the paper-facing final results.
 
-Ollama uses `OLLAMA_NUM_PARALLEL` equal to the trajectory worker count, so
-concurrent requests can be batched without changing model tags, quantization,
-context length, temperature, or `keep_alive=-1`.
+## Verification Before Reuse
 
-Completed jobs used bounded trajectory workers and identical concurrency for
-the three policies within each pair. A preemption or node loss invalidates that
-run; the runner terminates and does not combine records across nodes.
+```bash
+kubectl --context nautilus -n ucr-qzhang apply --dry-run=server -f <manifest>
+bash -n deployment/nrp/*.sh
+```
 
-## Primary Files
-
-- `gpu_job_lib.sh`: bounded Job lifecycle, GPU monitoring, provenance, and
-  cleanup.
-- `20-` through `23-*-configmap.yaml`: frozen model aliases and startup checks.
-- `40-qwen-inference-service.yaml`, `41-llama-inference-service.yaml`,
-  `50-gemma-high-memory-inference-service.yaml`, and
-  `44-phi-inference-service.yaml`: reusable inference Jobs and Services.
-- `run_qwen_development.sh`, `run_llama_development.sh`,
-  `run_gemma_high_memory_matrix.sh`, and `run_phi_high_memory_matrix.sh`: the
-  pair-specific development runners.
-
-Before reuse, run `kubectl apply --dry-run=server` on the relevant manifest and
-check the model IDs against the evidence manifest. Ollama library tags are
-mutable; a changed model ID must not be accepted silently.
+Check model IDs against the corresponding evidence manifest before requesting a
+GPU. Ollama library tags are mutable and must not be accepted silently.

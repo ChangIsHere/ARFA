@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arfa-mixed-qwen7-gemma12-config
+  namespace: ucr-qzhang
+data:
+  serve_pair.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+    env_root="/workspace/runs/${ARFA_RUN_ID}/environment"
+    mkdir -p "${env_root}"
+    ollama serve > "${env_root}/ollama-server.log" 2>&1 &
+    pid=$!
+    trap 'kill "${pid}" 2>/dev/null || true; wait "${pid}" 2>/dev/null || true' EXIT
+    for _ in $(seq 1 120); do ollama list >/dev/null 2>&1 && break; sleep 1; done
+    [[ $(ollama list | awk '$1 == "arfa-qwen2.5-coder:7b-8k" {print $2}') == c8cb1b0bc968 ]]
+    [[ $(ollama list | awk '$1 == "arfa-gemma3:12b-8k" {print $2}') == a44486f62aeb ]]
+    for model in arfa-qwen2.5-coder:7b-8k arfa-gemma3:12b-8k; do
+      safe=${model//[:.]/_}
+      ollama show "${model}" --modelfile > "${env_root}/model-show-${safe}.modelfile"
+      grep -q '^PARAMETER num_ctx 8192$' "${env_root}/model-show-${safe}.modelfile"
+      ollama run "${model}" "Respond with exactly: OK" > "/tmp/warm-${safe}.txt"
+    done
+    ollama list > "${env_root}/ollama-model-list.txt"
+    ollama ps > "${env_root}/ollama-ps-ready.txt"
+    nvidia-smi -q > "${env_root}/nvidia-smi-full.txt"
+    grep -q 'arfa-qwen2.5-coder:7b-8k' "${env_root}/ollama-ps-ready.txt"
+    grep -q 'arfa-gemma3:12b-8k' "${env_root}/ollama-ps-ready.txt"
+    touch /tmp/arfa-ready
+    wait "${pid}"

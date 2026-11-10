@@ -1,0 +1,4 @@
+"policy","task_count","expected_task_count","complete","success_count","success_rate","avg_wall_seconds","wall_seconds_per_success","avg_model_calls","avg_fast_calls","avg_slow_calls","fast_call_rate","avg_total_tokens","handoff_mode"
+"full_visible","100","100","True","29","0.29","481.7142508754018","1661.083623708282","3.56","1.27","2.29","0.35674157303370785","4642.22","full_visible"
+"structured_state","100","100","True","28","0.28","379.5852864129096","1355.661737188963","3.67","1.24","2.43","0.33787465940054495","3643.84","structured_state"
+"observation_only","100","100","True","31","0.31","576.1930059495592","1858.6871159663199","5.11","1.72","3.39","0.33659491193737767","4767.1","observation_only"

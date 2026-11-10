@@ -111,9 +111,12 @@ class ARFAAgent:
         max_steps: int = 12,
         maximum_identical_action_occurrences: int = 2,
         max_history_turns: int = 2,
+        handoff_mode: str = "full_visible",
     ) -> None:
         if max_history_turns < 1:
             raise ValueError("max_history_turns must be positive")
+        if handoff_mode not in {"full_visible", "structured_state", "observation_only"}:
+            raise ValueError(f"Unsupported handoff mode: {handoff_mode}")
         self.fast_track = fast_track
         self.slow_track = slow_track
         self.router = router
@@ -122,6 +125,7 @@ class ARFAAgent:
         self.max_steps = max_steps
         self.maximum_identical_action_occurrences = maximum_identical_action_occurrences
         self.max_history_turns = max_history_turns
+        self.handoff_mode = handoff_mode
 
     def run_task(self, task: dict[str, Any], env: Any) -> ARFARun:
         run_started = time.perf_counter()
@@ -134,25 +138,29 @@ class ARFAAgent:
         termination_reason = "max_steps"
         action_counts: dict[str, int] = {}
         consecutive_fast_calls = 0
+        previous_role: str | None = None
 
         for step_id in range(1, self.max_steps + 1):
             role = route.selected_role
             track = self.fast_track if role == "fast" else self.slow_track
-            messages.append(
-                {
-                    "role": "user",
-                    "content": build_user_prompt(
+            role_changed = previous_role is not None and previous_role != role
+            include_commitment = not (role_changed and self.handoff_mode == "observation_only")
+            user_message = {
+                "role": "user",
+                "content": build_user_prompt(
                         instruction=str(task["instruction"]),
                         testbed_path=str(env.testbed),
                         selected_role=role,
                         previous_observation=previous_observation,
                         previous_commitment=previous_commitment,
+                        include_commitment=include_commitment,
                     ),
-                }
-            )
+            }
+            messages.append(user_message)
+            model_messages = self._handoff_messages(messages, role_changed)
             model_started = time.perf_counter()
             try:
-                result = track.reason(self._bounded_messages(messages, self.max_history_turns))
+                result = track.reason(model_messages)
             except JSONModelRequestError as exc:
                 termination_reason = "model_request_error"
                 steps.append(
@@ -296,6 +304,7 @@ class ARFAAgent:
             previous_observation = observation
             previous_commitment = json.dumps(
                 {
+                    "current_plan": current_plan,
                     "action": action,
                     "expected_outcome": expected_outcome,
                     "expected_signals": signals,
@@ -304,6 +313,7 @@ class ARFAAgent:
                 ensure_ascii=False,
             )
             route = next_route
+            previous_role = role
 
         trace_text = "\n".join(step.observation for step in steps if step.observation)
         evaluator = env.evaluate(task, trace_text=trace_text, final_answer=final_answer)
@@ -316,6 +326,14 @@ class ARFAAgent:
         if not messages:
             return []
         return [messages[0], *messages[1:][-(2 * max_history_turns):]]
+
+    def _handoff_messages(
+        self, messages: list[dict[str, str]], role_changed: bool
+    ) -> list[dict[str, str]]:
+        bounded = self._bounded_messages(messages, self.max_history_turns)
+        if not role_changed or self.handoff_mode == "full_visible":
+            return bounded
+        return [messages[0], messages[-1]]
 
     def _step_without_execution(
         self,

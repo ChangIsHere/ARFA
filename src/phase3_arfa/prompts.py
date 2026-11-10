@@ -41,6 +41,7 @@ def build_user_prompt(
     selected_role: str,
     previous_observation: str | None = None,
     previous_commitment: str | None = None,
+    include_commitment: bool = True,
 ) -> str:
     parts = [
         f"Task: {instruction}",
@@ -49,7 +50,8 @@ def build_user_prompt(
         f"This reasoning turn is assigned to the {selected_role} model.",
     ]
     if previous_observation is not None:
-        parts.append(f"Previous pre-execution commitment:\n{previous_commitment or '<missing>'}")
+        if include_commitment:
+            parts.append(f"Previous pre-execution commitment:\n{previous_commitment or '<missing>'}")
         parts.append(f"Actual observation:\n{previous_observation}")
         parts.append("Choose the next action using the observed state.")
     return "\n\n".join(parts)

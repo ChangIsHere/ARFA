@@ -1,0 +1,4 @@
+average_gpu_utilization_percent=54.08
+average_sampled_power_watts=248.03
+sampled_duration_seconds=373
+estimated_gpu_energy_wh=25.8042

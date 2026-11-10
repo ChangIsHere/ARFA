@@ -1,167 +1,193 @@
-# ARFA Manuscript Handoff
+# ARFA Workshop Paper Handoff
 
-This is the entry point for a workshop or arXiv draft based on the repository's
-current evidence. The data support a paper about residual-guided model selection
-and model-pair dependence. They do not yet support a broad claim that ARFA is
-universally faster, safer, or more energy efficient.
+This is the canonical entry point for drafting the workshop paper. Read this
+file first, then use [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md) for exact
+numbers and [`evidence/`](../evidence/README.md) for source artifacts.
 
-The [control extension](phase3_control_extension.md) uses Gemma 4B/12B as the
-representative routing-control pair. The four native model pairs and the Gemma
-four-policy control matrix are complete. Mixed-pair qualification is partial,
-and external-benchmark experiments remain future work.
+For a new writing session, provide these three files together. Treat the result
+tables as the numerical source of truth, keep development and reserved-final
+results separate, and do not infer unreported significance or energy savings.
+
+## Working Title
+
+**ARFA: Residual-Guided Model Selection for Terminal-Based Coding Agents**
 
 ## Research Question
 
-Terminal agents normally invoke a reasoning model again after every action.
-ARFA instead records an expected outcome before execution and compares it with
-the terminal observation. The resulting residual is used to choose the fast or
-slow model for the next turn.
+After a terminal action, can the difference between the expected execution
+outcome and the actual terminal observation help select the model for the next
+reasoning turn?
 
-The paper asks:
+## Method In One Paragraph
 
-1. Does expectation-observation mismatch contain information related to agent
-   outcomes and reviewed reasoning-necessity labels?
-2. How capable and expensive are candidate fast and slow models by themselves?
-3. In a matched online agent, can residual routing retain task success while
-   reducing use of the slow model?
-4. Why do end-to-end savings differ across model pairs?
-5. Does residual outperform observation-only, expectation-gate-only, and
-   budget-matched random routing on the selected representative pair?
+Before executing a command, the agent commits to an expected outcome, expected
+exit code, stdout/stderr presence, and a possible continuation. After execution,
+ARFA computes a structured residual from mismatches between those commitments
+and the terminal observation. A low residual routes the next turn to a fast
+model; a high residual or a failed safety check routes it to a slow model. Both
+models use the same agent loop, evaluator, context limit, and step cap.
 
-## Evidence Inventory
+## Paper Thesis
 
-### Offline residual study
+The result is conditional rather than universal:
 
-Use [residual_diagnostics.md](residual_diagnostics.md) and
-[`evidence/residual_diagnostics/`](../evidence/residual_diagnostics/).
+> Execution residual can guide fast/slow model selection in terminal agents,
+> but the gain depends on the model pair. Residual works best when the fast model
+> is capable enough to avoid retries and genuinely cheaper over the complete
+> trajectory.
 
-- 300 shadow trajectories on 100 shared InterCode NL2Bash tasks.
-- Three model conditions and 790 executed terminal steps.
-- Expectations were committed before command execution; routing remained in
-  shadow mode.
-- Full residual AUC against the stored reviewed reasoning labels was 0.743
-  (task-bootstrap 95% CI 0.681-0.811), but learned observation-only AUC was
-  0.749. This supports association, not superiority or safe deployment.
-- The 751 labels were AI-assisted and, according to the project owner, divided
-  among six human reviewers. Separate reviewer files are unavailable, so these
-  label-based results should be described as provisional reviewed annotations,
-  not as a six-annotator agreement study.
-- Test-split task-failure AUC for structured residual was 0.613, 0.611, and
-  0.597 across Qwen 14B, Qwen 7B, and Llama 8B.
+This framing includes both the positive and negative findings. Gemma and the
+Qwen 7B/Gemma 12B mixed pair show clear benefits. Llama and Phi explain why a
+nominally smaller model can increase total cost through extra calls, repeated
+actions, or parse failures.
 
-### Phase 2 model characterization
+## Contributions
 
-Use the [Phase 2 writing bundle](phase2_writing_bundle/README_FOR_WRITING.md).
+1. **Execution residual for model selection.** ARFA uses a pre-execution
+   commitment and the resulting terminal observation to select the next model.
+2. **Matched online evaluation.** Residual is compared with always-slow,
+   always-fast, learned observation-only, expectation-gate-only, and
+   budget-matched random routing in the same execution loop.
+3. **Model-pair analysis.** Four native pairs and two cross-family pairs show
+   that routing quality and model choice must be evaluated together.
+4. **Cost-reversal finding.** A smaller model can cost more over a full task when
+   it creates extra reasoning steps or execution errors.
+5. **Cross-model state transfer.** A compact structured handoff retains the
+   measured success level while using less time and fewer tokens than full
+   visible history.
 
-- Eight models x the same 200 tasks = 1,600 attempts.
-- Success ranged from 12.5% to 40.0%.
-- The study identifies four candidate scale pairs and their standalone cost.
-- Phase 2 is historical characterization, not the causal routing baseline.
+## Evidence Chain
 
-### Phase 3 online development study
+### 1. Offline signal
 
-Use [`evidence/phase3_design/`](../evidence/phase3_design/) and especially
-[`native_pairs/results.csv`](../evidence/phase3_design/native_pairs/results.csv).
-Each pair ran the same 100 development tasks under residual, always-slow, and
-always-fast policies.
+The shadow collection contains 300 trajectories and 790 terminal steps. Full
+residual reaches ROC-AUC 0.743 against reviewed reasoning-demand labels. Learned
+observation-only reaches 0.749, so the offline study establishes association but
+not superiority.
 
-| Pair | Residual | Slow-only | Fast-only | Slow-call change | Wall-time change | Token change |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Qwen 7B/14B | 41% | 41% | 31% | -40.86% | -4.87% | -1.41% |
-| Llama 3B/8B | 19% | 16% | 8% | -22.64% | +13.78% | +24.82% |
-| Gemma 4B/12B | 29% | 26% | 21% | -48.06% | -30.65% | -30.61% |
-| Phi Mini/14B | 33% | 30% | 23% | -28.43% | +9.83% | +2.47% |
+### 2. Standalone model behavior
 
-Qwen's wall-time and token intervals cross zero. Gemma's threshold `0.30` was
-selected on the development tasks. No Phi threshold passed the saved selection
-rule; `0.15` is shown only because it had the highest development success.
-Absolute timing should not be pooled across hardware.
+Eight models each run the same 200 tasks. This stage identifies candidate pairs
+and shows that model size does not directly predict total token use or task
+success. It is characterization, not the primary routing comparison.
 
-### Gemma routing controls
+### 3. Four native development pairs
 
-Use
-[`evidence/phase3_design/supplementary/gemma_controls/`](../evidence/phase3_design/supplementary/gemma_controls/).
+Residual reduces slow-model calls in all four pairs. Qwen and Gemma reduce total
+cost; Llama and Phi increase time or tokens because the fast model creates more
+work. These development results motivate pair-dependent analysis.
 
-- Residual: 28% success, 390,911 tokens, 321 model calls.
-- Learned observation-only: 31% success, 394,414 tokens, 315 calls.
-- Expectation-gate-only: 25% success, 440,179 tokens, 347 calls.
-- Budget-matched random: 25% success, 427,674 tokens, 340 calls.
-- Residual used fewer tokens than both simple controls, but did not outperform
-  the learned observation-only baseline. All paired success intervals include
-  zero.
-- The observation-only run resumed after an infrastructure interruption, so
-  its wall time should not be compared directly with the other three policies.
+### 4. Reserved Qwen and Gemma evaluation
 
-## Supported Paper Claim
+Each pair runs six policies on the same reserved 100 tasks. The strongest result
+is Gemma residual versus always-slow: +9 success points, -21.5% wall time,
+-12.7% tokens, and -43.5% slow calls (`p=0.0225`). Qwen preserves always-slow
+success within 1 point while reducing wall time by 14.4% and slow calls by 41.3%.
 
-> Execution residual can be used as a lightweight reference signal for choosing
-> between fast and slow reasoning models in terminal agents. Across four
-> development pairs it consistently reduced slow-model calls, while end-to-end
-> savings depended on the fast model's latency, output length, and action quality.
+### 5. Cross-family model selection
 
-The strongest positive examples are Qwen and Gemma. Llama and Phi are useful
-counterexamples: reducing slow calls is not sufficient to reduce total cost.
-This pair-dependent result connects residual routing to model selection rather
-than treating the router and model pair as independent choices.
+Qwen 7B/Gemma 12B improves success by 4 points over always-slow while reducing
+wall time by 33.5%, tokens by 25.8%, and slow calls by 49.5%. Reversing the
+families to Gemma 4B/Qwen 14B saves time but loses 3 success points. The
+interaction therefore depends on both model roles, not only parameter count.
 
-### Why a smaller model can cost more
+### 6. Handoff behavior
 
-Use
-[`evidence/phase3_design/supplementary/cost_reversal/`](../evidence/phase3_design/supplementary/cost_reversal/).
+Three modes are evaluated: full visible history, structured state, and latest
+observation only. Structured state differs from full history by -1 success point
+while reducing wall time and tokens by about 21%. Observation-only requires
+28.2% more calls and 28.3% more slow calls than structured state.
 
-- Llama fast-only used 26.6% more calls per task and 23.4% more tokens per call
-  than slow-only; its max-step rate increased from 2% to 12%.
-- Phi fast-only used 37.5% more calls per task. Repeated actions increased from
-  0.10 to 0.52 per task, and parse errors increased from 0 to 0.31 per task.
-- Residual routing reduced slow-model calls for both pairs, but the extra steps
-  generated by the fast model offset that saving.
+Exact values and comparisons are in
+[EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md).
 
-This supports a secondary finding: model size alone is not a sufficient routing
-cost proxy. Fast-model action quality and trajectory length are part of the
-model-pair selection problem.
+## Recommended Workshop Structure
+
+1. **Introduction**
+   - Terminal agents repeatedly invoke reasoning models after tool execution.
+   - Existing efficiency work often optimizes inference after a call is chosen.
+   - ARFA asks which model should handle the next call based on execution.
+2. **Related Work**
+   - Coding agents and ReAct-style loops.
+   - Reflection and execution feedback.
+   - Model routing and adaptive computation.
+   - Inference and agent-efficiency measurement.
+3. **Method**
+   - Pre-execution commitment.
+   - Structured residual formula.
+   - Fast/slow routing and safety fallback.
+   - Cross-model handoff state.
+4. **Experimental Setup**
+   - InterCode NL2Bash and the 100/100 task split.
+   - Eight models and six model pairs.
+   - Matched policies and success evaluator.
+   - Task-level bootstrap intervals and exact McNemar tests.
+5. **Results**
+   - Offline residual association.
+   - Native-pair development study.
+   - Reserved Qwen and Gemma matrices.
+   - Cross-family pair analysis.
+6. **Analysis**
+   - Fast-model cost reversal.
+   - Handoff ablation.
+   - When residual helps and when it does not.
+7. **Limitations**
+   - One task benchmark.
+   - One run per task and policy.
+   - Offline labels are provisional reviewed annotations.
+   - Current full-matrix GPU measurements are not policy-level causal energy
+     estimates.
+8. **Conclusion**
+
+## Claims Supported By The Data
+
+- Residual can reduce slow-model use in a matched terminal-agent loop.
+- Some pairs preserve or improve success while reducing time and tokens.
+- The benefit is model-pair dependent.
+- A smaller model can increase complete-trajectory cost.
+- Structured handoff can reduce context cost without a measured success loss
+  distinguishable at the current sample size.
 
 ## Claims To Avoid
 
-- Do not call the current Phase 3 results held out; the reserved final split is
-  still unused.
-- Do not claim that residual beats learned observation-only routing. The matched
-  Gemma control is complete and observation-only has the higher point-estimate
-  success rate.
-- Do not claim measured energy savings. GPU power samples exist for infrastructure
-  monitoring, but the current paper results report calls, tokens, and wall time.
-- Do not describe Phase 2 as the primary routing baseline. Phase 3's matched
-  always-slow and always-fast policies are the relevant controls.
-- Do not claim that every pair improved. Llama and Phi increased total cost
-  relative to always-slow.
+- Residual universally outperforms learned observation-only routing.
+- Every fast/slow pair reduces total cost.
+- Phase 2 standalone runs are causal routing baselines.
+- Absolute latency can be pooled across different hardware classes.
+- Current run-level GPU samples prove policy-level energy savings.
+- The current results establish transfer beyond InterCode.
 
-## Suggested Paper Structure
+## Terminology
 
-1. **Introduction:** reasoning after every terminal action is expensive; an
-   external expectation-observation mismatch may help decide which model to use.
-2. **Related Work:** coding agents, ReAct and reflection, adaptive computation,
-   model routing, and inference efficiency.
-3. **Method:** pre-execution commitment, structured residual, safety fallback,
-   and fast/slow routing.
-4. **Offline Diagnostics:** 300 shadow trajectories and residual associations.
-5. **Experimental Setup:** InterCode NL2Bash, eight standalone models, four
-   online pairs, matched policies, success criterion, tokens, calls, and latency.
-6. **Results:** Phase 2 characterization followed by the four Phase 3 pair
-   comparisons.
-7. **Analysis:** why Qwen/Gemma benefit and Llama/Phi do not; model-pair choice
-   is part of the routing design.
-8. **Limitations:** one benchmark, one run per task/policy, development-set
-   threshold selection, incomplete mixed-pair coverage, and no direct energy
-   result.
+- **Success rate:** fraction of tasks accepted by the task evaluator. It is not
+  command-match accuracy.
+- **Residual:** mismatch between the committed expected execution signals and the
+  observed terminal result.
+- **Fast-call rate:** fraction of reasoning calls assigned to the fast model.
+- **Slow-call reduction:** reduction in slow-model calls relative to the stated
+  comparator, normally always-slow.
+- **Development:** the 100-task split used for pair and threshold development.
+- **Reserved final:** the separate 100-task split used by the frozen Qwen and
+  Gemma matrices and the mixed-pair extension.
 
 ## Source Map
 
 - Residual formula: `src/phase1_5_shadow/residual.py`
-- Online controller: `src/phase3_arfa/arfa_agent.py` and `router.py`
-- Phase 3 paired analysis: `src/phase3_arfa/analyze_results.py`
-- Frozen task manifest: `data/phase2/intercode_nl2bash_official_200.jsonl`
-- Phase 2 tables/figures: `docs/phase2_writing_bundle/`
-- Phase 3 compact evidence: `evidence/phase3_design/`
-- Raw local traces: ignored `results/` paths referenced by evidence manifests
+- Online controller: `src/phase3_arfa/arfa_agent.py`
+- Router policies: `src/phase3_arfa/router.py`
+- Agent prompts: `src/phase3_arfa/prompts.py`
+- Paired analysis: `src/phase3_arfa/analyze_results.py`
+- Handoff analysis: `src/phase3_arfa/analyze_handoff.py`
+- Frozen task data: `data/phase2/intercode_nl2bash_official_200.jsonl`
+- Phase 2 tables and figures: `docs/phase2_writing_bundle/`
+- Native-pair evidence: `evidence/phase3_design/native_pairs/`
+- Final Qwen/Gemma evidence: `evidence/phase3_final/`
+- Mixed-pair evidence: `evidence/phase3_mixed_pairs/`
+- Handoff evidence: `evidence/phase3_handoff/`
 
-For the experiments needed beyond the workshop version, see
+## Remaining Work Beyond The Workshop Draft
+
+The next high-value experiment is direct transfer to a pinned external terminal
+benchmark without retuning the routing threshold. Repeated policy-level energy
+measurement and residual-component ablations follow. See
 [phase3_publication_experiment_plan.md](phase3_publication_experiment_plan.md).

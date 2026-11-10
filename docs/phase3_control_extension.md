@@ -43,8 +43,8 @@ ID and report bootstrap intervals. Latency and energy are directly comparable
 only when runs use the same GPU model and execution settings.
 
 The controls are development experiments. Their purpose is method comparison,
-not a final held-out claim. The final split remains unused until the policy,
-model pair, thresholds, seeds, task IDs, runtime, and analysis are frozen.
+not a final held-out claim. They were followed by frozen Qwen and Gemma final
+matrices, documented in [`evidence/phase3_final/`](../evidence/phase3_final/).
 
 ## Gemma Development Results
 
@@ -84,11 +84,14 @@ The bounded runner verifies that both models remain resident, records runtime
 provenance, and deletes the GPU Job on exit. Local raw results are written below
 `results/phase3_arfa/nrp/nrp-gemma-controls-v2/`.
 
-## Next Stages
+## Final Follow-Up
 
-1. Freeze Qwen and Gemma for the reserved final split.
-2. Run mixed pairs to measure how the fast model's speed and capability change
-   the value of residual routing.
-3. Evaluate the frozen design on the reserved InterCode final split.
-4. Evaluate it on a second terminal or coding-agent benchmark with that
-   benchmark's official evaluator.
+The Qwen and Gemma reserved-split matrices, two cross-family pairs, and the
+three-mode handoff ablation are complete. Their paper-facing results are in
+[`evidence/phase3_final/`](../evidence/phase3_final/),
+[`evidence/phase3_mixed_pairs/`](../evidence/phase3_mixed_pairs/), and
+[`evidence/phase3_handoff/`](../evidence/phase3_handoff/).
+
+The remaining extensions are external-benchmark transfer, repeated policy-level
+energy measurement, and residual-component ablations. See
+[phase3_publication_experiment_plan.md](phase3_publication_experiment_plan.md).

@@ -1,26 +1,34 @@
 # Project Overview
 
-ARFA asks whether an execution expectation-observation mismatch can inform the
-decision to invoke a terminal agent's reasoning model again.
+ARFA asks whether the difference between an expected and an observed terminal
+result can help select the model for the next reasoning turn.
 
-The current project has three connected stages:
+The project has four connected evidence layers:
 
-1. Residual diagnostics, combining the original Phase 1 and Phase 1.5 collections.
-   Document the signal and its model dependence without assuming a safe router.
-2. Completed Phase 2 single-model characterization. Measure eight models'
-   standalone success and cost, then identify four useful fast/slow pairs.
-3. Phase 3 online control and primary comparison. Run residual, always-slow, and
-   always-fast under the same prompt, tasks, hardware, and execution loop to test
-   whether residual-guided selection improves the quality-efficiency tradeoff.
+1. **Offline diagnostics.** Shadow runs record expectations before execution and
+   measure whether execution residual is associated with reviewed reasoning
+   demand and task outcomes.
+2. **Standalone characterization.** Eight models run the same 200 InterCode
+   NL2Bash tasks to measure capability, latency, token use, and candidate
+   fast/slow pairings.
+3. **Matched online control.** Residual, endpoint policies, observation-only,
+   expectation-only, and random routing run through the same agent loop and
+   evaluator.
+4. **Pair and handoff analysis.** Native and cross-family model pairs test
+   model-selection dependence; three handoff modes test how much explicit state
+   must cross a model switch.
 
-All eight Phase 2 model runs and all four Phase 3 development pairs are complete.
-The reserved Phase 3 final split has not been opened. Current evidence supports a
-workshop draft; residual-specific controls, confirmatory evaluation, and external
-validation remain future work.
+All eight standalone runs, four native development pairs, two reserved final
+policy matrices, two mixed-pair matrices, and the handoff ablation are complete.
+The strongest result is Gemma 4B/12B: on the reserved split, residual improved
+success by 9 points over always-slow while reducing wall time by 21.5%, tokens
+by 12.7%, and slow calls by 43.5%.
 
-Phase 2 describes the available models; it does not isolate the effect of routing.
-The matched Phase 3 controls are the baselines for causal claims about residual.
+The supported claim is conditional. Residual can improve fast/slow selection,
+but the fast model must be capable enough to avoid retries and genuinely cheaper
+over a full trajectory. Llama and Phi demonstrate the opposite case: fewer slow
+calls did not reduce total cost because the fast model generated extra work.
 
-See [the current residual study](residual_diagnostics.md) and
-[the Phase 3 study](04_phase3_arfa_dual_track.md). Old phase-numbered source paths
-remain unchanged where they are needed for reproducibility.
+Phase 2 describes the candidate models. The matched Phase 3 policies provide the
+main evidence about routing. See [the experiment summary](EXPERIMENT_RESULTS.md)
+and [the manuscript handoff](README_FOR_WRITING.md).

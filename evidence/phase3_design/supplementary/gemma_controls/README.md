@@ -21,8 +21,9 @@ statistically significant on 100 tasks.
 The observation-only run resumed after an infrastructure interruption. Its
 success, token, and call counts cover all 100 tasks, but its wall time is not a
 clean comparison with the other policies. Expectation-gate-only recorded one
-model request error. These are development results; the reserved final split
-has not been used.
+model request error. These are development results. The later reserved-split
+Gemma matrix reran all policies under a frozen, matched protocol and is the
+primary paper result; see [`evidence/phase3_final/gemma/`](../../../phase3_final/gemma/).
 
 - `policy_summary.csv`: compact paper table.
 - `analysis.json`: paired estimates, bootstrap intervals, and McNemar tests.

@@ -8,15 +8,16 @@ metadata:
     app.kubernetes.io/component: qwen-controls
 spec:
   backoffLimit: 0
-  activeDeadlineSeconds: 43200
+  activeDeadlineSeconds: 21600
   ttlSecondsAfterFinished: 600
   template:
     metadata:
       labels:
         app.kubernetes.io/name: arfa
         app.kubernetes.io/component: qwen-controls
-        arfa.run-id: nrp-qwen-controls-v2
+        arfa.run-id: nrp-qwen-controls-v5
     spec:
+      priorityClassName: opportunistic2
       restartPolicy: Never
       affinity:
         nodeAffinity:
@@ -26,42 +27,16 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values:
-                      - NVIDIA-A10
-                      - NVIDIA-A40
-                      - NVIDIA-A100-PCIE-40GB
-                      - NVIDIA-A100-80GB-PCIe
-                      - NVIDIA-A100-SXM4-80GB
-                      - NVIDIA-GeForce-RTX-3090
-                      - NVIDIA-GeForce-RTX-4090
-                      - NVIDIA-GH200-480GB
-                      - NVIDIA-H100-80GB-HBM3
-                      - NVIDIA-H200-NVL
-                      - NVIDIA-L4
-                      - NVIDIA-L40
-                      - NVIDIA-L40S
-                      - NVIDIA-RTX-A5000
                       - NVIDIA-RTX-A6000
-                      - NVIDIA-RTX-5000-Ada-Generation
-                      - NVIDIA-RTX-PRO-6000-Blackwell-Max-Q-Workstation-Edition
-                      - NVIDIA-TITAN-RTX
-                      - Quadro-RTX-6000
-                      - Quadro-RTX-8000
-                      - Tesla-V100-SXM2-32GB
-                  - key: kubernetes.io/hostname
-                    operator: NotIn
-                    values:
-                      - hcc-nrp-shor-c6025.unl.edu
       containers:
         - name: ollama
           image: ollama/ollama:0.34.1
           imagePullPolicy: IfNotPresent
-          command:
-            - /bin/bash
-            - -lc
+          command: ["/bin/bash", "-lc"]
           args:
             - |
               set -euo pipefail
-              /opt/arfa/serve_qwen.sh &
+              /opt/arfa/serve_qwen_controls.sh &
               server_pid=$!
               trap 'kill "${server_pid}" 2>/dev/null || true; wait "${server_pid}" 2>/dev/null || true' EXIT
               for _ in $(seq 1 60); do
@@ -82,7 +57,7 @@ spec:
               wait "${server_pid}"
           env:
             - name: ARFA_RUN_ID
-              value: nrp-qwen-controls-v2
+              value: nrp-qwen-controls-v5
             - name: OLLAMA_HOST
               value: 0.0.0.0:11434
             - name: OLLAMA_MODELS
@@ -90,42 +65,36 @@ spec:
             - name: OLLAMA_KEEP_ALIVE
               value: "-1"
             - name: OLLAMA_LOAD_TIMEOUT
-              value: 20m
+              value: 60m
             - name: OLLAMA_MAX_LOADED_MODELS
               value: "2"
             - name: OLLAMA_NUM_PARALLEL
-              value: "1"
+              value: "4"
           ports:
             - name: ollama
               containerPort: 11434
               protocol: TCP
           startupProbe:
             exec:
-              command:
-                - /bin/bash
-                - -c
-                - test -f /tmp/arfa-ready
+              command: ["/bin/bash", "-c", "test -f /tmp/arfa-ready"]
             periodSeconds: 10
             failureThreshold: 360
           readinessProbe:
             exec:
-              command:
-                - /bin/bash
-                - -c
-                - test -f /tmp/arfa-ready
+              command: ["/bin/bash", "-c", "test -f /tmp/arfa-ready"]
             periodSeconds: 10
             failureThreshold: 3
           resources:
             requests:
-              cpu: "1"
-              memory: 20Gi
-              ephemeral-storage: 20Gi
-              nvidia.com/gpu: "1"
-            limits:
-              cpu: 1200m
+              cpu: "4"
               memory: 24Gi
               ephemeral-storage: 20Gi
-              nvidia.com/gpu: "1"
+              nvidia.com/rtxa6000: "1"
+            limits:
+              cpu: "4"
+              memory: 24Gi
+              ephemeral-storage: 20Gi
+              nvidia.com/rtxa6000: "1"
           volumeMounts:
             - name: workspace
               mountPath: /workspace
@@ -138,7 +107,7 @@ spec:
             claimName: arfa-nrp-workspace
         - name: config
           configMap:
-            name: arfa-qwen-residency-config
+            name: arfa-qwen-controls-residency-config
             defaultMode: 0555
 ---
 apiVersion: v1

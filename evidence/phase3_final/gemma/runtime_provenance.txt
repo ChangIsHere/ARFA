@@ -1,0 +1,19 @@
+captured_at_utc=2026-11-01T09:30:58Z
+git_commit=7184111d26ded55b96dd71e01df0d8011909446f
+git_worktree_dirty=true
+job=arfa-gemma-final-run
+pod=arfa-gemma-final-run-vdvbt
+node=hcc-prp-c5038.unl.edu
+pod_uid=017ffc2e-c13f-46dd-8146-388404857b5f
+image=docker.io/ollama/ollama:0.34.1
+image_id=docker.io/ollama/ollama@sha256:0c0a83210471fb50226bcdc2d6611d20ab13ae87e024cc304c94a6a5765c5e65
+Python 3.10.11
+Name: PyYAML
+Version: 6.0.3
+sha256:
+bfdb6fac7905e5f8d5d8f4d1b804855f0490e1425a22a178c305baaceda68084  config/phase3_final_gemma.yaml
+672e11b4673facdf4f7f5499616d46a6c12467e5671bdf50e9eac90ba02f768c  evidence/phase3_final/gemma_freeze_manifest.json
+38a352aec6f56226000e7ef9b1db8669b0cde05580c80c0c54939ee03598a0f9  deployment/nrp/24-gemma-controls-configmap.yaml
+cf788acb5c8bd2df2f5795cc22024987b030e2f54c5a4742acf978b1d5ba378a  deployment/nrp/64-gemma-final-service.yaml
+1d6ec85483408185bfe76ee58b2cf49161b49bb25ae8cc1d7331bc5203ded6a2  deployment/nrp/run_phase3_final.sh
+e409b6d42b6de2552f6741cf2926ca3e1bfaecf0b821cb86e491ff289f578bfe  deployment/nrp/gpu_job_lib.sh
