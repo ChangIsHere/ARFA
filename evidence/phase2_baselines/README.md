@@ -1,7 +1,7 @@
-# Phase 2 Single-Model Characterization Bundle
+# Phase 2 Single-Model Characterization
 
-Evidence for eight Phase 2 always-reason ReAct agents used one model at a time.
-No residual routing is enabled here. This bundle characterizes standalone model
+Eight Phase 2 always-reason ReAct agents use one model at a time. No residual
+routing is enabled here. This study characterizes standalone model
 capability and cost and supports fast/slow pair selection. The primary baselines
 for residual-routing claims are the matched Phase 3 `always_slow` and
 `always_fast` policies.
@@ -44,13 +44,13 @@ for residual-routing claims are the matched Phase 3 `always_slow` and
 - McNemar p-values are unadjusted for multiple comparisons. Energy was not measured.
 - Token means exclude tasks with missing token usage; those tasks remain in success-rate denominators.
 - Two request-error tasks (Gemma 12B and Phi Mini) use a synthetic error record: token usage is unknown and call counts do not capture all retries or prior steps. Their cost totals are incomplete.
-- DeepSeek candidates were replaced after observed runtime and protocol failures; see ../03_phase2_baseline_agent.md for selection history.
+- DeepSeek candidates were replaced after observed runtime and protocol failures; see [`docs/03_phase2_baseline_agent.md`](../../docs/03_phase2_baseline_agent.md) for selection history.
 - Original and expansion config file SHA-256 values differ. The recorded task, prompt, agent, environment, and protocol fields match; see `metrics/completeness.json` for both config hashes.
 
 ## Files
 
 - `reports/phase2_report.md`: full results and diagnostics.
 - `metrics/`: per-model summaries, paired comparisons, subgroups, failures, and completeness audit.
-- `figures/` and `tables/`: paper-facing exhibits.
+- `figures/` and `tables/`: generated exhibits.
 - `protocol/`: config, model metadata, environment audit, and trace hashes.
 - `metrics/task_outcomes.jsonl`: compact outcomes for all 1,600 attempts, enabling paired reanalysis without raw conversations.

@@ -1,0 +1,18 @@
+{
+  "valid": true,
+  "split": "final",
+  "pair": "qwen",
+  "policy": "learned_observation_only",
+  "expected_tasks": 100,
+  "checks": {
+    "summary_task_count": true,
+    "summary_expected_task_count": true,
+    "zero_model_request_errors": true,
+    "metrics_exact_task_set": true,
+    "traces_exact_task_set": true,
+    "summary_identity": true,
+    "row_identity": true,
+    "trace_fingerprints_match": true,
+    "config_hash_matches": true
+  }
+}

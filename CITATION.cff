@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software or its experimental artifacts, please cite the repository and the associated ARFA paper."
+title: "ARFA: Residual-Guided Model Selection for Terminal-Based Coding Agents"
+type: software
+authors:
+  - family-names: Zhou
+    given-names: Chang
+repository-code: "https://github.com/ChangIsHere/ARFA"
+version: 0.1.0
+date-released: 2026-11-12

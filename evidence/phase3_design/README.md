@@ -1,6 +1,6 @@
 # Phase 3 Development Evidence
 
-`native_pairs/` is the paper-facing result set. It contains four model pairs,
+`native_pairs/` is the reported development result set. It contains four model pairs,
 three policies per pair, and the same 100 InterCode NL2Bash development tasks.
 
 - `native_pairs/results.csv`: the compact main table.

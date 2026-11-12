@@ -46,4 +46,4 @@ done
 
 .venv/bin/python -m src.phase2_baseline.analyze_paper_results --results-root "${results_root}" --expected-models 8
 bash scripts/phase2_make_paper_artifacts.sh --analysis-dir "${results_root}/analysis"
-bash scripts/phase2_build_writing_bundle.sh --results-root "${results_root}"
+bash scripts/phase2_build_evidence_bundle.sh --results-root "${results_root}"

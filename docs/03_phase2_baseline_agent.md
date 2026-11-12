@@ -150,7 +150,7 @@ choices. It does not establish that ARFA is better than using either model alone
 That comparison belongs to Phase 3, where `residual`, `always_slow`, and
 `always_fast` share the Phase 3 prompt, execution loop, tasks, and hardware.
 
-The [writing package](phase2_writing_bundle/README_FOR_WRITING.md) contains all
+The [evidence package](../evidence/phase2_baselines/README.md) contains all
 eight results, four figures, paired confidence intervals, failure diagnostics,
 and source hashes. One run per model/task is available. The reported McNemar
 p-values are unadjusted; latency and tokens do not constitute measured energy.
@@ -166,7 +166,7 @@ sizes are listed by
 [Phi-4](https://ollama.com/library/phi4).
 
 ```text
-docs/phase2_writing_bundle/README_FOR_WRITING.md
+evidence/phase2_baselines/README.md
 ```
 
 ## Outputs

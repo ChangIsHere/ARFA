@@ -1,21 +1,23 @@
 # Evidence Index
 
-This directory contains compact, paper-facing outputs. Raw traces and checkpoints
-remain under the ignored `results/` tree.
+This directory contains compact outputs used to verify the reported results.
+Raw traces and checkpoints remain under the ignored `results/` tree.
 
 ## Primary Evidence
 
 - `residual_diagnostics/`: 300 shadow runs, step- and task-level residual scores,
   annotation association, model comparisons, and source hashes.
+- `phase2_baselines/`: standalone results for eight models on the same 200
+  InterCode tasks, including paired comparisons, figures, and protocol records.
 - `phase3_design/native_pairs/`: four native fast/slow development pairs with
   residual, always-slow, and always-fast policies.
 - `phase3_final/`: reserved 100-task Qwen and Gemma matrices with six matched
-  policies, paired bootstrap intervals, exact McNemar tests, and frozen protocol
-  manifests.
+  policies, task-level metrics, paired bootstrap intervals, exact McNemar tests,
+  and frozen protocol manifests.
 - `phase3_mixed_pairs/`: two cross-family final matrices with five matched
-  policies and policy-level GPU records.
+  policies, task-level metrics, and policy-level GPU records.
 - `phase3_handoff/`: full-visible, structured-state, and observation-only
-  cross-model handoff results.
+  cross-model handoff results with task-level metrics.
 
 ## Supporting Evidence
 
@@ -34,6 +36,6 @@ remain under the ignored `results/` tree.
 4. `phase3_handoff/README.md`
 5. `phase3_design/supplementary/cost_reversal/README.md`
 
-Every paper-facing number in the writing guide points to one of these locations.
-Absolute latency is compared only inside a matched matrix because the development
-experiments used different hardware.
+Every value in the consolidated results document points to one of these
+locations. Absolute latency is compared only inside a matched matrix because the
+development experiments used different hardware.

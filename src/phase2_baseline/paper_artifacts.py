@@ -169,7 +169,7 @@ def _write_tables(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate Phase 2 paper-facing figures and tables.")
+    parser = argparse.ArgumentParser(description="Generate Phase 2 figures and tables.")
     parser.add_argument("--analysis-dir", default="results/phase2_baseline/paper/analysis")
     args = parser.parse_args()
     analysis_dir = Path(args.analysis_dir)

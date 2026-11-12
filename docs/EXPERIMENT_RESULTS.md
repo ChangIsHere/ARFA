@@ -1,9 +1,9 @@
 # ARFA Experiment Results
 
-This is the numerical source for the workshop draft. Percentage changes are
-reported from the residual policy's perspective. For cost metrics, a negative
-change means residual used less time, fewer tokens, or fewer slow-model calls.
-Success changes are absolute percentage points.
+This document consolidates the results used in the ARFA evaluation. Percentage
+changes are reported from the residual policy's perspective. For cost metrics,
+a negative change means residual used less time, fewer tokens, or fewer
+slow-model calls. Success changes are absolute percentage points.
 
 Absolute latency is comparable only within a matched matrix. Development pairs
 ran on different hardware, so their raw seconds must not be pooled.
@@ -58,7 +58,7 @@ Each model ran the same 200 InterCode NL2Bash tasks.
 These runs characterize candidate models. They are not the causal routing
 baseline because the matched Phase 3 policies use a different prompt and loop.
 
-Source: [`docs/phase2_writing_bundle/`](phase2_writing_bundle/README_FOR_WRITING.md).
+Source: [`evidence/phase2_baselines/`](../evidence/phase2_baselines/README.md).
 
 ## Native-Pair Development Study
 

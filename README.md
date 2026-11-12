@@ -2,6 +2,10 @@
 
 **Residual-Guided Model Selection for Terminal-Based Coding Agents**
 
+This repository is the `v0.1.0` workshop artifact release. It contains the
+implementation, frozen configurations, compact result evidence, and
+reproducibility records for the completed InterCode NL2Bash study.
+
 ARFA studies one decision in terminal agents: after a command finishes, should
 the next reasoning turn use a fast model or a slow model? Before execution, the
 agent records the expected outcome and observable signals. After execution, it
@@ -52,26 +56,28 @@ a pinned second benchmark remains future work.
 
 ## Start Here
 
-- [Manuscript handoff](docs/README_FOR_WRITING.md): paper question,
-  contributions, narrative, outline, and claims.
-- [Experiment results](docs/EXPERIMENT_RESULTS.md): all paper-facing numbers in
-  one place, with residual-centered percentage comparisons.
-- [Evidence index](evidence/README.md): exact files behind each table and claim.
-- [Publication extension plan](docs/phase3_publication_experiment_plan.md):
-  external benchmark, repeated energy measurement, and residual ablations.
+- [Study overview](docs/STUDY_OVERVIEW.md): research question, method,
+  contributions, experiment sequence, and scope of the conclusions.
+- [Experiment results](docs/EXPERIMENT_RESULTS.md): consolidated numerical
+  results with residual-centered comparisons.
+- [Evidence index](evidence/README.md): exact artifacts behind each reported
+  result.
+- [Reproducibility guide](docs/REPRODUCIBILITY.md): environment setup,
+  verification commands, data provenance, and experiment entry points.
 
 ## Repository Map
 
 - `src/`: residual scoring, agents, routing policies, runners, and analysis.
 - `config/`: frozen and development experiment configurations.
 - `data/phase2/`: the 200-task InterCode manifest used by the online studies.
-- `evidence/`: compact paper-facing metrics, confidence intervals, audits, and
-  provenance.
-- `docs/`: writing guide, methods, protocols, tables, figures, and next steps.
+- `evidence/`: compact metrics, confidence intervals, audits, tables, figures,
+  and provenance records.
+- `docs/`: study overview, methods, protocols, consolidated results, and
+  reproducibility notes.
 - `deployment/nrp/`: bounded GPU Jobs and runners used for the recorded NRP
   experiments.
-- `results/`: ignored local raw traces and checkpoints. These are not required
-  to read the paper-facing results.
+- `results/`: ignored local raw traces and checkpoints. The tracked evidence is
+  sufficient to inspect the reported aggregate results.
 
 ## Reproduce And Verify
 
@@ -92,3 +98,7 @@ git diff --check
 Tasks come from [InterCode](https://github.com/princeton-nlp/intercode). Model
 weights, caches, raw traces, credentials, kubeconfig, and API tokens are not
 committed.
+
+## Citation
+
+Repository citation metadata is provided in [`CITATION.cff`](CITATION.cff).

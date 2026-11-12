@@ -1,5 +1,12 @@
 # Phase 3 Mixed-Pair Extension
 
+The mixed-pair matrix recorded source commit
+`7184111d26ded55b96dd71e01df0d8011909446f`. The freeze manifest also captures
+the exact mixed-pair configurations and runners, which were published with this
+evidence package. Current `main` contains later handoff changes to
+`arfa_agent.py` and `prompts.py`; those two source hashes therefore correspond to
+the recorded commit rather than the current working tree.
+
 This extension crosses the two useful fast models and two useful slow models.
 The native Qwen and Gemma cells are complete under `evidence/phase3_final/`.
 The remaining cross-family cells are:
@@ -42,7 +49,7 @@ routing achieved the highest success count. Together, the cells show that
 residual routing depends on the operational properties of the selected model
 pair; parameter count alone does not identify a useful fast track.
 
-Compact paper-facing artifacts are stored under `gemma4_qwen14/` and
+Compact reported artifacts are stored under `gemma4_qwen14/` and
 `qwen7_gemma12/`. They include policy summaries, paired analysis, per-cell
-audits, GPU summaries, runtime preflight, and provenance. Full task traces remain
-under `results/phase3_arfa/mixed_pairs/v1/`.
+audits, task-level metrics, GPU summaries, runtime preflight, and provenance.
+Full task traces remain under `results/phase3_arfa/mixed_pairs/v1/`.

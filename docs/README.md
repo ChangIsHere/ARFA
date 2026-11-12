@@ -1,18 +1,21 @@
 # Documentation
 
-## Paper Writing
+## Study Summary
 
-- [Manuscript handoff](README_FOR_WRITING.md): the canonical writing entry point.
+- [Study overview](STUDY_OVERVIEW.md): research question, method, evidence
+  sequence, and interpretation.
 - [Experiment results](EXPERIMENT_RESULTS.md): compact numerical summary of all
   completed studies.
 - [Project overview](01_project_overview.md): short description of the research
   question and experiment sequence.
+- [Reproducibility guide](REPRODUCIBILITY.md): setup, validation, provenance,
+  and experiment entry points.
 
 ## Methods And Experimental Design
 
 - [Residual definitions and diagnostics](residual_diagnostics.md)
 - [Phase 2 standalone model characterization](03_phase2_baseline_agent.md)
-- [Phase 2 tables and figures](phase2_writing_bundle/README_FOR_WRITING.md)
+- [Phase 2 baseline evidence](../evidence/phase2_baselines/README.md)
 - [Phase 3 dual-track agent](04_phase3_arfa_dual_track.md)
 - [Routing controls](phase3_control_extension.md)
 - [Phase 3 study protocol](phase3_study_protocol.md)

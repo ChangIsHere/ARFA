@@ -14,10 +14,14 @@ The completed final matrix contains six policies on the reserved 100-task split:
 - always fast.
 
 Both Qwen and Gemma completed all 600 policy-task runs with zero model-request
-failures. Compact paper-facing outputs are stored in `qwen/` and `gemma/`:
+failures. Compact reported outputs are stored in `qwen/` and `gemma/`:
 
 - `policy_summary.csv`: policy-level success, calls, tokens, and wall time;
 - `analysis.json`: paired bootstrap intervals and exact McNemar tests;
+- `*_metrics.csv`: task-level outcomes and cost measurements for independent
+  paired reanalysis;
+- `*_summary.json` and `*_audit.json`: per-policy provenance and completeness
+  checks;
 - `gpu_summary.txt`: run-level GPU monitoring;
 - `runtime_preflight.json` and `runtime_provenance.txt`: environment records.
 

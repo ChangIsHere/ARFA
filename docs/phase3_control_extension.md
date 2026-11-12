@@ -87,7 +87,7 @@ provenance, and deletes the GPU Job on exit. Local raw results are written below
 ## Final Follow-Up
 
 The Qwen and Gemma reserved-split matrices, two cross-family pairs, and the
-three-mode handoff ablation are complete. Their paper-facing results are in
+three-mode handoff ablation are complete. Their reported results are in
 [`evidence/phase3_final/`](../evidence/phase3_final/),
 [`evidence/phase3_mixed_pairs/`](../evidence/phase3_mixed_pairs/), and
 [`evidence/phase3_handoff/`](../evidence/phase3_handoff/).

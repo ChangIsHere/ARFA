@@ -37,9 +37,13 @@ def _write_readme(
     pair_lookup = {frozenset((row["model_a"], row["model_b"])): row for row in paired_rows}
     task_count = int(completeness["expected_tasks_per_model"])
     lines = [
-        "# Phase 2 Writing Bundle",
+        "# Phase 2 Single-Model Characterization",
         "",
-        "Evidence for the Phase 2 always-reason ReAct baselines. No residual routing is enabled here.",
+        "Eight Phase 2 always-reason ReAct agents use one model at a time. No residual",
+        "routing is enabled here. This study characterizes standalone model",
+        "capability and cost and supports fast/slow pair selection. The primary baselines",
+        "for residual-routing claims are the matched Phase 3 `always_slow` and",
+        "`always_fast` policies.",
         "",
         "## Evidence Status",
         "",
@@ -59,7 +63,7 @@ def _write_readme(
             f"{float(row['mean_tokens']):.1f} tokens/task; "
             f"{float(row['mean_task_wall_seconds']):.2f} s/task."
         )
-    lines.extend(["", "## Planned Pair Comparisons", ""])
+    lines.extend(["", "## Fast/Slow Pair Characterization", ""])
     for fast, slow in PLANNED_PAIRS:
         row = pair_lookup[frozenset((fast, slow))]
         sign = 1 if row["model_a"] == slow else -1
@@ -86,7 +90,7 @@ def _write_readme(
         "- McNemar p-values are unadjusted for multiple comparisons. Energy was not measured.",
         "- Token means exclude tasks with missing token usage; those tasks remain in success-rate denominators.",
         "- Two request-error tasks (Gemma 12B and Phi Mini) use a synthetic error record: token usage is unknown and call counts do not capture all retries or prior steps. Their cost totals are incomplete.",
-        "- DeepSeek candidates were replaced after observed runtime and protocol failures; see ../03_phase2_baseline_agent.md for selection history.",
+        "- DeepSeek candidates were replaced after observed runtime and protocol failures; see [`docs/03_phase2_baseline_agent.md`](../../docs/03_phase2_baseline_agent.md) for selection history.",
     ])
     if not completeness["config_hashes_match"]:
         lines.append(
@@ -99,7 +103,7 @@ def _write_readme(
         "",
         "- `reports/phase2_report.md`: full results and diagnostics.",
         "- `metrics/`: per-model summaries, paired comparisons, subgroups, failures, and completeness audit.",
-        "- `figures/` and `tables/`: paper-facing exhibits.",
+        "- `figures/` and `tables/`: generated exhibits.",
         "- `protocol/`: config, model metadata, environment audit, and trace hashes.",
         "- `metrics/task_outcomes.jsonl`: compact outcomes for all 1,600 attempts, enabling paired reanalysis without raw conversations.",
     ])
@@ -107,9 +111,9 @@ def _write_readme(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build the tracked Phase 2 paper-writing bundle.")
+    parser = argparse.ArgumentParser(description="Build the tracked Phase 2 evidence package.")
     parser.add_argument("--results-root", default="results/phase2_baseline/paper")
-    parser.add_argument("--output-dir", default="docs/phase2_writing_bundle")
+    parser.add_argument("--output-dir", default="evidence/phase2_baselines")
     args = parser.parse_args()
 
     root = Path(args.results_root)
@@ -117,7 +121,7 @@ def main() -> None:
     output = Path(args.output_dir)
     completeness = _read_json(analysis / "completeness.json")
     if not completeness["complete"]:
-        raise SystemExit("Phase 2 matrix is incomplete; refusing to publish a writing bundle")
+        raise SystemExit("Phase 2 matrix is incomplete; refusing to publish the evidence package")
     copies = {
         analysis / "phase2_report.md": output / "reports/phase2_report.md",
         analysis / "failure_case_analysis.md": output / "reports/failure_case_analysis.md",
@@ -184,12 +188,12 @@ def main() -> None:
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     _write_readme(
-        output / "README_FOR_WRITING.md",
+        output / "README.md",
         read_csv(analysis / "main_results.csv"),
         read_csv(analysis / "paired_model_comparisons.csv"),
         completeness,
     )
-    print(f"Wrote Phase 2 writing bundle to {output}")
+    print(f"Wrote Phase 2 evidence package to {output}")
 
 
 if __name__ == "__main__":

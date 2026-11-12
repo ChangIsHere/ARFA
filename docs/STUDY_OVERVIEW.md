@@ -1,12 +1,10 @@
-# ARFA Workshop Paper Handoff
+# Study Overview
 
-This is the canonical entry point for drafting the workshop paper. Read this
-file first, then use [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md) for exact
-numbers and [`evidence/`](../evidence/README.md) for source artifacts.
-
-For a new writing session, provide these three files together. Treat the result
-tables as the numerical source of truth, keep development and reserved-final
-results separate, and do not infer unreported significance or energy savings.
+This document summarizes the research question, system design, experiment
+sequence, and interpretation of the completed ARFA study. Exact values are
+reported in [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md); the underlying
+tables, audits, and provenance records are indexed in
+[`evidence/`](../evidence/README.md).
 
 ## Working Title
 
@@ -27,7 +25,7 @@ and the terminal observation. A low residual routes the next turn to a fast
 model; a high residual or a failed safety check routes it to a slow model. Both
 models use the same agent loop, evaluator, context limit, and step cap.
 
-## Paper Thesis
+## Main Finding
 
 The result is conditional rather than universal:
 
@@ -56,7 +54,7 @@ actions, or parse failures.
    measured success level while using less time and fewer tokens than full
    visible history.
 
-## Evidence Chain
+## Experimental Evidence
 
 ### 1. Offline signal
 
@@ -101,7 +99,7 @@ while reducing wall time and tokens by about 21%. Observation-only requires
 Exact values and comparisons are in
 [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md).
 
-## Recommended Workshop Structure
+## Paper Organization
 
 1. **Introduction**
    - Terminal agents repeatedly invoke reasoning models after tool execution.
@@ -139,7 +137,7 @@ Exact values and comparisons are in
      estimates.
 8. **Conclusion**
 
-## Claims Supported By The Data
+## Supported Conclusions
 
 - Residual can reduce slow-model use in a matched terminal-agent loop.
 - Some pairs preserve or improve success while reducing time and tokens.
@@ -148,7 +146,9 @@ Exact values and comparisons are in
 - Structured handoff can reduce context cost without a measured success loss
   distinguishable at the current sample size.
 
-## Claims To Avoid
+## Current Limits
+
+The current study does not establish that:
 
 - Residual universally outperforms learned observation-only routing.
 - Every fast/slow pair reduces total cost.
@@ -179,13 +179,13 @@ Exact values and comparisons are in
 - Paired analysis: `src/phase3_arfa/analyze_results.py`
 - Handoff analysis: `src/phase3_arfa/analyze_handoff.py`
 - Frozen task data: `data/phase2/intercode_nl2bash_official_200.jsonl`
-- Phase 2 tables and figures: `docs/phase2_writing_bundle/`
+- Phase 2 tables and figures: `evidence/phase2_baselines/`
 - Native-pair evidence: `evidence/phase3_design/native_pairs/`
 - Final Qwen/Gemma evidence: `evidence/phase3_final/`
 - Mixed-pair evidence: `evidence/phase3_mixed_pairs/`
 - Handoff evidence: `evidence/phase3_handoff/`
 
-## Remaining Work Beyond The Workshop Draft
+## Remaining Work
 
 The next high-value experiment is direct transfer to a pinned external terminal
 benchmark without retuning the routing threshold. Repeated policy-level energy

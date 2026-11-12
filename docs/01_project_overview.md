@@ -31,4 +31,4 @@ calls did not reduce total cost because the fast model generated extra work.
 
 Phase 2 describes the candidate models. The matched Phase 3 policies provide the
 main evidence about routing. See [the experiment summary](EXPERIMENT_RESULTS.md)
-and [the manuscript handoff](README_FOR_WRITING.md).
+and [the study overview](STUDY_OVERVIEW.md).

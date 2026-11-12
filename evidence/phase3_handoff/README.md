@@ -41,4 +41,5 @@ observation is not a free simplification: it required more model calls and more
 slow-model use in this study.
 
 `analysis.json` contains paired bootstrap intervals and exact McNemar tests.
-Full task-level traces remain under `results/phase3_arfa/handoff/v1/`.
+The three `*_metrics.csv` files contain task-level outcomes and costs. Full
+conversation traces remain under `results/phase3_arfa/handoff/v1/`.

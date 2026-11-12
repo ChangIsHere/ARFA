@@ -1,10 +1,10 @@
 # Local Results
 
 This directory contains generated raw traces, checkpoints, and run logs. It is
-excluded from Git. Compact paper-facing evidence is tracked in `evidence/` and
-the Phase 2 writing bundle.
+excluded from Git. Compact reported evidence is tracked in `evidence/` and
+the tracked Phase 2 evidence package.
 
-## Current Paper-Facing Raw Roots
+## Raw Result Directories
 
 - `phase1_5_shadow/full/`: 300 shadow runs used by the residual diagnostics.
 - `phase2_baseline/paper/`: eight standalone model runs and Phase 2 analysis.
